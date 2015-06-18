@@ -26,8 +26,8 @@ class Channels(ndb.Model):
 	channel_img_url = ndb.BlobKeyProperty()
 	description = ndb.StringProperty()
 	pending_bit = ndb.IntegerProperty()	#keep it 1 while inserting
-	curated_bit = ndb.BooleanProperty()	#curated/open
-	created_time = ndb.DateTimeProperty()
+	curated_bit = ndb.IntegerProperty(default=1)	#curated/open, 1 means curated(rok k rakho salle ko!)
+	created_time = ndb.DateTimeProperty(auto_now_add = True)
 
 
 
@@ -38,18 +38,21 @@ class Posts(ndb.Model):
 	user_ptr = ndb.KeyProperty(kind=Users)
 	channel_ptr = ndb.KeyProperty(kind=Channels)
 	text = ndb.StringProperty()
-	img_url = ndb.BlobKeyProperty()
-	time = ndb.DateTimeProperty(auto_now = True)
-	pending_bit = ndb.IntegerProperty()
-	isAnonymous = ndb.BooleanProperty()
-
+	post_img_url = ndb.BlobKeyProperty()
+	time = ndb.DateTimeProperty(auto_now_add = True)
+	pending_bit = ndb.IntegerProperty(default=1)
+	isAnonymous = ndb.StringProperty(
+					choices = ['True','False'],
+					default = 'True')	#True means pending
 
 class Channel_Admins(ndb.Model):
 	"""docstring for Channel_Admin"""
 	
 	user_ptr = ndb.KeyProperty(kind=Users)
 	channel_ptr = ndb.KeyProperty(kind=Channels)
-	isAnonymous = ndb.BooleanProperty()
+	isAnonymous = ndb.StringProperty(
+					choices = ['True','False'],
+					default = 'True')
 
 class Channel_Followers(ndb.Model):
 	"""docstring for Channel_Followers"""

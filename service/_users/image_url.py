@@ -5,11 +5,7 @@ from google.appengine.api import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 
 class ImageUrl(webapp2.RequestHandler):
-	"""docstring for ImageUrl"""
-	# def __init__(self, arg):
-	# 	super(ImageUrl, self).__init__()
-	# 	self.arg = arg
-	# 	
+	"""docstring for ImageUrl"""	
 
 	def get(self):
 		dict_={}

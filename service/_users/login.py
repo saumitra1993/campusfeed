@@ -1,8 +1,8 @@
 import logging
 import webapp2
-from database import Users
+from db.database import Users
 from google.appengine.api import users
-from authentication import get_password_hash, passwords_match
+from service._users.authentication import get_password_hash, passwords_match
 from google.appengine.api import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 
@@ -17,12 +17,14 @@ class Login(blobstore_handlers.BlobstoreUploadHandler):
 	def post(self):
 		logging.info("i am in Login")
 
-		db = User()
-		db.username = self.request.get("username").strip()
+		db = Users()
+		db.first_name = self.request.get("first_name").strip()
+		db.last_name = self.request.get("last_name").strip()
 		db.branch = self.request.get("branch").strip()
 		db.phone = self.request.get("phone").strip()		
 		db.email_id = self.request.get("email_id").strip()
 		db.password = get_password_hash(self.request.get("password").strip())
+		db.user_id = self.request.get("user_id").strip()
 		db.user_img_url = self.get_uploads('user_img_url')[0].key()
 		db.put()
 		# if users.is_current_user_admin():

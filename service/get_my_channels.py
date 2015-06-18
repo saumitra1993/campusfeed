@@ -1,8 +1,8 @@
 import webapp2
 import logging
 import json
-from constants import DEFAULT_ROOT_URL, DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL
-from database import Channels, Users, Channel_Followers
+from const.constants import DEFAULT_ROOT_URL, DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL
+from db.database import Channels, Users, Channel_Followers
 class GetMyChannels(webapp2.RequestHandler):
 	"""docstring for GetMyChannels"""
 	# Request URL- /users/:user_id/channels GET
@@ -40,11 +40,13 @@ class GetMyChannels(webapp2.RequestHandler):
 					_dict = {}
 					_dict['channel_id'] = followed_channel.channel_ptr.id()
 					_dict['channel_name'] = channel.channel_name
+					_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == followed_channel.channel_ptr).count()
+					
 					if channel.channel_img_url:
-						_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + channel.channel_img_url
+						_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.channel_img_url)
 					else:
 						_dict['channel_img_url'] = DEFAULT_IMG_URL
-					_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == followed_channel.channel_ptr).count()
+					
 					logging.info(_dict)
 					out.append(_dict)
 				dict_['user_channels'] = out
