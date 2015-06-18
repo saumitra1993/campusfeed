@@ -1,12 +1,12 @@
 from google.appengine.ext import ndb
 import logging
 
-class User(ndb.Model):
+class Users(ndb.Model):
 	"""docstring for User"""
 	
 	#user_id = [p]
 	first_name = ndb.StringProperty()
-	last_time = ndb.StringProperty()
+	last_name = ndb.StringProperty()
 	branch = ndb.StringProperty()
 	type_ = ndb.StringProperty(
 		choices = ['user','admin','superuser'],
@@ -18,7 +18,7 @@ class User(ndb.Model):
 	# instance_key = ndb.StringProperty()
 	user_img_url = ndb.BlobKeyProperty()
 
-class Channel(ndb.Model):
+class Channels(ndb.Model):
 	"""docstring for Channel"""
 	
 	#channel_id = [p]	
@@ -31,12 +31,12 @@ class Channel(ndb.Model):
 
 
 
-class Post(ndb.Model):
+class Posts(ndb.Model):
 	"""docstring for Post"""
 
 	#post_id = [p]
-	user_ptr = ndb.KeyProperty(kind=User)
-	channel_ptr = ndb.KeyProperty(kind=Channel)
+	user_ptr = ndb.KeyProperty(kind=Users)
+	channel_ptr = ndb.KeyProperty(kind=Channels)
 	text = ndb.StringProperty()
 	img_url = ndb.BlobKeyProperty()
 	time = ndb.DateTimeProperty(auto_now = True)
@@ -44,16 +44,16 @@ class Post(ndb.Model):
 	isAnonymous = ndb.BooleanProperty()
 
 
-class Channel_Admin(ndb.Model):
+class Channel_Admins(ndb.Model):
 	"""docstring for Channel_Admin"""
 	
-	user_ptr = ndb.KeyProperty(kind=User)
-	channel_ptr = ndb.KeyProperty(kind=Channel)
+	user_ptr = ndb.KeyProperty(kind=Users)
+	channel_ptr = ndb.KeyProperty(kind=Channels)
 	isAnonymous = ndb.BooleanProperty()
 
 class Channel_Followers(ndb.Model):
 	"""docstring for Channel_Followers"""
 
-	user_ptr = ndb.KeyProperty(kind=User)
-	channel_ptr = ndb.KeyProperty(kind=Channel)
+	user_ptr = ndb.KeyProperty(kind=Users)
+	channel_ptr = ndb.KeyProperty(kind=Channels)
 		

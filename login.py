@@ -1,6 +1,6 @@
 import logging
 import webapp2
-from database import User
+from database import Users
 from google.appengine.api import users
 from authentication import get_password_hash, passwords_match
 from google.appengine.api import blobstore
