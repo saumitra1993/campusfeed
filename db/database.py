@@ -59,4 +59,11 @@ class Channel_Followers(ndb.Model):
 
 	user_ptr = ndb.KeyProperty(kind=Users)
 	channel_ptr = ndb.KeyProperty(kind=Channels)
-		
+
+class DBMobileAuth(ndb.Model):
+    name = ndb.StringProperty(indexed=False)
+    user_id = ndb.StringProperty(indexed=True)
+    expiration = ndb.DateTimeProperty(auto_now_add=True)
+    @property
+    def token(self):
+        return self.key.id()

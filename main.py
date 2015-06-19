@@ -5,11 +5,11 @@ from service._users.image_url import ImageUrl
 from service.get_photo import GetPhotu
 from service._channels.get_my_channels import GetMyChannels
 from service._channels.get_channel_details import GetChannelDetails
-from service._channels._posts.get_channel_posts import GetChannelPosts
 from service._users.image_url import ImageUrl
 from service._channels.image_url_channel import ChannelImageUrl
 from service._channels._posts.image_url_post import PostImageUrl
-from service._channels._posts.posts import NewPosts
+from service._channels._posts.posts import PostsHandler
+from service._channels._posts.approve_post import ApprovePost
 from service._channels.channels import NewChannels
 config = {}
 config['webapp2_extras.sessions'] = {
@@ -24,10 +24,11 @@ application = webapp2.WSGIApplication([
 	('/imageurl',ImageUrl),
 	('/pic/(.*)',GetPhotu),
 	('/users/(.*)/channels',GetMyChannels),
-	('/channels/(.*)',GetChannelDetails),
-	('/channels/(.*)/posts',GetChannelPosts),
+	webapp2.Route(r'/channels/<:\d{16}>',GetChannelDetails),
+	#('/channels/<\d{16}>/posts',GetChannelPosts),
 	('/channelimageurl',ChannelImageUrl),
     ('/postimageurl',PostImageUrl),
-    ('/channels/(.*)/posts',NewPosts),
+    webapp2.Route(r'/channels/<:\d{16}>/posts',PostsHandler),
     ('/channels',NewChannels),
+    webapp2.Route(r'/channels/<:\d{16}>/posts/<:\d{16}>',ApprovePost),
 ], config=config, debug=True)
