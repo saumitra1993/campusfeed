@@ -4,7 +4,7 @@ from service._users.login import Login
 from service._users.image_url import ImageUrl
 from service.get_photo import GetPhotu
 from service._channels.get_my_channels import GetMyChannels
-from service._channels.get_channel_details import GetChannelDetails
+from service._channels.channels_handler import ChannelsHandler
 from service._users.image_url import ImageUrl
 from service._channels.image_url_channel import ChannelImageUrl
 from service._channels._posts.image_url_post import PostImageUrl
@@ -24,11 +24,11 @@ application = webapp2.WSGIApplication([
 	('/imageurl',ImageUrl),
 	('/pic/(.*)',GetPhotu),
 	('/users/(.*)/channels',GetMyChannels),
-	webapp2.Route(r'/channels/<:\d{16}>',GetChannelDetails),
 	#('/channels/<\d{16}>/posts',GetChannelPosts),
 	('/channelimageurl',ChannelImageUrl),
     ('/postimageurl',PostImageUrl),
-    webapp2.Route(r'/channels/<:\d{16}>/posts',PostsHandler),
     ('/channels',NewChannels),
+	webapp2.Route(r'/channels/<:\d{16}>',ChannelsHandler),
+    webapp2.Route(r'/channels/<:\d{16}>/posts',PostsHandler),
     webapp2.Route(r'/channels/<:\d{16}>/posts/<:\d{16}>',ApprovePost),
 ], config=config, debug=True)

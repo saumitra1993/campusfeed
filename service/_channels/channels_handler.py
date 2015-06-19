@@ -2,7 +2,7 @@ import webapp2
 import logging
 import json
 from db.database import Channels, Users, Channel_Admins
-class GetChannelDetails(webapp2.RequestHandler):
+class ChannelsHandler(webapp2.RequestHandler):
 		
 	# 	Request URL: /channels/:channel_id GET
 	# Response : status, description, created_time, admins: array of (first_name,last_name)
@@ -29,3 +29,12 @@ class GetChannelDetails(webapp2.RequestHandler):
 			self.response.set_status(404, 'Channel not found')
 
 		self.response.write(json.dumps(dict_))
+
+	def put(self, channel_id):
+
+		db = Channels.get_by_id(int(channel_id))
+		logging.info(db.pending_bit)
+		if db.pending_bit == 1:
+			db.pending_bit = 0
+		logging.info(db.pending_bit)
+		db.put()

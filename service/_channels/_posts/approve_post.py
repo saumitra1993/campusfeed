@@ -8,7 +8,7 @@ class ApprovePost(webapp2.RequestHandler):
 	# Request URL : channels/:channel_id/posts/:post_id PUT
 	# Response: status=200 else 400
 
-	def get(self, channel_id, post_id):
+	def put(self, channel_id, post_id):
 
 		db = Posts.get_by_id(int(post_id))
 		logging.info(db.pending_bit)

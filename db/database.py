@@ -25,7 +25,7 @@ class Channels(ndb.Model):
 	channel_name = ndb.StringProperty()
 	channel_img_url = ndb.BlobKeyProperty()
 	description = ndb.StringProperty()
-	pending_bit = ndb.IntegerProperty()	#keep it 1 while inserting
+	pending_bit = ndb.IntegerProperty(default=1)	#keep it 1 while inserting
 	curated_bit = ndb.IntegerProperty(default=1)	#curated/open, 1 means curated(rok k rakho salle ko!)
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
 
