@@ -16,7 +16,7 @@ class NewChannels(blobstore_handlers.BlobstoreUploadHandler):
 		logging.info(self.request)
 
 		user_id = self.request.get('user_id').strip()
-#		isAnonymous = self.request.get('isAnonymous').strip()
+		isAnonymous = self.request.get('isAnonymous').strip()
 		
 		db = Channels()
 		db.channel_name = self.request.get('channel_name').strip()
@@ -34,6 +34,6 @@ class NewChannels(blobstore_handlers.BlobstoreUploadHandler):
 		db1 = Channel_Admins()
 		db1.user_ptr = user_key
 		db1.channel_ptr = channel_key
-#		db1.isAnonymous = isAnonymous
-		k1=db1.put()
+		db1.isAnonymous = isAnonymous
+		k1 = db1.put()
 		logging.info('...Inserted into DB user with key... %s ' % k1)

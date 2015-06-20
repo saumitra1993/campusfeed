@@ -28,7 +28,7 @@ application = webapp2.WSGIApplication([
 	('/channelimageurl',ChannelImageUrl),
     ('/postimageurl',PostImageUrl),
     ('/channels',NewChannels),
-	webapp2.Route(r'/channels/<:\d{16}>',ChannelsHandler),
-    webapp2.Route(r'/channels/<:\d{16}>/posts',PostsHandler),
-    webapp2.Route(r'/channels/<:\d{16}>/posts/<:\d{16}>',ApprovePost),
+	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>',ChannelsHandler),
+    webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts',PostsHandler),
+    webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts/<:[0-9][a-z][A-Z]{16}>',ApprovePost),
 ], config=config, debug=True)

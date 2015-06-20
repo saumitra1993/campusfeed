@@ -12,7 +12,7 @@ def utc_to_ist(date):
 def ist_to_utc(date):
     return date - datetime.timedelta(hours=IST_OFFSET_HOURS)
 
-date_format_string = '%d-%b-%Y %H:%M:%S'
+date_format_string = '%d-%b-%Y,%H:%M:%S'
 def date_to_string(date):
     return date.strftime(date_format_string)
 

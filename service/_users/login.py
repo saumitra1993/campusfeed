@@ -66,7 +66,7 @@ class Login(BaseHandler, webapp2.RequestHandler):
 				dict_['mAuthToken'] = mAuthToken
 				self.response.write(json.dumps(dict_))
 				self.session['name'] = result[0].first_name + result[0].last_name
-				self.session['userid'] = user_id
+				self.session['userid'] = result[0].key.id()
 				self.response.set_status(200, 'Awesome')
 			else:
 				logging.info("Incorrect password.")
