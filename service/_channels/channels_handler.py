@@ -4,7 +4,10 @@ import json
 from db.database import Channels, Users, Channel_Admins
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
-class ChannelsHandler(webapp2.RequestHandler):
+from service._users.sessions import BaseHandler
+from google.appengine.ext import ndb
+
+class ChannelsHandler(webapp2.RequestHandler,BaseHandler):
 		
 	# 	Request URL: /channels/:channel_id GET
 	# Response : status, description, created_time, admins: array of (first_name,last_name)
@@ -34,9 +37,16 @@ class ChannelsHandler(webapp2.RequestHandler):
 
 	def put(self, channel_id):
 
-		db = Channels.get_by_id(int(channel_id))
-		logging.info(db.pending_bit)
-		if db.pending_bit == 1:
-			db.pending_bit = 0
-		logging.info(db.pending_bit)
-		db.put()
+		if channel_id:	
+			db = Channels.get_by_id(int(channel_id))
+			logging.info(db.pending_bit)
+			if db.pending_bit == 1:
+				db.pending_bit = 0
+			logging.info(db.pending_bit)
+			db.put()
+
+			user_id = self.session['userid']
+			db1 = Channel_Followers()
+			db1.user_ptr = ndb.Key('Users',user_id)
+			db1.channel_ptr = db.key
+			db1.put()	

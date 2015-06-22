@@ -31,8 +31,13 @@ class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 		channel_items = k.get()
 		channel_key = channel_items.key
 
-		query = Users.query().filter(Users.user_id == user_id).fetch()
+		query = Users.query().filter(Users.user_id == user_id).fetch() #query will store entire 'list' of db cols
 		user_key = query[0].key
+		
+		#updating 'user' to 'admin
+		result = Users.get_by_id(user_id) #result will store entire 'object' of db cols
+		result.type_ = 'admin'
+		result.put()
 
 		db1 = Channel_Admins()
 		db1.user_ptr = user_key

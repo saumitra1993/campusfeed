@@ -29,8 +29,6 @@ class Channels(ndb.Model):
 	curated_bit = ndb.IntegerProperty(default=1)	#curated/open, 1 means curated(rok k rakho salle ko!)
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
 
-
-
 class Posts(ndb.Model):
 	"""docstring for Post"""
 
@@ -69,3 +67,9 @@ class DBMobileAuth(ndb.Model):
     @property
     def token(self):
         return self.key.id()
+
+class Upvotes(ndb.Model):
+	"""docstring for Upvote"""
+	user_ptr = ndb.KeyProperty(kind=Users)
+	post_ptr = ndb.KeyProperty(kind=Posts)
+	created_time = ndb.DateTimeProperty(auto_now_add=True)
