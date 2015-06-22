@@ -53,12 +53,14 @@ class Channel_Admins(ndb.Model):
 	isAnonymous = ndb.StringProperty(
 					choices = ['True','False'],
 					default = 'True')
+	created_time = ndb.DateTimeProperty(auto_now_add = True)
 
 class Channel_Followers(ndb.Model):
 	"""docstring for Channel_Followers"""
 
 	user_ptr = ndb.KeyProperty(kind=Users)
 	channel_ptr = ndb.KeyProperty(kind=Channels)
+	created_time = ndb.DateTimeProperty(auto_now_add = True)
 
 class DBMobileAuth(ndb.Model):
     name = ndb.StringProperty(indexed=False)

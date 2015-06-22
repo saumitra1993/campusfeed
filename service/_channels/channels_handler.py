@@ -2,6 +2,8 @@ import webapp2
 import logging
 import json
 from db.database import Channels, Users, Channel_Admins
+from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
+from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 class ChannelsHandler(webapp2.RequestHandler):
 		
 	# 	Request URL: /channels/:channel_id GET
@@ -13,7 +15,7 @@ class ChannelsHandler(webapp2.RequestHandler):
 			channel_admins = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key).fetch()
 			if len(channel_admins) > 0:
 				dict_['description'] = channel.description
-				dict_['created_time'] = channel.created_time
+				dict_['created_time'] = date_to_string(utc_to_ist(channel.created_time))
 				out = []
 				for channel_admin in channel_admins:
 					admin = Users.get_by_id(channel_admin.user_ptr.id())

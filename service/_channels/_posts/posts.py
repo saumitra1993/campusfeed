@@ -51,7 +51,7 @@ class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 		post_key = post_items.key
 		text = post_items.text
 		post_img_url = post_items.post_img_url
-		time = date_to_string(post_items.time)
+		time = date_to_string(utc_to_ist(post_items.time))
 
 		
 		_dict = {}

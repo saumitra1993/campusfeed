@@ -1,18 +1,46 @@
 import webapp2
 import logging
 import json
-from const.constants import DEFAULT_ROOT_URL, DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL
+from google.appengine.ext import ndb
 from db.database import Channels, Users, Channel_Followers
-class GetMyChannels(webapp2.RequestHandler):
+from const.constants import DEFAULT_ROOT_URL, DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL
+
+class FollowedChannels(webapp2.RequestHandler):
 	"""docstring for GetMyChannels"""
+	# Request URL: /users/usersid/channels POST
+	# Request params: channel_id
+	# Response : status
+	def post(self, user_id):
+		channel_id = int(self.request.get('channel_id').strip())
+		
+		user_query = Users.query(Users.user_id == user_id)
+		result = user_query.fetch()
+		channel_key = ndb.Key('Channels', channel_id)
+		
+		channel = Channels.get_by_id(channel_key.id())
+		
+		if len(result) == 1 and channel:
+			user = result[0]
+			relationship = Channel_Followers.query(Channel_Followers.user_ptr == user.key, Channel_Followers.channel_ptr == channel_key).fetch()
+			if len(relationship) == 0:
+				db = Channel_Followers()
+				db.user_ptr = user.key
+				db.channel_ptr = channel_key
+				db.put()
+				self.response.set_status(200,'Awesome')
+			else:
+				self.response.set_status(400,'User id and channel id are related.')
+		else:
+			self.response.set_status(401,'User or Channel sucks')
+		
+
 	# Request URL- /users/:user_id/channels GET
 	# Response - Dictionary of status(200/400), 
 	# user_channels: array of (   channel_id, 
 	# 						channel_name, 
 	# 					channel_img_url, num_followers)
 	# Query params-
-	# limit and offset
-
+	# limit and offset	
 	def get(self,user_id):
 		limit = self.request.get('limit')
 		offset = self.request.get('offset')
@@ -49,7 +77,7 @@ class GetMyChannels(webapp2.RequestHandler):
 					
 					logging.info(_dict)
 					out.append(_dict)
-				dict_['user_channels'] = out
+				dict_['followed_channels'] = out
 				self.response.set_status(200, 'Awesome')
 			else:
 				self.response.set_status(401, 'User is malicious. Ask him to go fuck himself.')
