@@ -5,6 +5,7 @@ from service.get_photo import GetPhotu
 from service._users.login import Login
 from service._users.image_url import ImageUrl
 from service._users.edit_profile import EditProfile
+from service._users.search_users import SearchUsers
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.channels_handler import ChannelsHandler
@@ -35,6 +36,7 @@ application = webapp2.WSGIApplication([
 	('/channelimageurl',ChannelImageUrl),
     ('/postimageurl',PostImageUrl),
     ('/channels',AllChannels),
+    webapp2.Route(r'/users/search',SearchUsers)
     webapp2.Route(r'/users/<:[0-9]{5}>',EditProfile),
 	webapp2.Route(r'/channels/<:[0-9][a-z][A-Z]{16}>',ChannelsHandler),
 	webapp2.Route(r'/channels/<:[0-9][a-z][A-Z]{16}>/admins',ChannelAdmins),
