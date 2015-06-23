@@ -3,7 +3,7 @@ import logging
 from service._users.sessions import BaseHandler
 from db.database import Channel_Admins, Users
 
-class ChannelAdmins(webapp2.RequestHandler,BaseHandler):
+class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 	"""docstring for ChannelAdmins"""
 	
 	# Request URL: /channels/channel_id/admins POST

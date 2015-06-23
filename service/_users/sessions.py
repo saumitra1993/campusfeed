@@ -8,7 +8,6 @@ from const.constants import MOBILE_USER_SESSION_DURATION_DAYS
 from datetime import datetime
 from db.database import DBMobileAuth
 from const.business import customers
-import logging
 
 class BaseHandler(webapp2.RequestHandler):
     def dispatch(self):

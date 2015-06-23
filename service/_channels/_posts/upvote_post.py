@@ -4,7 +4,7 @@ from google.appengine.ext import ndb
 from db.database import Upvotes,Posts
 from service._users.sessions import BaseHandler
 
-class UpvotePost(webapp2.RequestHandler,Basehandler):
+class UpvotePost(BaseHandler, webapp2.RequestHandler):
 	"""docstring for UpvotePost"""
 	
 	# DBtable : user_id,post_id,timestamp
