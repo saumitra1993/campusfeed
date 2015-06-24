@@ -2,7 +2,7 @@ import webapp2
 import logging
 from db.database import Posts
 
-class ApprovePost(webapp2.RequestHandler):
+class OnePost(webapp2.RequestHandler):
 	"""docstring for ApprovePost"""
 	
 	# Request URL : channels/:channel_id/posts/:post_id PUT

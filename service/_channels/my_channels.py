@@ -34,7 +34,7 @@ class MyChannels(webapp2.RequestHandler):
 					_dict['channel_id'] = channel.key.id()
 					_dict['channel_name'] = channel.channel_name
 					_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).count()
-					
+					_dict['pending_bit'] = channel.pending_bit
 					if channel.channel_img_url:
 						_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.channel_img_url)
 					else:

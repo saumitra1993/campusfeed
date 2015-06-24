@@ -7,7 +7,7 @@ from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_I
 from service._users.sessions import BaseHandler
 from google.appengine.ext import ndb
 
-class ChannelsHandler(webapp2.RequestHandler,BaseHandler):
+class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 		
 	# 	Request URL: /channels/:channel_id GET
 	# Response : status, description, created_time, admins: array of (first_name,last_name)
