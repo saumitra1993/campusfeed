@@ -2,6 +2,7 @@ import webapp2
 import logging
 from service._users.sessions import BaseHandler
 from db.database import Channel_Admins, Users
+from google.appengine.ext import ndb
 
 class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 	"""docstring for ChannelAdmins"""
@@ -29,4 +30,28 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 				else:
 					self.response.set_status(401,'Unable to fetch user from Users.')
 		else:
-			self.response.set_status(400,'Unable to fetch channel from Channels.')			
+			self.response.set_status(400,'Unable to fetch channel from Channels.')	
+
+
+	def delete(self,channel_id):
+	# Request URL: /channels/:channel_id/admins DELETE
+	# Response : status
+		userID = self.session['userid']
+		user_ptr = ndb.Key('Users',userID)		
+		
+		channel_ptr = ndb.Key('Channels', channel_id)
+		
+		if channel_ptr and user_ptr:
+			query = Channel_Admins.query(Channel_Admins.user_ptr = user_ptr, Channel_Admins.channel_ptr = channel_ptr).fetch()
+			if len(query == 1):
+				channel_admin = query[0]
+				key = channel_admin.key
+				if key:
+					key.delete()
+					self.response.set_status(200,'Awesome.You are no more admin.')
+				else:
+					self.response.set_status(400,'Unable to fetch key.')	
+			else:
+				self.response.set_status(401,'Duplicate channel-admin combo!!!')
+		else:
+			self.response.set_status(401,'Channel Admin cannot be deleted.')

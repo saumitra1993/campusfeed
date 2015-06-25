@@ -39,7 +39,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>',Profile),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/channels',FollowedChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/mychannels',MyChannels),
-	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/pendingchannels', PendingChannels),
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/pendingchannels', PendingChannels),
 
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>',ChannelsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/admins',ChannelAdmins),

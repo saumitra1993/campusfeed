@@ -1,7 +1,6 @@
 import webapp2
 import json
 import logging
-from service._users.sessions import BaseHandler
 from db.database import Users, Channel_Admins, Channels, Channel_Followers
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 

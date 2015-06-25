@@ -17,6 +17,7 @@ class Users(ndb.Model):
 	user_id = ndb.StringProperty()
 	# instance_key = ndb.StringProperty()
 	user_img_url = ndb.BlobKeyProperty()
+	last_seen = ndb.DateTimeProperty() # given when the app gets killed/update after every api call
 
 class Channels(ndb.Model):
 	"""docstring for Channel"""
@@ -28,6 +29,8 @@ class Channels(ndb.Model):
 	pending_bit = ndb.IntegerProperty(default=1)	#keep it 1 while inserting
 	curated_bit = ndb.IntegerProperty(default=1)	#curated/open, 1 means curated(rok k rakho salle ko!)
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
+	isDeleted = ndb.IntegerProperty(default=0)
+	edited_time = ndb.DateTimeProperty(auto_now = True)
 
 class Posts(ndb.Model):
 	"""docstring for Post"""
@@ -42,6 +45,8 @@ class Posts(ndb.Model):
 	isAnonymous = ndb.StringProperty(
 					choices = ['True','False'],
 					default = 'True')	#True means pending
+#	isDeleted = ndb.IntegerProperty(default=0)
+	edited_time = ndb.DateTimeProperty(auto_now = True)
 
 class Channel_Admins(ndb.Model):
 	"""docstring for Channel_Admin"""
@@ -52,6 +57,8 @@ class Channel_Admins(ndb.Model):
 					choices = ['True','False'],
 					default = 'True')
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
+	isDeleted = ndb.IntegerProperty(default=0)
+	edited_time = ndb.DateTimeProperty(auto_now = True)
 
 class Channel_Followers(ndb.Model):
 	"""docstring for Channel_Followers"""
@@ -59,6 +66,8 @@ class Channel_Followers(ndb.Model):
 	user_ptr = ndb.KeyProperty(kind=Users)
 	channel_ptr = ndb.KeyProperty(kind=Channels)
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
+	edited_time = ndb.DateTimeProperty(auto_now = True)
+	isDeleted = ndb.IntegerProperty(default=0)
 
 class DBMobileAuth(ndb.Model):
     name = ndb.StringProperty(indexed=False)
@@ -73,3 +82,6 @@ class Upvotes(ndb.Model):
 	user_ptr = ndb.KeyProperty(kind=Users)
 	post_ptr = ndb.KeyProperty(kind=Posts)
 	created_time = ndb.DateTimeProperty(auto_now_add=True)
+
+	#self.session['userid'] ... this is badi wali id 
+	#chinmay will always send me 14307(one in the url),since it has never been sent from backend
