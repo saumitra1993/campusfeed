@@ -39,11 +39,11 @@ class Posts(ndb.Model):
 	channel_ptr = ndb.KeyProperty(kind=Channels)
 	text = ndb.StringProperty()
 	post_img_url = ndb.BlobKeyProperty()
-	time = ndb.DateTimeProperty(auto_now_add = True)
+	created_time = ndb.DateTimeProperty(auto_now_add = True)
 	pending_bit = ndb.IntegerProperty(default=1)
 	isAnonymous = ndb.StringProperty(
 					choices = ['True','False'],
-					default = 'True')	#True means pending
+					default = 'False')	#True means pending
 	edited_time = ndb.DateTimeProperty(auto_now = True)
 #	isDeleted = ndb.IntegerProperty(default=0)
 
@@ -54,7 +54,7 @@ class Channel_Admins(ndb.Model):
 	channel_ptr = ndb.KeyProperty(kind=Channels)
 	isAnonymous = ndb.StringProperty(
 					choices = ['True','False'],
-					default = 'True')
+					default = 'False')
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
 	isDeleted = ndb.IntegerProperty(default=0)
 	edited_time = ndb.DateTimeProperty(auto_now = True)

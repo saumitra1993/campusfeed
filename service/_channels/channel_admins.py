@@ -14,8 +14,8 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 
 	def post(self,channel_id):
 
-		user_ids = self.request.get('user_id') #array of user_ids
-		
+		user_ids = self.request.get('user_id') #array of user_ids(sent by Chinmay)
+		isAnonymous = self.request.get('is_Anonymous').strip()
 		channel = Channels.get_by_id(int(channel_id))
 
 		if channel:
@@ -26,6 +26,8 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 					db = Channel_Admins()
 					db.user_ptr = user.key
 					db.channel_ptr = channel.key
+					if isAnonymous:
+						db.isAnonymous = 'True' #for user who don't want to reveal his name as admin						
 					db.put()
 					self.response.set_status(200,'Awesome')
 					self.session['last-seen'] = datetime.now()
@@ -42,19 +44,22 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 		user_ptr = ndb.Key('Users',userID)		
 		
 		channel_ptr = ndb.Key('Channels', int(channel_id))
-		logging.info(user_ptr)
-		logging.info(channel_ptr)
+	
 		if channel_ptr and user_ptr:
-			qury = Channel_Admins.query(Channel_Admins.user_ptr == user_ptr, Channel_Admins.channel_ptr == channel_ptr).fetch()
-			if len(qury) == 1:
-				channel_admin = qury[0]
+			query = Channel_Admins.query(Channel_Admins.user_ptr == user_ptr, Channel_Admins.channel_ptr == channel_ptr).fetch()
+			if len(query) == 1:
+				channel_admin = query[0]
 				key = channel_admin.key
-				if key:
-					key.delete()
-					self.response.set_status(200,'Awesome.You are no more admin.')
+			#	if key:
+			#		key.delete()
+				db = Channel_Admins.get_by_id(int(key.id()))
+				if db.isDeleted == 0:
+					db.isDeleted = 1
+					db.put()
 					self.session['last-seen'] = datetime.now()
+					self.response.set_status(200,'Awesome.You are no more admin.')
 				else:
-					self.response.set_status(400,'Unable to fetch key.')	
+					self.response.set_status(400,'Sorry,you are already NOT an admin.')	
 			else:
 				self.response.set_status(401,'Duplicate channel-admin combo!!!')
 		else:

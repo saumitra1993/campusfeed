@@ -18,13 +18,20 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 			channel_admins = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key).fetch()
 			if len(channel_admins) > 0:
 				dict_['description'] = channel.description
+				dict_['channel_name'] = channel.channel_name
 				dict_['created_time'] = date_to_string(utc_to_ist(channel.created_time))
 				out = []
 				for channel_admin in channel_admins:
 					admin = Users.get_by_id(channel_admin.user_ptr.id())
 					_dict = {}
-					_dict['first_name'] = admin.first_name
-					_dict['last_name'] = admin.last_name
+
+					if channel_admin.isAnonymous == True: #for admin who don't want to reveal their names.
+						_dict['first_name'] = 'Anonymous'
+						_dict['last_name'] = ''
+					else:
+						_dict['first_name'] = admin.first_name
+						_dict['last_name'] = admin.last_name
+					
 					out.append(_dict)
 				dict_['admins'] = out
 				self.response.set_status(200, 'Awesome')
@@ -38,17 +45,25 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 
 	def put(self, channel_id):
 
-		if channel_id:	
-			db = Channels.get_by_id(int(channel_id))
-			logging.info(db.pending_bit)
-			if db.pending_bit == 1:
-				db.pending_bit = 0
-			logging.info(db.pending_bit)
-			db.put()
+		user_id = self.session['userid']
+		user = Users.get_by_id(user_id)
+		
+		if user.type_ == 'superuser':
+			if channel_id:	
+				db = Channels.get_by_id(int(channel_id))
+				logging.info(db.pending_bit)
+				if db.pending_bit == 1:
+					db.pending_bit = 0
+				logging.info(db.pending_bit)
+				db.put()
 
-			user_id = self.session['userid']
-			db1 = Channel_Followers()
-			db1.user_ptr = ndb.Key('Users',user_id)
-			db1.channel_ptr = db.key
-			db1.put()	
-			self.session['last-seen'] = datetime.now()
+				db1 = Channel_Followers() #every superuser is follower of every channel
+				db1.user_ptr = ndb.Key('Users',user_id)
+				db1.channel_ptr = db.key
+				db1.put()	
+				self.session['last-seen'] = datetime.now()
+				self.response.set_status(200, 'Awesome.Channel approved.Superuser follows the channel.')
+		else:
+			self.response.set_status(400, 'You are not an SUPERUSER.You cannot approve/follow a CHANNEL.')
+
+			
