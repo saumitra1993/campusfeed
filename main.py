@@ -7,6 +7,7 @@ from service._users.image_url import ImageUrl
 from service._users.search_users import SearchUsers
 from service._users.edit_profile import Profile
 from service._users.requests import PendingChannels
+from service._users.user_feed import UserFeed
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.channels_handler import ChannelsHandler
@@ -40,6 +41,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/channels',FollowedChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/mychannels',MyChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/pendingchannels', PendingChannels),
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/feed',UserFeed),
 
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>',ChannelsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/admins',ChannelAdmins),
