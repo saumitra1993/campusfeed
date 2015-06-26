@@ -67,6 +67,7 @@ class Login(BaseHandler, webapp2.RequestHandler):
 				self.response.write(json.dumps(dict_))
 				self.session['name'] = result[0].first_name + result[0].last_name
 				self.session['userid'] = result[0].key.id()
+				self.session['last-seen'] = datetime.now()
 				self.response.set_status(200, 'Awesome')
 			else:
 				logging.info("Incorrect password.")

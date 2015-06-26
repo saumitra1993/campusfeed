@@ -1,5 +1,6 @@
 import webapp2
 import logging
+from datetime import datetime
 from service._users.sessions import BaseHandler
 from db.database import Channel_Admins, Users
 from google.appengine.ext import ndb
@@ -27,6 +28,7 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 					db.channel_ptr = channel.key
 					db.put()
 					self.response.set_status(200,'Awesome')
+					self.session['last-seen'] = datetime.now()
 				else:
 					self.response.set_status(401,'Unable to fetch user from Users.')
 		else:
@@ -39,16 +41,18 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 		userID = self.session['userid']
 		user_ptr = ndb.Key('Users',userID)		
 		
-		channel_ptr = ndb.Key('Channels', channel_id)
-		
+		channel_ptr = ndb.Key('Channels', int(channel_id))
+		logging.info(user_ptr)
+		logging.info(channel_ptr)
 		if channel_ptr and user_ptr:
-			query = Channel_Admins.query(Channel_Admins.user_ptr = user_ptr, Channel_Admins.channel_ptr = channel_ptr).fetch()
-			if len(query == 1):
-				channel_admin = query[0]
+			qury = Channel_Admins.query(Channel_Admins.user_ptr == user_ptr, Channel_Admins.channel_ptr == channel_ptr).fetch()
+			if len(qury) == 1:
+				channel_admin = qury[0]
 				key = channel_admin.key
 				if key:
 					key.delete()
 					self.response.set_status(200,'Awesome.You are no more admin.')
+					self.session['last-seen'] = datetime.now()
 				else:
 					self.response.set_status(400,'Unable to fetch key.')	
 			else:

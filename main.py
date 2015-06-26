@@ -7,7 +7,11 @@ from service._users.image_url import ImageUrl
 from service._users.search_users import SearchUsers
 from service._users.edit_profile import Profile
 from service._users.requests import PendingChannels
+
 from service._users.user_feed import UserFeed
+
+from service._users.notification import Notifications
+
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.channels_handler import ChannelsHandler
@@ -23,7 +27,10 @@ from service._channels._posts.approve_post import OnePost
 
 config = {}
 config['webapp2_extras.sessions'] = {
-	'secret_key': 'qwertyuioppoiuytrewqqwertyuiopsdfkjbsdjf'
+	'secret_key': 'qwertyuioppoiuytrewqqwertyuiopsdfkjbsdjf',
+	'backends': {'datastore': 'webapp2_extras.appengine.sessions_ndb.DatastoreSessionFactory',
+                 'memcache': 'webapp2_extras.appengine.sessions_memcache.MemcacheSessionFactory',
+                 'securecookie': 'webapp2_extras.sessions.SecureCookieSessionFactory'}
 }
 
 logging.getLogger().setLevel(logging.DEBUG)
@@ -41,7 +48,11 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/channels',FollowedChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/mychannels',MyChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/pendingchannels', PendingChannels),
+
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/feed',UserFeed),
+
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/notifications', Notifications),
+
 
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>',ChannelsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/admins',ChannelAdmins),

@@ -1,6 +1,7 @@
 import webapp2
 import json
 import logging
+from datetime import datetime
 from google.appengine.api import blobstore
 from service._users.sessions import BaseHandler
 from db.database import Users, Channel_Admins, Channels, Channel_Followers
@@ -44,7 +45,7 @@ class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 		db1.channel_ptr = channel_key
 		db1.isAnonymous = isAnonymous
 		k1 = db1.put()
-
+		self.session['last-seen'] = datetime.now()
 		db2 = Channel_Followers()
 		db2.user_ptr = user_key
 		db2.channel_ptr = channel_key
@@ -102,7 +103,7 @@ class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 
 			_dict['all_channels'] = out
 			self.response.set_status(200, 'Awesome')
-			
+			self.session['last-seen'] = datetime.now()
 		else:
 			self.response.set_status(400, 'Limit offset standards are not followed')
 		self.response.write(json.dumps(_dict))

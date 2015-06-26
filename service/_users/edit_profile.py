@@ -26,6 +26,7 @@ class Profile(BaseHandler, webapp2.RequestHandler):
 				pflag = 1
 
 			user.put()
+			self.session['last-seen'] = datetime.now()
 			if eflag == 1:
 				self.response.set_status(200,'Awesome.Email_id updated.')
 			elif pflag == 1:

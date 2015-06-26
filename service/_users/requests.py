@@ -1,6 +1,7 @@
 import webapp2
 import json
 import logging
+from datetime import datetime
 from db.database import Users, Channel_Admins, Channels, Channel_Followers
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 
@@ -39,6 +40,7 @@ class PendingChannels(webapp2.RequestHandler):
 							out.append(_dict)
 						dict_['pending_channels'] = out
 						self.response.set_status(200, 'Awesome')
+						self.session['last-seen'] = datetime.now()
 					else:
 						self.response.set_status(401, 'User is malicious. Ask him to go fuck himself.')
 				else:
