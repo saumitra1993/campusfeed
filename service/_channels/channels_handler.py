@@ -28,6 +28,7 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 					out.append(_dict)
 				dict_['admins'] = out
 				self.response.set_status(200, 'Awesome')
+				self.session['last-seen'] = datetime.now()
 			else:
 				self.response.set_status(400, 'No admins of the channel! Weird!')
 		else:
@@ -50,3 +51,4 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 			db1.user_ptr = ndb.Key('Users',user_id)
 			db1.channel_ptr = db.key
 			db1.put()	
+			self.session['last-seen'] = datetime.now()

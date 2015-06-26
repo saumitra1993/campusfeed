@@ -11,5 +11,4 @@ class SearchUsers(webapp2.RequestHandler):
 
 		search_string = self.request.get('search_string').strip() #search_string is a name(first/last)
 
-		db = 
 

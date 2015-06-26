@@ -2,10 +2,11 @@ import webapp2
 import logging
 import json
 from google.appengine.ext import ndb
+from service._users.sessions import BaseHandler
 from db.database import Channels, Users, Channel_Followers
 from const.constants import DEFAULT_ROOT_URL, DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL
 
-class FollowedChannels(webapp2.RequestHandler):
+class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 	"""docstring for GetMyChannels"""
 	# Request URL- /users/:user_id/channels GET
 	# Response - Dictionary of status(200/400), 
@@ -52,6 +53,7 @@ class FollowedChannels(webapp2.RequestHandler):
 					out.append(_dict)
 				dict_['followed_channels'] = out
 				self.response.set_status(200, 'Awesome')
+				self.session['last-seen'] = datetime.now()
 			else:
 				self.response.set_status(401, 'User is malicious. Ask him to go fuck himself.')
 		else:
@@ -79,6 +81,7 @@ class FollowedChannels(webapp2.RequestHandler):
 				db.channel_ptr = channel_key
 				db.put()
 				self.response.set_status(200,'Awesome')
+				self.session['last-seen'] = datetime.now()
 			else:
 				self.response.set_status(400,'User id and channel id are related.')
 		else:
