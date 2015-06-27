@@ -44,25 +44,35 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 
 	def put(self, channel_id):
 
-		user_id = self.session['userid']
-		user = Users.get_by_id(user_id)
+		userID = self.session['userid']
+		user = Users.get_by_id(userID)
 		
 		if user.type_ == 'superuser':
 			if channel_id:	
 				db = Channels.get_by_id(int(channel_id))
+
+				#approving a Channel by the superuser
 				logging.info(db.pending_bit)
 				if db.pending_bit == 1:
 					db.pending_bit = 0
 				logging.info(db.pending_bit)
 				db.put()
-				###TO CORRECT !!!
-				db1 = Channel_Followers() #every admin is follower of every channel
-				db1.user_ptr = ndb.Key('Users',
-				db1.channel_ptr = db.key
-				db1.put()	
+				
+				#inserting every ADMIN as FOLLOWER of his/her CHANNEL in Channel_Followers
+				result = Channel_Admins.query(Channel_Admins.channel_ptr == db.key) #every admin is follower of HIS channel
+				channel_admins_details = result.fetch()
+				if len(channel_admins_details)>0 :
+					for channel_admin_details in channel_admins_details:
+						db1 = Channel_Followers()
+						db1.user_ptr = channel_admin_details.user_ptr
+						db1.channel_ptr = channel_admin_details.channel_ptr
+						db1.put() 
+				else:
+					logging.info('Admin/s could NOT be inserted as Follower/s of their Channel.')
+				
 				self.session['last-seen'] = datetime.now()
-				self.response.set_status(200, 'Awesome.Channel approved.')
+				self.response.set_status(200, 'Awesome.Channel approved by SUPERUSER.Admins becomes Followers of their Channel.')
 		else:
-			self.response.set_status(400, 'You are not an SUPERUSER.You cannot approve/follow a CHANNEL.')
+			self.response.set_status(400, 'You are not an SUPERUSER.You cannot approve a CHANNEL.')
 
 			

@@ -19,6 +19,7 @@ from service._channels.image_url_channel import ChannelImageUrl
 from service._channels.channels import AllChannels
 from service._channels.my_channels import MyChannels
 from service._channels.channel_admins import ChannelAdmins
+from service._channels.channel_followers import ChannelFollowers
 
 from service._channels._posts.image_url_post import PostImageUrl
 from service._channels._posts.posts import PostsHandler
@@ -55,6 +56,7 @@ application = webapp2.WSGIApplication([
 
 
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>',ChannelsHandler),
+	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/followers',ChannelFollowers),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/admins',ChannelAdmins),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts',PostsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts/<:[0-9][a-z][A-Z]{16}>',OnePost),
