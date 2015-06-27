@@ -21,37 +21,35 @@ class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 
 		user_id = self.request.get('user_id').strip()
 		isAnonymous = self.request.get('isAnonymous').strip()
-		
-		db = Channels()
-		db.channel_name = self.request.get('channel_name').strip()
-		db.description = self.request.get('description').strip()
-		db.curated_bit = int(self.request.get('curated_bit').strip())
-		db.channel_img_url = self.get_uploads('channel_img_url')[0].key()
-		logging.info(db.channel_img_url)
-		k = db.put()
-		channel_items = k.get()
-		channel_key = channel_items.key
+		user_query = Users.query(Users.user_id == user_id).fetch() #query will store entire 'list' of db cols
+		if len(user_query) == 1:
+			user = user_query[0]
+			user_key = user.key
+			user.type_ = 'admin'   #updating 'user' to 'admin
+			user.put()
+			db = Channels()
+			db.channel_name = self.request.get('channel_name').strip()
+			db.description = self.request.get('description').strip()
+			db.curated_bit = int(self.request.get('curated_bit').strip())
+			db.channel_img_url = self.get_uploads('channel_img_url')[0].key()
+			logging.info(db.channel_img_url)
+			k = db.put()
+			channel_items = k.get()
+			channel_key = channel_items.key
 
-		query = Users.query().filter(Users.user_id == user_id).fetch() #query will store entire 'list' of db cols
-		user = query[0]
-		user_key = user.key
-		
-		#updating 'user' to 'admin
-		result = Users.get_by_id(user_id) #result will store entire 'object' of db cols
-		result.type_ = 'admin'
-		result.put()
+			
 
-		db1 = Channel_Admins()
-		db1.user_ptr = user_key
-		db1.channel_ptr = channel_key
-		db1.isAnonymous = isAnonymous
-		k1 = db1.put()
-		self.session['last-seen'] = datetime.now()
-		db2 = Channel_Followers()
-		db2.user_ptr = user_key
-		db2.channel_ptr = channel_key
-		k2 = db2.put()
-		logging.info('...Inserted into DB user with key... %s ' % k1)
+			db1 = Channel_Admins()
+			db1.user_ptr = user_key
+			db1.channel_ptr = channel_key
+			db1.isAnonymous = isAnonymous
+			k1 = db1.put()
+			self.session['last-seen'] = datetime.now()
+			db2 = Channel_Followers()
+			db2.user_ptr = user_key
+			db2.channel_ptr = channel_key
+			k2 = db2.put()
+			logging.info('...Inserted into DB user with key... %s ' % k1)
 
 	# Request URL - /channels GET
 

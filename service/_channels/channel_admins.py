@@ -14,7 +14,7 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 
 	def post(self,channel_id):
 
-		user_ids = self.request.get('user_id') #array of user_ids(sent by Chinmay)
+		user_ids = self.request.get('user_id')	 #array of user_ids(sent by Chinmay)
 		isAnonymous = self.request.get('is_Anonymous').strip()
 		channel = Channels.get_by_id(int(channel_id))
 

@@ -22,13 +22,12 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 				dict_['created_time'] = date_to_string(utc_to_ist(channel.created_time))
 				out = []
 				for channel_admin in channel_admins:
-					admin = Users.get_by_id(channel_admin.user_ptr.id())
 					_dict = {}
-
 					if channel_admin.isAnonymous == True: #for admin who don't want to reveal their names.
 						_dict['first_name'] = 'Anonymous'
 						_dict['last_name'] = ''
 					else:
+						admin = Users.get_by_id(channel_admin.user_ptr.id())
 						_dict['first_name'] = admin.first_name
 						_dict['last_name'] = admin.last_name
 					
@@ -56,13 +55,13 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 					db.pending_bit = 0
 				logging.info(db.pending_bit)
 				db.put()
-
-				db1 = Channel_Followers() #every superuser is follower of every channel
-				db1.user_ptr = ndb.Key('Users',user_id)
+				###TO CORRECT !!!
+				db1 = Channel_Followers() #every admin is follower of every channel
+				db1.user_ptr = ndb.Key('Users',
 				db1.channel_ptr = db.key
 				db1.put()	
 				self.session['last-seen'] = datetime.now()
-				self.response.set_status(200, 'Awesome.Channel approved.Superuser follows the channel.')
+				self.response.set_status(200, 'Awesome.Channel approved.')
 		else:
 			self.response.set_status(400, 'You are not an SUPERUSER.You cannot approve/follow a CHANNEL.')
 
