@@ -1,5 +1,8 @@
 from google.appengine.ext import ndb
+from google.appengine.api import search
 import logging
+
+index1 = search.Index(name='channelsearch')
 
 class Users(ndb.Model):
 	"""docstring for User"""
@@ -30,6 +33,20 @@ class Channels(ndb.Model):
 	isDeleted = ndb.IntegerProperty(default=0)
 	edited_time = ndb.DateTimeProperty(auto_now = True)
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
+
+	def _post_put_hook(self, future):
+		if self == future.get_result().get():
+			name = self.channel_name
+			descr = self.description
+			channel_id = str(self.key.id())
+			fields = [
+			  search.TextField(name="channel_name", value=name),
+			  search.TextField(name="channel_descr", value=descr),]
+			d = search.Document(doc_id=channel_id, fields=fields)
+			try:
+				add_result = search.Index(name="channelsearch").put(d)
+			except search.Error:	  
+				logging.error("Document not saved in index!")
 
 class Posts(ndb.Model):
 	"""docstring for Post"""
@@ -69,12 +86,12 @@ class Channel_Followers(ndb.Model):
 	isDeleted = ndb.IntegerProperty(default=0)
 
 class DBMobileAuth(ndb.Model):
-    name = ndb.StringProperty(indexed=False)
-    user_id = ndb.StringProperty(indexed=True)
-    expiration = ndb.DateTimeProperty(auto_now_add=True)
-    @property
-    def token(self):
-        return self.key.id()
+	name = ndb.StringProperty(indexed=False)
+	user_id = ndb.StringProperty(indexed=True)
+	expiration = ndb.DateTimeProperty(auto_now_add=True)
+	@property
+	def token(self):
+		return self.key.id()
 
 class Upvotes(ndb.Model):
 	"""docstring for Upvote"""

@@ -31,7 +31,11 @@ class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 			db.channel_name = self.request.get('channel_name').strip()
 			db.description = self.request.get('description').strip()
 			db.curated_bit = int(self.request.get('curated_bit').strip())
-			db.channel_img_url = self.get_uploads('channel_img_url')[0].key()
+			try:
+				db.channel_img_url = self.get_uploads('channel_img_url')[0].key()
+			except:
+				db.channel_img_url = blobstore.BlobKey(DEFAULT_IMG_ID)
+			
 			logging.info(db.channel_img_url)
 			k = db.put()
 			channel_items = k.get()

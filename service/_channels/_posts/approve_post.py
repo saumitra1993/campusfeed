@@ -43,15 +43,15 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 				post = result[0]
 				dict_ = {	
 							'post_id' : post.key.id(),
-				            'post_text' : post.text,
-				            'post_description' : post.description,
-				            'post_img_url' : post.post_img_url,
-				        }
+							'post_text' : post.text,
+							'post_description' : post.description,
+							'post_img_url' : post.post_img_url,
+						}
 				logging.info(json.dumps(dict_, indent=2))
-		        
-		        response = json.dumps(dict_)
-		        self.response.write(response)
-		    else:
-		    	self.response.set_status(401,'Unable to fetch post from Posts.')
+				
+				response = json.dumps(dict_)
+				self.response.write(response)
+			else:
+				self.response.set_status(401,'Unable to fetch post from Posts.')
 		else:
 			self.response.set_status(400,'Unable to fetch channel from Channels.')    

@@ -20,6 +20,7 @@ from service._channels.channels import AllChannels
 from service._channels.my_channels import MyChannels
 from service._channels.channel_admins import ChannelAdmins
 from service._channels.channel_followers import ChannelFollowers
+from service._channels.search_channel import SearchChannels
 
 from service._channels._posts.image_url_post import PostImageUrl
 from service._channels._posts.posts import PostsHandler
@@ -49,6 +50,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/channels',FollowedChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/mychannels',MyChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/pendingchannels', PendingChannels),
+	webapp2.Route(r'/users/search', SearchUsers),
 
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/feed',UserFeed),
 
@@ -60,7 +62,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/admins',ChannelAdmins),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts',PostsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts/<:[0-9][a-z][A-Z]{16}>',OnePost),
-
+	webapp2.Route(r'/channels/search',SearchChannels),
 	webapp2.Route(r'/posts/<:[0-9a-zA-Z]{16}>/upvotes',UpvotePost),
 
 ], config=config, debug=True)
