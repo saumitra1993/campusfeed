@@ -112,7 +112,7 @@ class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 					posts = posts_query.fetch(offset=offset)
 
 				out = []
-
+				dict_={}
 				for post in posts:
 					posting_user = Users.get_by_id(post.user_ptr.id())
 					_dict = {}
