@@ -94,9 +94,11 @@ class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 				user = Users.get_by_id(user_id)
 		#		posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
 				
+				if user.type_ == 'admin':
+					is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key).fetch()
+					if len(is_admin) == 1:
+						posts_query = Posts.query(Posts.channel_ptr == channel.key) 
 				if user.type_ == 'user':
-					posts_query = Posts.query(Posts.channel_ptr == channel.key, Posts.pending_bit == 0) 
-				elif user.type_ == 'admin':
 					posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
 				
 				if timestamp:

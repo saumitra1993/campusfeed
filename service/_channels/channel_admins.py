@@ -50,16 +50,16 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 			if len(query) == 1:
 				channel_admin = query[0]
 				key = channel_admin.key
-			#	if key:
+				if key:
 			#		key.delete()
-				db = Channel_Admins.get_by_id(int(key.id()))
-				if db.isDeleted == 0:
-					db.isDeleted = 1
-					db.put()
-					self.session['last-seen'] = datetime.now()
-					self.response.set_status(200,'Awesome.You are no more admin.')
-				else:
-					self.response.set_status(400,'Sorry,you are already NOT an admin.')	
+					db = Channel_Admins.get_by_id(int(key.id()))
+					if db.isDeleted == 0:
+						db.isDeleted = 1
+						db.put()
+						self.session['last-seen'] = datetime.now()
+						self.response.set_status(200,'Awesome.You are no more admin.')
+					else:
+						self.response.set_status(400,'Sorry,you are already NOT an admin.')	
 			else:
 				self.response.set_status(401,'Duplicate channel-admin combo!!!')
 		else:
