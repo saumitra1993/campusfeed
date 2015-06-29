@@ -101,3 +101,8 @@ class Upvotes(ndb.Model):
 
 	#self.session['userid'] ... this is badi wali id 
 	#chinmay will always send me 14307(one in the url),since it has never been sent from backend
+
+class Upvote_Notifications(ndb.Model):
+	user_ptr = ndb.KeyProperty(kind=Users)
+	post_ptr = ndb.KeyProperty(kind=Posts)
+	new_upvote_count = ndb.IntegerProperty(default=0)

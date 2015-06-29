@@ -1,6 +1,7 @@
 import webapp2
 import logging
-from db.database import Posts, Channel_Admins, Channels
+from db.database import Posts, Channel_Admins, Channels, Upvotes, Upvote_Notifications
+from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from service._users.sessions import BaseHandler
 
 class OnePost(BaseHandler, webapp2.RequestHandler):
@@ -23,6 +24,7 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 					db.pending_bit = 0
 				logging.info(db.pending_bit)
 				db.put()
+				self.session['last-seen'] = datetime.now()
 				self.response.set_status(200, 'Awesome.Post approved')
 			else:
 				self.response.set_status(400, 'You are not an ADMIN of this channel.You cannot approve a POST.')
@@ -34,24 +36,34 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 	# Response: text,post_img_url,description
 
 	def get(self,channel_id,post_id):
-
-		channel = Channels.get_by_id(int(channel_id))
-		
-		if channel:
-			result = Posts.query(Posts.channel_ptr == channel.key).fetch()
-			if len(result) == 1 :
-				post = result[0]
-				dict_ = {	
-							'post_id' : post.key.id(),
-							'post_text' : post.text,
-							'post_description' : post.description,
-							'post_img_url' : post.post_img_url,
-						}
-				logging.info(json.dumps(dict_, indent=2))
-				
-				response = json.dumps(dict_)
-				self.response.write(response)
-			else:
-				self.response.set_status(401,'Unable to fetch post from Posts.')
+		logged_in_userid = self.session['userid']
+		logged_in_user_key = Key('Users',logged_in_userid)
+		post = Posts.get_by_id(int(post_id))
+		if post:
+			user = post.user_ptr.get()
+			channel = post.channel_ptr.get()
+			name = user.first_name + " " + user.last_name
+			num_upvotes = Upvotes.query(Upvotes.post_ptr == post.key).count()
+			dict_ = {	
+						'post_id' : post.key.id(),
+						'post_text' : post.text,
+						'post_img_url' : post.post_img_url,
+						'created_time':date_to_string(utc_to_ist(post.created_time)),
+						'channel_id':channel.key.id(),
+						'channel_name':channel.channel_name,
+						'user_id':user.key.id(),
+						'user_name': name,
+						'num_upvotes':num_upvotes,
+					}
+			logging.info(json.dumps(dict_, indent=2))
+			notifications_query = Upvote_Notifications.query(Upvote_Notifications.user_ptr == logged_in_user_key, Upvote_Notifications.post_ptr == post.key).fetch()
+			if len(notifications_query) == 1:
+				new_notif = notifications_query[0]
+				new_notif.new_upvote_count = 0
+				new_notif.put()
+			response = json.dumps(dict_)
+			self.session['last-seen'] = datetime.now()
+			self.response.set_status(200, 'Awesome')
+			self.response.write(response)
 		else:
 			self.response.set_status(400,'Unable to fetch channel from Channels.')    

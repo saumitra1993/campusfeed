@@ -1,7 +1,7 @@
 import webapp2
 import logging
 import json
-from db.database import Channels, Users, Channel_Admins, Channel_Followers
+from db.database import Channels, Users, Channel_Admins, Channel_Followers, Upvote_Notifications
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 from service._users.sessions import BaseHandler
@@ -12,11 +12,10 @@ class Notifications(BaseHandler, webapp2.RequestHandler):
 	# Request URL: users/:userid/notifications GET
 	# Response:
 	#  dict: {
-	#     'admin_notif': channel_id, channel_name, user_id, user_first_name,lastname,bit  #admin added/removed
-	#     'channel_notif': 
-	#     'post_notif':
-	#     'upvote_notif':
-	#     'follow_notif':
+	#     'new_as_admin': [channel_id, channel_name]
+	#     'new_posts': [channel_id, channel_name, num_new_posts]
+	#     'new_followers': [channel_id, channel_name, num_new_followers]
+	#     'new_upvotes': [post_id, channel_name, new_upvote_count]
 	#  }
 	def get(self, user_id):
 		user_query = Users.query(Users.user_id == user_id)
@@ -60,4 +59,24 @@ class Notifications(BaseHandler, webapp2.RequestHandler):
 						out3.append(dict_2)
 				final_dict['new_posts'] = out2
 				final_dict['new_followers'] = out3
+			else:
+				upvote_notifications_query = Upvote_Notifications.query(Upvote_Notifications.user_ptr == user.key, Upvote_Notifications.new_upvote_count > 0).fetch()
+				out4 = []
+				for upvote_notification in upvote_notifications_query:
+					post = upvote_notification.post_ptr.get()
+					channel = post.channel_ptr.get()
+					new_upvote_count = upvote_notification.new_upvote_count
+					dict_ = {}
+					dict_['post_id'] = post.key.id()
+					dict_['channel_name'] = channel.channel_name
+					dict_['new_upvote_count'] = new_upvote_count
+					out4.append(dict_)
+					upvote_notification.new_upvote_count = 0
+					upvote_notification.put()
 
+				final_dict['new_upvotes'] = out4
+				self.response.set_status(200, 'Awesome')
+		else:
+			self.response.set_status(400, 'Unauthorized')
+		
+		self.response.write(json.dumps(final_dict))

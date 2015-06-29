@@ -1,7 +1,7 @@
 import webapp2
 import logging
 from google.appengine.ext import ndb
-from db.database import Upvotes,Posts
+from db.database import Upvotes,Posts, Upvote_Notifications
 from service._users.sessions import BaseHandler
 
 class UpvotePost(BaseHandler, webapp2.RequestHandler):
@@ -29,6 +29,17 @@ class UpvotePost(BaseHandler, webapp2.RequestHandler):
 				db.user_ptr = user_ID
 				db.post_ptr = db1.key
 				db.put()
+				notifications_query = Upvote_Notifications.query(Upvote_Notifications.user_ptr == user_ID, Upvote_Notifications.post_ptr == db1.key).fetch()
+				if len(notifications_query) == 1:
+					new_notif = notifications_query[0]
+					new_notif.new_upvote_count = new_notif.new_upvote_count + 1
+					new_notif.put()
+				else:
+					new_notif = Upvote_Notifications()
+					new_notif.user_ptr = user_ID
+					new_notif.post_ptr = db1.key
+					new_notif.new_upvote_count = 1
+					new_notif.put()
 				self.response.set_status(200,'Awesome')
 			else:
 				self.response.set_status(400,'Unable to fetch post from Posts.')
