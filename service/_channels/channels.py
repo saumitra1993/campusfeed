@@ -17,22 +17,23 @@ class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 
 	def post(self):
 
-		logging.info(self.request)
+		data = json.loads(self.request.body)
 
-		user_id = self.request.get('user_id').strip()
-		isAnonymous = self.request.get('isAnonymous').strip()
+		user_id = data.get('user_id').strip()
+		isAnonymous = str(data.get('isAnonymous'))
 		user_query = Users.query(Users.user_id == user_id).fetch() #query will store entire 'list' of db cols
+		
 		if len(user_query) == 1:
 			user = user_query[0]
 			user_key = user.key
 			user.type_ = 'admin'   #updating 'user' to 'admin
 			user.put()
 			db = Channels()
-			db.channel_name = self.request.get('channel_name').strip()
-			db.description = self.request.get('description').strip()
-			db.curated_bit = int(self.request.get('curated_bit').strip())
+			db.channel_name = data.get('channel_name').strip()
+			db.description = data.get('description').strip()
+			db.curated_bit = int(data.get('curated_bit'))
 			try:
-				db.channel_img_url = self.get_uploads('channel_img_url')[0].key()
+				db.channel_img_url = data.get_uploads('channel_img_url')[0].key()
 			except:
 				db.channel_img_url = blobstore.BlobKey(DEFAULT_IMG_ID)
 			

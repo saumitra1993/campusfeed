@@ -1,6 +1,7 @@
 import webapp2
 import logging
 import json
+import datetime
 from google.appengine.ext import ndb
 from service._users.sessions import BaseHandler
 from db.database import Channels, Users, Channel_Followers
@@ -11,10 +12,10 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 	# Request URL- /users/:user_id/channels GET
 	# Response - Dictionary of status(200/400), 
 	# user_channels: array of (   channel_id, 
-	# 						channel_name, 
-	# 					channel_img_url, num_followers)
+	#                       channel_name, 
+	#                   channel_img_url, num_followers)
 	# Query params-
-	# limit and offset	
+	# limit and offset  
 	def get(self,user_id):
 		limit = self.request.get('limit')
 		offset = self.request.get('offset')
@@ -53,7 +54,7 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 					out.append(_dict)
 				dict_['followed_channels'] = out
 				self.response.set_status(200, 'Awesome')
-				self.session['last-seen'] = datetime.now()
+				self.session['last-seen'] = datetime.datetime.now()
 			else:
 				self.response.set_status(401, 'User is malicious. Ask him to go fuck himself.')
 		else:
@@ -103,15 +104,15 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 				if len(query) == 1:
 					user_channel = query[0]
 					key = user_channel.key
-				    if key:
-					# 	key.delete()	
+					if key:
+					#   key.delete()    
 						db = Channel_Followers.get_by_id(int(key.id()))
 						if db.isDeleted == 0:
 							db.isDeleted = 1
 							db.put()
 							self.response.set_status(200,'Awesome.Entry deleted.')
 					else:
-					 	self.response.set_status(400,'Unable to fetch key.')
+						self.response.set_status(400,'Unable to fetch key.')
 				else:
 					self.response.set_status(401,'Duplicate user_ptr-channel_ptr combo!!!')
 			else:

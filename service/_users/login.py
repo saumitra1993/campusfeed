@@ -53,9 +53,13 @@ class Login(BaseHandler, webapp2.RequestHandler):
 		# user_img_url = self.get_uploads('user_img_url')[0].key()
 		# db.put()
 
-		
-		user_id = self.request.get("user_id").strip()
-		password = self.request.get("password").strip()
+		data = json.loads(self.request.body)
+		# user_id = self.request.get("user_id").strip()
+		# password = self.request.get("password").strip()
+		user_id = data.get("user_id")
+		password = data.get("password")
+		logging.info(self.request)
+		logging.info(user_id)
 		result = Users.query().filter(Users.user_id == user_id).fetch()
 		dict_={}
 		if result:
@@ -69,8 +73,11 @@ class Login(BaseHandler, webapp2.RequestHandler):
 				self.session['userid'] = result[0].key.id()
 				self.session['last-seen'] = datetime.now()
 				self.response.set_status(200, 'Awesome')
+				self.response.write(json.dumps(dict_))
+				logging.info("done")
 			else:
 				logging.info("Incorrect password.")
 		else:
+			self.response.set_status(400,'Fail')
 			logging.info("Login Failed!")	
 
