@@ -1,0 +1,77 @@
+/* ----------------------------------
+
+Name:purple.css
+Version:1.3
+
+---------------------------------- */
+
+/* Logo */
+.logo-dark { width: 136px !important; }
+.logo-white { width: 157px !important; }
+
+/* Color and Othe Element */
+body { color: #757575 }
+.navbar-inverse .navbar-nav > li.current > a, 
+.navbar-inverse .navbar-nav > li > a:hover { border-bottom: 2px solid #c80063 }
+.gray-bg { background-color: #000 }
+.pink-bg { background-color: #c80063 }
+.service-box:hover { background-color: #141414 }
+.border-right { border-right: 1px solid #262626 }
+.border-bottom { border-bottom: 1px solid #262626 }
+.highlight { background-color: #c80063; }
+.home-slider h1 { color: #c80063; }
+i { color: #c80063 }
+.portfolio-figure .title { color: #c80063 }
+.orange-bg { background-color: #c80063 }
+.social i:hover { color: #c80063 }
+.map-button:before { color: #c80063 }
+.highlight { position: relative; z-index: 3 }
+header .intro-section { padding-top: 365px }
+.popup-slide .title { color: #c80063 }
+.popup-navigation span:hover { color: #c80063 }
+.slider-gradient-overlay { background: rgba(2, 18, 78, 0.7); background: -moz-linear-gradient(left, rgba(172, 28, 130, 0.7) 0%, rgba(108, 59, 124, 0.6) 100%); background: -webkit-gradient(left top, right top, color-stop(0%, rgba(172, 28, 130, 0.7)), color-stop(100%, rgba(108, 59, 124, 0.6))); background: -webkit-linear-gradient(left, rgba(172, 28, 130, 0.7) 0%, rgba(108, 59, 124, 0.6) 100%); background: -o-linear-gradient(left, rgba(172, 28, 130, 0.7) 0%, rgba(108, 59, 124, 0.6) 100%); background: -ms-linear-gradient(left, rgba(172, 28, 130, 0.7) 0%, rgba(108, 59, 124, 0.6) 100%); background: linear-gradient(to right, rgba(172, 28, 130, 0.7) 0%, rgba(108, 59, 124, 0.6) 100%); height: 100%; position: absolute; top: 0; width: 100%; z-index: 1; }
+.model-name { color: #c80063; font-weight: 500; }
+.model-des { font-size: 20px; font-weight: 400; }
+.highlight-button-black { border: 2px solid #c80063; color: #c80063; display: inline-block; font-family: "Oswald", sans-serif; font-size: 14px; font-weight: 400; letter-spacing: 2px; margin: 10px 0 0; padding: 6px 16px; text-decoration: none; text-transform: uppercase; }
+.highlight-button-black:hover { background-color: #000; border-color: #fff; color: #FFF; }
+.orange-line { background: #c80063; }
+.label { border: 2px solid #c80063; color: #c80063; }
+.border-top { border-top: 1px solid #262626; }
+#success { border-color: #c80063; color: #c80063; }
+.loader .loader-progress { background-color: #c80063; }
+
+/* models */
+.models-main { transition: all 400ms ease-in-out 0s; -webkit-transition: all 400ms ease-in-out 0s; -moz-transition: all 400ms ease-in-out 0s; }
+.models-photo { background-color: #fff; }
+.models-text { padding: 60px; min-height: 476px; background-color: #c80063; }
+.models-text .model-name { font-size: 25px; color: #FFF; margin-top: 0; }
+.models-main:hover .model-name { color: #c80063; }
+.models-main:hover img { opacity: 0.4; transition: all 400ms ease-in-out 0s; -webkit-transition: all 400ms ease-in-out 0s; -moz-transition: all 400ms ease-in-out 0s; }
+.models-main:hover .models-text { background-color: #FFF; color: #000; }
+.models-main:hover p { color: #c80063; }
+.models-text .small-button { background-color: #000; color: #fff; margin-bottom: 0; font-size: 13px; padding: 5px 20px; }
+
+/* Testimonial */
+.testimonial { background: url(http://placehold.it/1920x1048) no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+
+/* photoshots */
+.photoshots { padding-top: 0; }
+.gallery ul li { width: 20%; float: left; }
+
+/* Blog */
+.blog-content.active .frameOverlay { background-color: #000; }
+.blog-title .title { color: #c80063; }
+.month { color: #585858; }
+.blog-day { background-color: #c80063; border: 2px solid #c80063; }
+.blog-content:hover .blog-day { border: 4px solid #fff; background-color: #c80063; color: #fff; }
+.small-button { border: 2px solid #2c2c2c; color: #717171; }
+.small-button:hover { border: 2px solid #c80063; color: #c80063; }
+
+/* contact */
+.icon-list li a { color: #757575 }
+.form-control { background-color: #1d1d1d; border-bottom: 1px solid #1d1d1d; color: #5e5e5e; }
+.form-control:focus { border-bottom: 1px solid #c80063; }
+.divider { background-color: #262626; }
+
+/* footer */
+#footer { background: url(http://placehold.it/1920x197) no-repeat center top; -webkit-background-size: cover; background-size: cover; }

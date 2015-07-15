@@ -1,0 +1,125 @@
+/* ----------------------------------
+
+Name:blue.css
+Version:1.3
+
+---------------------------------- */
+
+/* Logo */
+.logo-dark { width: 122px !important; }
+.logo-white { width: 141px !important; }
+
+/* Color and Othe Element */
+.count-box p { color: #12569b; }
+.navbar-inverse .navbar-nav > li.current > a, 
+.navbar-inverse .navbar-nav > li > a:hover { border-bottom: 2px solid #12569b }
+.highlight { background-color: transparent; font-size: 85px }
+i { color: #12569b }
+.portfolio-figure .title { color: #12569b }
+.orange-bg { background-color: #12569b }
+.social i:hover { color: #12569b }
+.map-button:before { color: #12569b }
+.home-slider h1 { background-color: transparent; color: #fff; border-top: 1px solid rgba(255, 255, 255, 0.3); border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+.tour-price { border-radius: 15px; background-color: #ffc600; padding: 23px 0; height: 120px; width: 120px; font-size: 35px; font-family: 'Oswald', sans-serif; left: 0; right: 0; margin: 0 auto; position: absolute; top: -29%; font-weight: 100; color: #000 }
+.tour-price span { display: block; font-size: 23px; line-height: 36px; padding: 0 !important; }
+.highlight { position: relative; z-index: 3 }
+.slider-text .highlight-button, 
+.slider-text .highlight-button:focus { border: 2px solid #fff; background-color: #FFF; color: #000; font-size: 13px; letter-spacing: 1px; padding: 3px 15px; }
+.slider-text .highlight-button:hover { background-color: transparent; color: #fff; }
+header .intro-section { padding-top: 365px }
+.popup-slide .title { color: #12569b }
+.popup-navigation span:hover { color: #12569b }
+.title-text { padding: 0; }
+#success { border-color: #12569b; color: #12569b; }
+.loader .loader-progress { background-color: #12569b; }
+
+/* Separator */
+.blue-line { margin: 15px auto 13px; z-index: 1; width: 80px; height: 6px; background: #12569b; }
+h2.title { display: block; font-size: 60px; margin-top: 70px; }
+.orange-line { background: #12569b; }
+
+/* About Us */
+#about { padding-top: 90px; }
+.about .title { margin: 0 }
+.about .title-text { height: 160px; }
+.dishes-main-img { background-color: #000; }
+.dishes-main-text { padding: 10px 30px; }
+.dishes-main-text .small-button { margin: 10px 0 20px }
+.dishes-main-text h4 { font-size: 18px; line-height: 35px; }
+.dishes-main:hover .dishes-main-img img { opacity: 0.5; }
+.dishes-main { background-color: #fff; padding: 15px; margin-bottom: 25px; border: 1px solid #e2e2e2; box-shadow: 3px 3px  5px #e2e2e2; }
+.dishes-main:hover { box-shadow: 0 0  5px #c7c7c7; }
+
+/* Popular Destinations */
+.popular-destinations { background: url(http://placehold.it/1920x1048) no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+.popular-destinations .title-text { height: 160px; }
+.destinations-main { background-color: #FFF; }
+.destinations-text { padding: 10px 27px; text-align: left; }
+.namerol .small-button { font-size: 11px; color: #828282; border: 1px solid #bababa; padding: 0 12px; font-family: 'Open Sans', sans-serif; letter-spacing: 0; }
+.namerol .small-button:hover { color: #fff; border: 1px solid #000; }
+.popular-destinations .team-details .namerol .orange-line, 
+.special-offers .team-details .namerol .orange-line, 
+.holidays .team-details .namerol .orange-line { margin: 6px auto 13px; }
+.popular-destinations .our-team .orange-line { background: #fff; }
+.team-details:hover .small-button { color: #fff; border: 1px solid #000; background-color: #000; }
+.honeymoon-packages-banner img { width: auto; margin-top: 85px; }
+
+/* Tour List */
+.tour-list .portfolio-figure figcaption { height: 75%; width: 75%; left: 12.5%; top: 12.6%; padding: 35px; }
+.tour-price-popup { display: block; font-size: 25px !important; margin-top: 5px !important; font-weight: 500 !important; }
+.tour-price-popup .red-font { color: #c60c0f; font-weight: 200; display:inline-block !important  }
+.portfolio-figure figcaption span { color: #5e5e5e; font-size: 25px; font-weight: 100; }
+.tour-list .portfolio-figure:hover img { -webkit-transform: translateY(0px); -moz-transform: translateY(0px); -ms-transform: translateY(0px); transform: translateY(0px); opacity: 0.4; }
+.tour-list .portfolio-figure figcaption { box-shadow: none; }
+.tour-list .portfolio-figure .title { font-size: 32px; font-weight: 300; margin-bottom: 10px; }
+.tour-list .black-line { margin-left: auto; margin-right: auto; }
+.tour-details { font-size: 14px; color: #5e5e5e; line-height: 20px; width: 80%; margin-right: auto; margin-left: auto; margin-bottom: 30px; }
+.tour-list .portfolio-figure figcaption a { display: inherit; right: 0; left: 0; bottom: 12%; margin: 0 auto; font-size: 14px; padding: 5px 15px; width: 128px; }
+.tour-list .portfolio-figure figcaption a:hover { color: #FFF; }
+.itinerary li { margin-bottom: 15px; float: left; }
+.itinerary li span { background-color: #000; display: inline-block; color: #FFF; text-transform: uppercase; padding: 2px 15px; font-weight: 600; font-size: 12px; margin: 7px 0 0 0; float: left; }
+.itinerary li p { float: right; width: 85%; }
+.meals { margin: 15px 0 0 150px; color: #939393; }
+.popup-slideshow .highlight-button { background-color: #c60c0f; color: #fff; float: left; font-size: 25px; padding: 15px 25px; }
+.popup-slideshow .highlight-button:hover { background-color: #000; color: #FFF; }
+span.title { font-size: 30px; }
+
+/* Work Count */
+.work-count-box { text-align: center; }
+span.title { display: block; text-align: center; color: #000; }
+.work-count-box .content-white { margin: 0 auto; color: #000; }
+.work-count-box .black-line-top, 
+.work-count-box .black-line-bottom { margin-left: auto; margin-right: auto; display: block; }
+.work-count-box i { color: #fff; border-radius: 50%; width: 100px; height: 100px; padding: 29px; background-color: #000; margin-bottom: 20px; }
+
+/* Testimonial */
+.testimonial { background: url(http://placehold.it/1920x1048) no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+.testimonial .reviews i { font-size: 20px; margin: 0 8px 25px 0; color: #ffa800; }
+
+/* Special Offers */
+.special-offers { padding-bottom: 90px !important; }
+.offers-tour-price { background: rgba(0, 0, 0, 0.7); font-family: "Oswald", sans-serif; font-size: 20px; text-transform: uppercase; font-weight: 100; left: 0; margin: 0 auto; padding: 10px 0; position: absolute; right: 0; bottom: 0; width: 100%; color: #FFF; }
+.offers-tour-price span { display: block; font-size: 23px; line-height: 36px; padding: 0; }
+.special-offers .team-details .namerol { background: none repeat scroll 0 0 #fff; padding: 30px 0 17px; }
+.special-offers .team-details .team-profile { background-color: #000; }
+.special-offers .team-details:hover .team-profile img { opacity: 0.5; }
+.special-offers .team-details:hover .offers-tour-price { background-color: #fdcf31; color: #000; }
+
+/* Counter Box */
+.count-box .title { color: #525252; font-size: 30px; }
+
+/* Holidays */
+.holidays { background: url(http://placehold.it/1920x1048) no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+.holidays .carousel-indicators { bottom: -80px; }
+.holidays .carousel-indicators li { border: 2px solid #fff; }
+.holidays .carousel-indicators .active { background-color: #fff; }
+.holidays .carousel { overflow: visible; }
+.holidays .container { overflow: hidden; }
+.holidays .blue-line { background: #fff; }
+
+/* Conter Box */
+.conter-box { background: url(http://placehold.it/1920x1000) no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+
+/* Blog */
+.blog-day { background-color: #12569b; border: 2px solid #12569b; }
+.blog-content:hover .blog-day { border: 4px solid #fff; background-color: #12569b; color: #fff; }

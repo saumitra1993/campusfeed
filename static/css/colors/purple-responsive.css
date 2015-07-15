@@ -1,0 +1,63 @@
+/* ----------------------------------
+
+Name:purple-responsive.css
+Version:1.3
+
+---------------------------------- */
+
+.purple #about { position: relative; }
+.purple .model-box { overflow: hidden; }
+.purple .white-bg { opacity: 0; position: absolute; width: 100%; }
+@media screen and (max-width:1024px) {
+    .slider-text { height: 74%; }
+}
+@media screen and (max-width:992px) {
+    .purple .purple-service-box { border-bottom: 1px solid #262626 !important; }
+    .purple .gallery ul li { width: 25%; }
+}
+@media screen and (max-width:768px) {
+    .purple .gallery ul li { width: 50%; }
+    .purple .model-box .simple-text { width: 50% !important; }
+    .purple .pp_gallery {left: 46%; }
+    .purple h2.title { font-size: 45px; }
+    .purple .border-right { border-color: #262626 !important; }
+    .purple .service-box { border-bottom-color: #262626 !important; }
+    .purple .models-text { padding: 30px; min-height: 0; }
+    .slider-text { height: 65%; }
+}
+@media screen and (max-width:767px) {
+    .purple .home-slider h1 { font-size: 30px; }
+    .purple .simple-text { height: inherit !important; }
+    .purple.models-text { min-height: 0; }
+    .purple .conter-box .col-md-3 { margin: 0 0 30px; }
+    .purple .count-box:nth-child(4) { margin-bottom: 0; }
+    .purple .highlight-button-black { margin-top: 0; }
+}
+@media screen and (max-width:600px) {
+    .purple .white-bg { height: 100%; overflow: hidden; opacity: 0.9 }
+    .purple .simple-text { width: 100% !important; }
+    .purple .model-box { background: url(../images/about-model.jpg) no-repeat -420px top; }
+    .purple .model-box .simple-text { margin-top: 30px !important; text-align: center; width: 100% !important; }
+}
+@media screen and (max-width:480px) {
+    .purple .home-slider h1 { font-size: 24px; line-height: 26px; padding: 20px 22px; }
+    .purple .big { font-size: 20px; margin-top: 0; line-height: 26px; margin-bottom: 15px; }
+    .purple .models-text { padding: 15px; }
+    .purple h2.title { font-size: 30px; }
+}
+@media screen and (max-width:420px) {
+    .purple .gallery ul li { width: 100%; }
+    .purple .chart span, 
+    .purple .chart2 span, 
+    .purple .chart3 span { top: 34%; }
+    .purple .pp_details { width: 240px; }
+    .purple .lead { margin-top: 8%; }
+}
+@media screen and (max-width:320px) {
+    .purple .chart span, 
+    .purple .chart2 span, 
+    .purple .chart3 span { font-size: 32px; top: 44%; }
+    .purple .slider-text { height: 75%; }
+    .purple .contact-info { margin-top: 0; }
+    
+}

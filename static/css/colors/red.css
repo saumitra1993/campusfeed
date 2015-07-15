@@ -1,0 +1,127 @@
+/* ----------------------------------
+
+Name:red.css
+Version:1.3
+
+---------------------------------- */
+
+/* Logo */
+.logo-dark { width: 202px !important; }
+.logo-white { width: 233px !important; }
+
+/* Color and Othe Element */
+body { background-color: #000; }
+.navbar-inverse .navbar-nav > li.current > a, 
+.navbar-inverse .navbar-nav > li > a:hover { border-bottom: 2px solid #d52124 }
+.highlight { background-color: transparent; font-size: 85px }
+i { color: #d52124 }
+.portfolio-figure .title { color: #d52124 }
+.orange-bg { background-color: #d52124 }
+.social i:hover { color: #d52124 }
+.map-button:before { color: #d52124 }
+.home-slider h1 { background-color: #d52124; color: #fff; font-size: 55px; padding: 25px 45px; margin: 0; font-weight: 100; }
+.slider-text { height: 60%; }
+.home-slider span { font-size: 26px; font-family: "Open Sans", sans-serif; padding: 18px 0 55px; color: #828282; }
+.highlight { position: relative; z-index: 3 }
+.slider-text .highlight-button, 
+.slider-text .highlight-button:focus { border: 2px solid #fff; background-color: #FFF; color: #000; font-size: 13px; letter-spacing: 1px; padding: 3px 15px; }
+.slider-text .highlight-button:hover { background-color: transparent; color: #fff; }
+header .intro-section { padding-top: 365px }
+.popup-slide .title { color: #d52124 }
+.popup-navigation span:hover { color: #d52124 }
+#success { border-color: #d52124; color: #d52124; }
+.loader .loader-progress { background-color: #d52124; }
+
+/* Separator */
+.blue-line { margin: 15px auto 13px; z-index: 1; width: 80px; height: 6px; background: #d52124; }
+h2.title { display: block; font-size: 60px; margin-top: 70px; color: #9a9a9a; }
+.orange-line { background: #d52124; }
+.title-text { height: 160px; padding-left: 0 !important; padding-right: 0 !important; }
+.title { margin: 0 !important; }
+
+/* About Us */
+#about { padding-top: 90px; }
+.dishes-main-img { background-color: #d52124; }
+.dishes-main-text { padding: 10px 30px; }
+.dishes-main-text .small-button { margin: 10px 0 20px }
+.dishes-main-text h4 { font-size: 18px; line-height: 35px; }
+.dishes-main:hover .dishes-main-img img { opacity: 0.5; }
+.dishes-main { background-color: #181818; margin-bottom: 25px; }
+.dishes-main:hover .small-button-dark-gray { background-color: #d52124; color: #FFF; border: 1px solid #d52124 !important; }
+
+/* Featured Projects */
+.featured-projects { background: url("http://placehold.it/1920x1280") no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+.popular-destinations .title-text { height: 160px; }
+.destinations-main { background-color: #FFF; }
+.destinations-text { padding: 10px 27px; text-align: left; }
+.namerol .small-button { font-size: 11px; color: #828282; border: 1px solid #bababa; padding: 0 12px; font-family: 'Open Sans', sans-serif; letter-spacing: 0; }
+.namerol .small-button:hover { color: #fff; border: 1px solid #000; }
+.popular-destinations .team-details .namerol .orange-line, 
+.special-offers .team-details .namerol .orange-line, 
+.holidays .team-details .namerol .orange-line { margin: 6px auto 13px; }
+.popular-destinations .our-team .orange-line { background: #fff; }
+.team-details:hover .small-button { color: #fff; border: 1px solid #000; background-color: #000; }
+.team-details .namerol { padding: 25px; }
+
+/* Projects */
+.isotope-filters li a:hover, 
+.isotope-filters li a:focus, 
+.isotope-filters li a:active, 
+.isotope-filters li a.active { color: #d52124; }
+.project-list .portfolio-figure figcaption { height: 50%; width: 100%; left: 0; top: 0; padding: 35px; background-color: rgba(213, 33, 36, 0.8); }
+.project-list .portfolio-figure:hover img { -webkit-transform: translateY(0px); -moz-transform: translateY(0px); -ms-transform: translateY(0px); transform: translateY(0px); opacity: 0.4; }
+.project-list .portfolio-figure figcaption { box-shadow: none; }
+.project-list .portfolio-figure figcaption .spa-details { text-align: left; }
+.spa-details .title { font-weight: 100; font-size: 25px; }
+.spa-details p { color: #fff; line-height: 22px; margin: 0; font-size: 12px; font-weight: 300; letter-spacing: 1px; text-transform: uppercase; width: 70%; margin-top: 5px; }
+.portfolio-figure figcaption a { display: inline-block; position: inherit; right: inherit; color: #000; background-color: #FFF; border: 1px solid #FFF; margin-top: 25px; }
+.portfolio-figure figcaption a:hover { color: #fff; background-color: #000; border: 1px solid #898989; }
+.portfolio-figure .title { font-family: 'Open Sans', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 3px; font-weight: 600; border-bottom: 1px solid rgba(235, 235, 235, 0.3); display: inline-block; padding: 6px 0; }
+.popup-slide figure { background-color: #000; }
+.popup-navigation span.nav-next, 
+.popup-navigation span.nav-prev { background-color: #d52124; }
+.popup-navigation span.nav-next:hover, 
+.popup-navigation span.nav-prev:hover { color: #000; }
+.popup-line { background-color: #2e2e2e; }
+.popup-slide .right-part { color: #656565; }
+span.nav-close:before { color: #FFF; }
+
+/* Work Count */
+.work-count { background: url("http://placehold.it/1920x1280") no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+.work-count-box { text-align: center; }
+span.title { display: block; text-align: center; color: #000; font-family: 'Open Sans', sans-serif; font-size: 14px; letter-spacing: 1px; font-weight: 600; margin: 40px 0 15px 0 !important; }
+.work-count-box .gray-text { margin: 0 auto; font-size: 13px; line-height: 21px; width: 80%; }
+.work-count-box .black-line-top, 
+.work-count-box .black-line-bottom { margin-left: auto; margin-right: auto; display: block; }
+.work-count-box i { color: #fff; border-radius: 50%; width: 70px; height: 70px; padding: 20px; background-color: #818181; margin-bottom: 20px; font-size: 30px; }
+
+/* Testimonial */
+.testimonial { background: url("http://placehold.it/1920x1048") no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+.testimonial .reviews i { font-size: 20px; margin: 0 8px 25px 0; color: #ffa800; }
+#testimonial .color-overlay { padding-top: 129px; padding-bottom: 120px; background: none repeat scroll 0 0 rgba(213, 33, 36, 0.9) }
+
+/* Expertise */
+.expertise { padding-bottom: 90px !important; padding-top: 90px !important; }
+
+/* Team */
+#team { padding: 90px 0; }
+.label { border: 2px solid #d52124; color: #FFFFFF; }
+
+/* Conter Box */
+.conter-box { background: url("http://placehold.it/1920x1000") no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+
+/* Blog */
+#blog { padding: 90px 0; }
+.blog-day { background-color: #d52124; border: 2px solid #d52124; }
+.blog-content:hover .blog-day { border: 4px solid #fff; background-color: #d52124; color: #fff; }
+.date { border-bottom: 1px solid #dbdbdb; border-top: 1px solid #dbdbdb; padding: 10px 0; text-transform: uppercase; font-size: 12px; margin-bottom: 15px; }
+
+/* Client logos */
+.client-logos { background: url(http://placehold.it/1920x1000) no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }
+
+/* Contact */
+.contact { padding: 90px 0; }
+.divider { background-color: #262626; }
+.form-control { background-color: #1d1d1d; border-bottom: 1px solid #1d1d1d; color: #5e5e5e; }
+.form-control:focus { border-bottom: 1px solid #d52124; }
+#footer { background: url(http://placehold.it/1920x1000) no-repeat center top fixed; -webkit-background-size: cover; background-size: cover; }

@@ -1,0 +1,171 @@
+/* ----------------------------------
+
+Name:violet-responsive.css
+Version:1.3
+
+---------------------------------- */
+
+@media screen and (max-width:1650px) {
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 40% 0 0; }
+    .violet .portfolio-figure .title { font-size: 14px !important; letter-spacing: 2px; line-height: 24px; }
+}
+@media screen and (max-width:1400px) {
+    .violet .spa-details p { width: 88%; }
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 34% 0 0; }
+}
+@media screen and (max-width:1210px) {
+    .violet .spa-list .portfolio-figure figcaption { padding: 7%; }
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 30% 0 0; }
+    .violet .portfolio-figure figcaption a { margin-top: 13px; }
+}
+@media screen and (max-width:1055px) {
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 51% 0 0; }
+    .violet .portfolio-figure .title { display: block; }
+    .violet .spa-list .portfolio-figure figcaption .spa-details p { display: none; }
+    .violet .portfolio-figure figcaption a { display: block; float: left; }
+}
+@media screen and (max-width:992px) {
+    .violet h2.title { font-size: 20px; padding: 3px 25px; margin-top: 38px; }
+    .violet .about-spa { padding: 90px 30px; }
+    .violet .portfolio-figure .title { line-height: 18px; }
+    .violet .margin-bottom-100 { margin-bottom: 48px; }
+    .violet .about-spa .container { width: 100%; }
+    .violet .blog .description { display: inline; }
+    .violet .contact .margin-bottom-50 { margin-bottom: 0 !important; }
+    .violet .contact-info { margin-top: 0; padding-top: 30px; }
+    .violet .map { padding: 0; }
+}
+@media screen and (max-width:840px) {
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 43% 0 0; }
+}
+@media screen and (max-width:768px) {
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 41% 0 0; }
+    .violet .work-count .col-sm-7 { width: 85.333333%; }
+    .violet .col-sm-7 { width: 87%; }
+    .violet h2.title { margin: 90px 0 22px; }
+    .violet .margin-bottom-100 { margin-bottom: 40px; }
+    .violet .title-text { padding: 0 0 0; height: auto !important; margin: 0 auto; text-align: center; float: none; display: block; }    
+    .violet span.title { margin: 20px 0 7px 0; }
+    .violet .margin-top-50 { margin-top: 17px !important; }
+    .violet .margin-bottom-50 { margin-bottom: 25px !important; }
+    .violet .margin-bottom { margin-bottom: 20px !important; }
+    .violet .count-box .title { line-height: 28px; }
+    .violet .about-spa-details { padding: 0; width: 80%; }
+    .violet .small-button-gray { margin: 0; }
+    .violet .our-team .content-white { margin-bottom: 10px; }
+    .violet .blog .description { display: inline-block; width: 100%; }
+    .violet .padding-30 { padding: 15px; }
+    .violet .contact-info { padding-top: 25px !important; margin-top: 5px; }
+    .violet .description.margin-top { margin-top: 1% !important; }
+    .violet #about .team-details:nth-child(3), 
+    .violet #about .team-details:nth-child(4) { margin-bottom: 0; }
+    .violet .offers .team-details:nth-child(3), 
+    .violet .offers .team-details:nth-child(4) { margin-bottom: 0; }
+    .violet .count-box:last-child p { margin-bottom: 0; }
+    .violet .spa-list .portfolio-figure figcaption .spa-details p { display: block; }
+    .violet .team .row:nth-child(2) { margin-top: 17px; }
+}
+@media screen and (max-width:767px) {
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 84% 0 0; }
+    .violet .spa-list .portfolio-figure figcaption .spa-details p { margin-top: 8px; }
+    .violet .work-count .col-sm-7 { width: 100%; }
+    .violet .col-sm-7 { width: 100%; }
+    .violet #blog { padding-bottom: 30px; }
+    .violet .work-count .col-sm-7 h6 { margin-top: 0; }
+    .violet .margin-bottom-100 { margin-bottom: 30px; }
+    .violet .work-count-box { display: inline-block; padding: 0 }
+    .violet .work-count-box:last-child { margin-bottom: 0; }
+    .violet span.title { font-size: 22px; }
+    .violet .blog span.title { font-size: 14px; margin: 15px 0 15px 0; }
+    .violet .count-box:last-child { margin-bottom: 0; }
+    .violet .about-spa { padding: 30px; }
+    .violet .about-spa .container { margin: 0; }
+    .violet .about-spa-details { width: 100%; }
+    .violet .about-spa-details h6 { font-size: 24px; line-height: 26px; }
+    .violet .contact-text { text-align: center; }
+    .violet .icon-list li { text-align: center; }
+    .violet .divider-transparent { width: 100%; }
+    .violet .form-group { margin-bottom: 0; }
+    .violet .form-group button { margin: 0; }
+    .violet .namerol .content { width: 100%; }
+    .violet .contact-info { padding-top: 17px; margin-top: 0px; }
+    .violet h2.title { margin: 31px 0 16px; }
+    .violet .contact .margin-bottom { margin-bottom: 20px !important; }
+    .violet .contact .row:last-child { padding-top: 10px !important; }
+    .violet .margin-bottom { margin-bottom: 5px !important; }
+    .violet .description h6 { margin: 0; }
+    .violet .about-spa-details h6 { margin-bottom: 15px !important; }
+    .violet p.description { margin-bottom: 0 !important; }
+    .violet .small-button-red { margin-bottom: 0; }
+    .violet .count-box .title { margin-top: 5px !important; }
+    .violet .row.group.margin-top.show { margin-top: 7px !important; }
+    .violet .offers .team-details:nth-child(3) { margin-bottom: 15px; }
+}
+@media screen and (max-width:723px) {
+    .violet .isotope-filters { margin: 5% 10px; }
+    .violet .isotope-filters li { padding: 0 1%; }
+    .violet .isotope-filters li a { font-size: 18px; }
+}
+@media screen and (max-width:600px) {
+    .violet .description { line-height: 26px; margin-bottom: 3px !important; font-size: 14px; }
+    .violet .description h6 { line-height: 26px; font-size: 18px; margin-bottom: 15px !important; }
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 77% 0 0; }
+    .violet .about-spa-details h6 { font-size: 22px; line-height: 24px; }
+    .violet .light { font-size: 16px; margin-bottom: 7px; }
+    .violet .lead { font-size: 20px; }
+    .violet .team-details:hover .our-team { padding-top: 75px; }
+    .violet .contact-info { margin-top: 8px; }
+}
+@media screen and (max-width:480px) {
+    .violet .margin-top-50 { margin-top: 20px !important }
+    .violet h2.title { margin-top: 23px; }
+    .violet .description h6 { font-size: 16px; line-height: 23px; margin-bottom: 10px !important; }
+    .violet .team-details { padding: 0; width: 100%; }
+    .violet .team-details:last-child { margin-bottom: 10px; }
+    .violet .description { line-height: 23px; }
+    .violet .small-button, 
+    .violet .small-button-red { margin: 15px 0 6px; }
+    .violet .spa-list .portfolio-figure figcaption { padding: 5%; }
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 70% 0 0; }
+    .violet span.title { font-size: 18px; line-height: 19px; margin: 15px 8px 10px; }
+    .violet .work-count-box .gray-text { line-height: 18px; }
+    .violet .work-count .col-sm-7 h6 { font-size: 16px; line-height: 19px; }
+    .violet .col-md-8, 
+    .violet .col-md-6, 
+    .violet .col-md-4, 
+    .violet .col-md-3 { padding: 0; }
+    .violet .isotope-filters { margin: 5% 2%; }
+    .violet .span .team-details .namerol { padding: 15px; }
+    .violet .about-spa-details h6 { font-size: 18px; line-height: 20px; margin-top: 0; }
+    .violet .label { font-size: 14px; padding: 15px 25px; margin-bottom: 0; }
+    .violet .team-details:hover .our-team { padding-top: 50%; }
+    .violet .buttons a { margin-top: 20px !important; }
+    .violet .count-box { margin-bottom: 5%; }
+    .violet .count-box .title { line-height: 20px; margin-bottom: 3px; }
+    .violet #about .team-details { margin-bottom: 15px; }
+    .violet .offers .team-details { margin-bottom: 15px; }
+    .violet .description.margin-top { margin-top: 0 !important; }
+    .violet h2.title { margin: 30px 0 15px; }
+    .violet .namerol .small-button { margin-bottom: 0; }
+    .violet .margin-bottom-50 { margin-bottom: 15px !important; }
+    .violet #about .team-details:nth-child(3) { margin-bottom: 15px; }
+    .violet #count { padding-bottom: 30px; }
+    .violet #team { padding-bottom: 30px; }
+    .violet .about-spa { padding: 30px 15px; }
+}
+@media screen and (max-width:380px) {
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 57% 0 0; }
+    .violet .chart6 span { font-size: 32px; top: 44%; }
+}
+@media screen and (max-width:320px) {
+    .violet .spa-list .portfolio-figure figcaption .spa-details { padding: 46% 0 0; }
+    .violet span.title { font-size: 16px; }
+    .violet .work-count .col-sm-7 h6 { font-size: 14px; }
+    .violet .description h6 { font-size: 14px; line-height: 20px; }
+    .violet .about-spa-details h6 { font-size: 16px; }
+    .violet .team-details:hover .our-team { padding-top: 45%; }
+    .violet .margin-top { margin-top: 13px !important; }
+    .violet .contact .margin-bottom { margin-bottom: 5px !important; }
+    .violet .contact-info { padding-top: 10px; }
+    .violet .namerol .content { line-height: 16px; }
+}

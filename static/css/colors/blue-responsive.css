@@ -1,0 +1,255 @@
+/* ----------------------------------
+
+Name:blue-responsive.css
+Version:1.3
+
+---------------------------------- */
+
+.blue .title-text { height: auto; }
+.blue .description { display: inline-block; }
+.blue #blog .title-text { padding-bottom: 30px; }
+.blue .popular-destinations .title-text { padding-bottom: 30px; }
+.blue .dishes-main { margin-bottom: 0; }
+@media screen and (max-width:1800px) {
+    .blue .tour-list .portfolio-figure .title { font-size: 28px; }
+    .blue .tour-list .black-line { margin: 16px auto; }
+}
+@media screen and (max-width:1700px) {
+    .blue .tour-list .portfolio-figure .title { font-size: 28px; margin-bottom: 0; }
+    .blue .tour-list .black-line { margin: 16px auto; }
+    .blue .portfolio-figure figcaption span { font-size: 25px; }
+    .blue .tour-details { font-size: 13px; margin-left: 0; margin-right: 0; width: 100%; }
+}
+@media screen and (max-width:1600px) {
+    .blue .tour-list .portfolio-figure .title { font-size: 26px; padding-bottom: 5px; }
+    .blue .portfolio-figure figcaption span { display: none; }
+    .blue .portfolio-figure figcaption span.tour-price-popup { display: block; }
+    .blue .tour-details { font-size: 14px; margin-left: 0; margin-right: 0; width: 100%; }
+    .blue .tour-list .portfolio-figure figcaption { padding: 20px; }
+}
+@media screen and (max-width:1500px) {
+    .blue .home-slider h1 { font-size: 60px; }
+}
+@media screen and (max-width:1400px) {
+    .blue .home-slider h1 { font-size: 50px; }
+    .blue .home-slider span { font-size: 27px; }
+    .blue .portfolio-figure figcaption span.tour-price-popup { display: none; }
+    .blue .tour-list .portfolio-figure .title { font-size: 22px; padding-bottom: 5px; }
+    .blue .tour-details { font-size: 13px; }
+}
+@media screen and (max-width:1200px) {
+    .blue .home-slider h1 { font-size: 44px; }
+    .blue .home-slider span { font-size: 25px; }
+    .blue .tour-list .portfolio-figure .title { font-size: 20px; }
+}
+@media screen and (max-width:1100px) {
+    .blue .home-slider h1 { font-size: 34px; }
+    .blue .home-slider span { font-size: 22px; }
+    .blue .tour-details { display: none; }
+    .blue .tour-list .black-line { display: none; }
+    .blue .tour-list .portfolio-figure .title { font-size: 30px; line-height: 40px; }
+    .blue .tour-list .portfolio-figure figcaption { padding: 30px; }
+}
+@media screen and (max-width:992px) {
+    .blue .tour-list .portfolio-figure .title { font-size: 24px; line-height: 30px; }
+    .blue h2.title { padding-bottom: 0; }
+    .blue .work-count span.title { font-size: 23px; }
+    .blue .title-text .blue-line { margin-bottom: 0; }
+    .blue #about { padding-top: 0; }
+    .blue #about h2.title { margin-top: 40px; padding-bottom: 0; }
+    .blue #team h2.title { margin-top: 40px; padding-bottom: 0; }
+    .blue #blog h2.title { margin-top: 40px; padding-bottom: 0; }
+}
+@media screen and (max-width:991px) { 
+    .blue .dishes-main-text h4 { line-height: 28px; } 
+}
+@media screen and (max-width:850px) {
+    .blue .tour-list .portfolio-figure figcaption { padding: 20px; }
+    .blue .map { padding: 0 0 !important; }
+    .blue .margin-top-50 { margin-top: 0; }
+    .blue .no-bottom { padding-bottom: 0; }
+    .blue .honeymoon-packages-banner img { margin-top: 50px; }
+    .blue .margin-bottom-50 { margin-bottom: 0; }
+    .blue .os-animation h2.title { margin-top: 40px; }
+    .blue .contact h2.title { margin-top: 0px; }
+}
+@media screen and (max-width:768px) {
+    .blue .os-animation h2.title { margin: 56px 0 0; }
+    .blue #about h2.title { margin: 56px 0 17px; }
+    .blue #team h2.title { margin-top: 56px; }
+    .blue .work-count .container { margin: 0 0 !important; }
+    .blue .description { margin-top: 25px !important; width: 89%; }
+    .blue .title-text { padding: 0; }
+    .blue .popular-destinations .title-text { padding-bottom: 30px; height: auto !important; }
+    .blue .popular-destinations .margin-top { margin-top: 0 !important; }
+    .blue .dishes-main-text { padding: 10px 10px; }
+    .blue .namerol .content { width: 93%; }
+    .blue .dishes-main-text h4 { font-size: 16px; }
+    .blue .popular-destinations .team-details .namerol .orange-line, 
+    .blue .special-offers .team-details .namerol .orange-line, 
+    .blue .holidays .team-details .namerol .orange-line { margin: 5px auto 8px; }
+    .blue .holidays .carousel-indicators { bottom: -84px; }
+    .blue .margin-bottom-100 { margin-bottom: 76px; }
+    .blue .contact-info { margin-top: 25px; }
+    .blue .portfolio-figure figcaption span, 
+    .blue .portfolio-figure figcaption span.tour-price-popup, 
+    .blue .tour-list .black-line, 
+    .blue .tour-details { display: block; }
+    .blue .counterBox .white-line { margin: 3px auto; }
+    .blue .team-details:nth-child(3),
+    .blue .team-details:nth-child(4) { margin-bottom: 0; }
+    .blue .special-offers .row:nth-child(3) { margin-top: 0 !important; }
+    .blue .home-slider span { padding: 20px 0 31px; }
+}
+@media screen and (max-width:767px) {
+    .blue .honeymoon-packages-banner img { width: 100%; }
+    .blue .home-slider .tour-price { top: -37%; }
+    .blue .home-slider .tour-price span { padding: 0; line-height: 25px; }
+    .blue .tour-list .portfolio-figure .title { font-size: 52px; line-height: 80px; }
+    .blue .portfolio-figure figcaption span { font-size: 28px; display: block; padding-bottom: 12px; }
+    .blue .tour-list .portfolio-figure figcaption { padding: 40px; }
+    .blue .tour-list .black-line { display: block; }
+    .blue .tour-details { display: block; font-size: 16px; margin-left: auto; margin-right: auto; }
+    .blue .tour-list .portfolio-figure figcaption { height: 65%; width: 65%; left: 0; top: 17.6%; padding: 35px; right: 0; margin: 0 auto; vertical-align: middle; }
+    .blue .portfolio-figure figcaption span.tour-price-popup { display: block; }
+    .blue .os-animation h2.title { margin-top: 22px; }
+    .blue .work-count span.title { font-size: 30px; }
+    .blue .description { line-height: 24px; font-size: 16px; }
+    .blue #about h2.title { display: block; margin-top: 22px; }
+    .blue #team h2.title { display: block; margin-top: 22px; }
+    .blue #blog h2.title { display: block; margin-top: 22px; }
+    .blue #about .description { width: 70%; padding-top: 20px; }
+    .blue #expertise .description { width: 70%; padding-top: 20px; }
+    .blue #team .description { width: 70%; padding-top: 20px; }
+    .blue .black-line-top { margin: 18px auto 2px; } 
+    .blue .holidays .carousel-indicators { bottom: -37px; }
+    .blue h2.title { font-size: 55px; }
+    .blue .description { width: 100% !important; }
+    .blue h2.title { font-size: 40px; margin-top: 16px; line-height: 50px; }
+    .blue .description { padding-top: 0 !important; }
+    .blue .description { margin-top: 18px !important; }
+    .blue .margin-bottom { margin-bottom: 15px !important; }
+    .blue .margin-top { margin-top: 15px !important; }
+    .blue .popular-destinations .title-text { margin-bottom: 0; }
+    .blue .margin-top-50 { margin-top: 25px !important; }
+    .blue .white-line { margin: 18px auto 10px; }
+    .blue .conter-box .col-md-3 { margin: 0 0 30px; }
+    .blue .counterBoxNumber { font-size: 60px; line-height: 76px; }
+    .blue .counterBoxDetails { line-height: 18px; }
+    .blue .dishes-main { margin-bottom: 15px; } 
+    .blue .about .col-md-4:last-child .dishes-main { margin-bottom: 0; }
+    .blue .work-count .work-count-box:last-child .small-button { margin-bottom: 0; }
+    .blue .special-offers { padding-bottom: 30px !important; }
+    .blue .isotope-filters { padding: 43px 0 0; }
+    .blue .count-box:nth-child(4) { margin-bottom: 0; }
+    .blue .margin-bottom-100 { margin-bottom: 30px; }
+    .blue .about .col-md-4 { padding: 0; }
+}
+@media screen and (max-width:670px) {
+    .blue .tour-list .portfolio-figure .title { font-size: 32px; line-height: 55px; }
+    .blue .portfolio-figure figcaption span.tour-price-popup { font-size: 20px !important; padding-bottom: 0; }
+    .blue .portfolio-figure figcaption span { font-size: 24px; }
+    .blue .tour-details { font-size: 14px; }
+    .blue .description { line-height: 24px; font-size: 16px; }
+}
+
+@media screen and (max-width:600px) {
+    .blue .popular-destinations { padding-top: 30px }
+    .blue .os-animation h2.title { margin-bottom: 0; }
+    .blue .special-offers { padding-bottom: 30px !important; }
+    .blue .honeymoon-packages-banner img { margin-top: 30px; }
+}
+@media screen and (max-width:560px) {
+    .blue .tour-list .portfolio-figure .title { font-size: 30px; line-height: 46px; }
+    .blue .portfolio-figure figcaption span { font-size: 20px; padding: 0; }
+    .blue .tour-details { font-size: 14px; }
+    .blue .tour-list .portfolio-figure figcaption { padding: 20px; }
+}
+@media screen and (max-width:480px) {
+    .blue .popular-destinations .col-md-3,
+    .blue .special-offers .col-md-6, 
+    .blue .special-offers .col-md-3 { padding: 0; }
+    .blue .buttons .small-button { margin: 30px 0 0; }
+    .blue section { padding-bottom: 30px; padding-top: 30px; }
+    .blue .home-slider h1 { font-size: 34px; }
+    .blue .home-slider .tour-price { top: -34%; }
+    .blue .tour-list .portfolio-figure .title { font-size: 28px; }
+    .blue .tour-details { display: none; }
+    .blue .tour-list .black-line { display: none; }
+    .blue .tour-list .portfolio-figure figcaption { padding: 30px; }
+    .blue #count { padding-bottom: 30px; }
+    .blue #contact .title { margin: 30px 0 25px }
+    .blue #team h2.title { margin-bottom: 30px; }
+    .blue h2.title { font-size: 36px; line-height: 46px; }
+    .blue .margin-top { margin-top: 0 !important; }
+    .blue .title-text .blue-line { margin-bottom: 15px; }
+    .blue .popular-destinations .title-text { padding-bottom: 15px; height: inherit; }
+    .blue .team-details { width: 100%; margin-bottom: 15px; }
+    .blue .margin-top-50 { padding-top: 0 !important; }
+    .blue .margin-bottom-50 { margin-bottom: 10px !important; }
+    .blue .special-offers .team-details .namerol { padding: 17px 0 17px; }
+    .blue .special-offers .team-details .namerol .small-button { margin-bottom: 0; }
+    .blue .work-count span.title { font-size: 24px; }
+    .blue .black-line-top { margin: 16px auto 2px; }
+    .blue .work-count-box i { width: 80px; height: 80px; padding: 24px; }
+    .blue .margin-top-50 { margin-top: 0 !important}
+    .blue .work-count-box { padding: 0; }
+    .blue #blog .title-text { padding-bottom: 0; }
+    .blue #blog { padding-bottom: 30px; }
+    .blue .contact-info { margin-top: 0; }
+    .blue .team-details:nth-child(3) { margin-bottom: 15px; }
+    .blue .namerol .small-button { margin-bottom: 0; }
+    .blue .counterBoxNumber { font-size: 40px; line-height: 43px; }
+    .blue .counterBox .white-line { margin: 7px auto 8px; }
+    .blue .conter-box .col-md-3:last-child .counterBoxDetails { margin-bottom: 0; }
+    .blue .white-line { margin: 14px auto 6px; }
+    .blue .testimonial .reviews i { margin-bottom: 15px; }
+    .blue .team-details { padding: 0 15px; }
+}
+@media screen and (max-width:420px) {
+    .blue .chart5 span { font-size: 32px; top: 44%; }
+}
+@media screen and (max-width:400px) {
+    .blue .home-slider h1 { font-size: 22px; padding: 10px 12px; }
+    .blue .home-slider span { font-size: 16px; }
+    .blue .home-slider .tour-price { top: -23%; }
+    .blue .home-slider .tour-price { padding: 18px 0; height: 90px; width: 90px; font-size: 25px; }
+    .blue .portfolio-figure figcaption span { display: none; }
+    .blue .tour-list .portfolio-figure .title { font-size: 26px; line-height: 40px; }
+    .blue h2.title { font-size: 24px; line-height: 26px; margin-bottom: 0 !important; }
+}
+@media screen and (max-width:350px) {
+    .blue .portfolio-figure figcaption span { display: none; }
+    .blue .tour-details { display: none; }
+    .blue .tour-list .black-line { display: none; }
+    .blue .tour-list .portfolio-figure .title { font-size: 26px; line-height: 30px; }
+    .blue .tour-list .portfolio-figure figcaption { height: 75%; width: 75%; top: 12.6%; }
+    .blue .counterBoxNumber { line-height: 50px; margin: 30px 0 25px !important; }
+    .blue .head { margin-bottom: 4%; }
+}
+@media screen and (max-width:320px) {
+    .blue #contact .title { margin: 19px 0 2px; }
+    .blue #contact .title-text { margin-bottom: 18px; }
+    .blue .about .col-md-4:last-child .dishes-main { margin-bottom: 0; }
+    .blue .dishes-main-text h4 { line-height: 20px; }
+    .blue .dishes-main { margin-bottom: 15px; }
+    .blue .title-text { height: auto !important; }
+    .blue .popular-destinations .title-text { padding-bottom: 17px; }
+    .blue .team-details .namerol .small-button { margin: 11px 0 0; }
+    .blue .margin-bottom-50 { margin-bottom: 0 !important; }
+    .blue .margin-bottom-100 { margin-bottom: 30px; }
+    .blue .holidays .carousel-indicators { bottom: -38px; } 
+    .blue .contact-info { margin-top: 0; }
+    .blue #contact .title-text { margin-bottom: 0; }
+    .blue .team-details:hover .our-team { padding-top: 100px; }
+    .blue .dishes-main-text { padding-bottom: 0; }
+    .blue .dishes-main-text p { margin-bottom: 0; }
+    .blue #home .carousel-indicators { bottom: 35px; }
+    .blue #blog .title-text { padding-bottom: 0 ;}
+    .blue #team h2.title { margin-bottom: 16px; }
+    .blue .itinerary li span { margin-bottom: 5px; }
+    .blue .home-slider span { padding: 7px 0 20px; line-height: 26px; }
+    h2.title { letter-spacing: 0; }
+    .itinerary li p { width: 100%; }
+
+}

@@ -1,0 +1,146 @@
+/* ----------------------------------
+
+Name:green-responsive.css
+Version:1.3
+
+---------------------------------- */
+
+.green .seasonal-dishes .title-text { height: auto; }
+.green #contact .title-text { height: auto; }
+@media screen and (max-width: 1024px) {
+    .slider-text h2 { margin: 15px 0 0; }
+}
+@media only screen and (min-width:993px) and (max-width:1200px) {
+    .green .home-slider h1 { font-size: 60px; }
+    .green .home-slider span { width: 70% }
+    .green .slider-text { height: 78%; }
+}
+@media screen and (max-width:997px) {
+    .green span.title { font-size: 28px; }
+    .green #about h2.title { margin-top: 40px; padding-bottom: 0; }
+    .green #team h2.title { margin-top: 40px; padding-bottom: 0; }
+    .green #blog h2.title { margin-top: 40px; padding-bottom: 0; }
+    .green .dishes-main-text h4 { font-size: 19px; }
+}
+@media screen and (max-width:991px) {
+    .green .dishes-main-text { padding: 10px 15px; }
+}
+@media screen and (max-width:768px) {
+    .green .dishes-main-text { padding: 10px 15px; }
+    .green span.title { font-size: 28px; }
+    .green .count-box { margin-bottom: 5%; }
+    .green .count-box:nth-child(4),
+    .green .count-box:nth-child(5) { margin-bottom: 0; }
+    .green .team .title-text { margin-bottom: 15px; }
+    .green h2.title { margin: 68px 0 0 !important; }
+    .seasonal-dishes h2.title { margin: 0 !important; padding: 0 0 15px; line-height: 54px; }
+    .green-line { margin: 10px auto 20px; }
+    .green .white-line-bottom { margin-bottom: 9px; }
+    .green .title-text { height: auto !important; padding: 0; }
+    .green .margin-left { margin-left: 0 !important; }
+    .green #about a.small-button.inner-link:last-child { margin-bottom: 0; }
+    .green .dishes-main-text h4 { line-height: 28px; margin-top: 0; }
+    .green .team .width { margin-bottom: 30px; }
+    .green #conter-box .color-overlay { padding: 90px 0; }
+    .green .white-line-small { margin: 9px auto; }
+    .green #blog { padding-bottom: 90px; }
+    .green .dishes-main-text .small-button { margin: 10px 0 6px; }
+}
+@media screen and (max-width:767px) {
+    .green .home-slider span { width: 100%; }
+    .green .slider-text h2 { margin: 35px 0 0; }
+    .green .display-inline { display: inline; }
+    .green h2.title { font-size: 50px; line-height: 50px; margin-top: 40px !important; }
+    .green .divider-dark { margin: 30px 0 5px; }
+    .green .margin-left { margin-left: 0px; }
+    .green .food-services .margin-bottom { margin: 0 !important; }
+    .green .counter-title { font-size: 40px; line-height: 52px; margin: 0 0 30px; }
+    .green .description { margin-bottom: 20px !important; margin-top: 0 !important; }
+    .green .book-a-table { margin-top: 30px; }
+    .green span.title { min-height: 0; }
+    .green .white-line-bottom { margin-bottom: 22px; }
+    .green #about .small-button { margin-bottom: 0; }
+    .green #about .col-sm-12 .col-sm-6 { padding: 0; }
+    .green-line { margin: 15px auto 20px; }
+    .green .seasonal-dishes h2.title { margin-top: 15px !important; }
+    .green .team .title-text { margin-bottom: 0; }
+    .green .count-box:nth-child(4) { margin-bottom: 5%; }
+    .green .counterBoxNumber { line-height: 80px; }
+    .green #conter-box .color-overlay { padding: 30px 0; }
+    .green .conter-box .col-md-3 { margin: 0 0 25px; }
+    .green .contact-info { margin-top: 1%; }
+    .green .seasonal-dishes .row .margin-top .col-sm-4 { padding: 0; margin-bottom: 15px;  }
+    .green .seasonal-dishes .row .margin-top .col-sm-4:last-child { margin-bottom: 0; }
+    .green .contact .row:last-child { padding: 0; }
+    .green #blog { padding-bottom: 30px; }
+    .green #contact { padding-bottom: 30px; }
+}
+@media screen and (max-width:600px) {
+    .green .book-a-table { padding: 25px; margin: 40px auto 0; font-size: 40px; line-height: 46px; }
+    .green .description { line-height: 2px; }
+}
+@media screen and (max-width:480px) {
+    .green .slider-text { height: 84%; }
+    .green .counter-title { font-size: 25px; line-height: 35px; margin: 0 0 25px; }
+    .green .slider-text h2 { margin: 35px 0 0; font-size: 30px; line-height: 40px; }
+    .green .slider-text span { display: none; }
+    .green .home-slider h1 { font-size: 36px; padding: 0 10px }
+    .green .white-line-top { margin: 8px auto 2px; }
+    .green h2.title { font-size: 40px; display: block; }
+    .green .col-sm-12, 
+    .green .col-sm-6, 
+    .green .col-md-6{ padding: 0; }
+    .green .margin-left { margin-left: 0 !important; }
+    .green .divider-dark { margin: 21px 0 0; }
+    .green .description { line-height: 24px; }
+    .green .description { margin-bottom: 30px !important; }
+    .green .margin-bottom { margin-bottom: 15px !important; }
+    .green .work-count-box:last-child .small-button { margin-bottom: 0; }
+    .green .count-box:nth-child(4) { margin-bottom: 5%; }
+    .green .count-box .title { margin-top: 0 !important; }
+    .green .white-line-small { margin: 10px auto; }
+    .green .counterBoxNumber { line-height: 54px; }
+    .green .seasonal-dishes .col-sm-4:last-child .dishes-main { margin-bottom: 0; }
+    .green testimonial .carousel-caption { padding-bottom: 0; }
+}
+@media screen and (max-width:420px) {
+    .green .chart4 span { font-size: 26px; top: 34%; }
+}
+@media screen and (max-width:360px) {
+    .green .slider-text h2 { font-size: 20px; margin: 15px 0 0; line-height: 50px; }
+    .green .home-slider h1 { font-size: 30px; padding: 0; line-height: 48px; }
+    .green .home-slider span { font-size: 16px; }
+    .green .white-line-top { margin: 18px auto 2px; }
+    .green .white-line-bottom { margin: 2px auto 18px; }
+    .green .home-slider span { font-size: 17px; padding: 0 20px 20px 20px; line-height: 25px; width: 100%; }
+    .green .title-text { margin-bottom: 10px; }
+    .green .book-a-table .highlight-button { padding: 5px 18px; font-size: 28px; }
+    .green .book-a-table { font-size: 34px; }
+    .green .team .width { margin-bottom: 26px; }
+    .green .team .title-text { margin-bottom: 0 !important; }
+    .green .count-box { margin-bottom: 30px; }
+}
+@media only screen and (min-width:360px) and (max-width:480px) {
+    .green .seasonal-dishes h2.title { margin-bottom: 0 !important; padding: 0; }
+    .green span.title { font-size: 22px; }
+}
+@media screen and (max-width:320px) {
+    .green .chart4 span { font-size: 32px; top: 44%; }
+    .green .slider-text { height: 100%; padding-top: 50%; }
+    .green .home-slider h1 { font-size: 26px; }
+    .green .slider-text h2 { line-height: 26px; }
+    .green .counterBoxNumber { line-height: 50px; }
+    .green #about .margin-left { margin-left: 0 !important; margin-top: 10px; }
+    .green #about h2.title { margin-top: 20px; line-height: 30px; }
+    .green .description { line-height: 20px; }
+    .green .description { margin-bottom: 15px !important; }
+    .green .title-text { margin-bottom: 0; }
+    .green .contact-info { margin-top: 0; }
+    .green .seasonal-dishes h2.title { font-size: 30px; line-height: 30px; margin: 0 !important; padding: 0; }
+    .green .counter-title { font-size: 20px; line-height: 26px; margin: 0 0 25px; }
+    .green .count-box { margin-bottom: 25px; }
+    .green .home-slider .white-line-bottom { margin-bottom: 30px; }
+    .green span.title { font-size: 20px; }
+    .green #about a.small-button.inner-link:last-child { margin-top: 6px; }
+    .green h2.title { font-size: 30px; }
+}

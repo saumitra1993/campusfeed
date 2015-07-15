@@ -1,0 +1,155 @@
+/* ----------------------------------
+
+Name:red-responsive.css
+Version:1.3
+
+---------------------------------- */
+
+@media screen and (max-width:1800px) {
+    .red .project-list .portfolio-figure figcaption { padding: 5%; }
+}
+@media screen and (max-width:1700px) {
+    .red .portfolio-figure .title { font-size: inherit; }
+}
+@media screen and (max-width:1500px) {
+    .red .cs-style-3 figcaption a { margin: 10px 0px; }
+}
+@media screen and (max-width:1500px) {
+    .red .spa-details p { display: none; }
+    .red .cs-style-3 figcaption a { display: table; }
+}
+@media screen and (max-width:1199px) {
+    .red .team-details:hover .our-team { padding-top: 75px; }
+}
+@media screen and (max-width:1100px) {
+    .red .home-slider h1 { padding: 25px 44px; font-size: 47px; }
+}
+@media screen and (max-width:991px) {
+    .red section.map { padding: 0 !important; }
+    .red .client-logos { padding: 0; }
+    .red h2.title { line-height: 65px; padding-bottom: 15px; }
+    .red .description h6 { display: inline-block; }
+    .red .team-details:hover .our-team { padding-top: 185px; }
+    .red .grid-gallery .row { margin: inherit; }
+    .red .margin-bottom-100 { margin-bottom: 90px; }
+    .red span.title { margin: 20px 0 15px 0 !important; }
+    .red .work-count-box .gray-text { width: 86%; }
+    .red .margin-bottom-50 { margin-bottom: 25px !important; }
+    .red .dishes-main-text { padding: 10px; }
+    .red .dishes-main-text .margin-bottom { margin-bottom: 15px !important; }
+    .red .counterBoxNumber { font-size: 80px; line-height: 80px; }
+    .red .white-line { margin: 15px auto 13px; }
+    .red .padding-30 { padding: 10px; }
+    .red .count .count-box:nth-child(3), 
+    .red .count .count-box:nth-child(4) { margin-bottom: 0; }
+}
+@media screen and (max-width:768px) {
+    .red h2.title { font-size: 50px; line-height: 50px; }
+    .red .description { display: inline-block; margin-top: 0 !important; width: 100%; }
+    .red .margin-bottom { margin-bottom: 20px !important; }
+    .red .dishes-main-text { padding: 10px; }
+    .red .content { margin-bottom: 10px; width: 100%; }
+    .red .namerol .content { margin-bottom: 5px; }
+    .red .dishes-main-text .small-button { margin-bottom: 10px; }
+    .red .work-count h6 { font-size: 16px; margin-top: 0; }
+    .red .counterBoxNumber { font-size: 60px; line-height: 60px; }
+    .red .count-box:nth-child(3) { margin-bottom: 0; }
+    .red .count-box:nth-child(4) { margin-bottom: 0; }
+    .red .buttons .small-button { margin-top: 30px; }
+    .red .title-text { height: auto !important; padding-top: 0; }
+    .red .spa-details p { display: block; }
+    .red .about .row .col-sm-3, 
+    .red .expertise .row .col-sm-3 { width: 50%; }
+    .red .about .row .col-sm-3, 
+    .red .expertise .row .col-sm-3 { margin-bottom: 4%; }
+    .red .about .row .col-sm-3:nth-child(3), 
+    .red .about .row .col-sm-3:nth-child(4), 
+    .red .expertise .row .col-sm-3:nth-child(3), 
+    .red .expertise .row .col-sm-3:nth-child(4) { margin-bottom: 0 !important; }
+    .red .team-details:nth-child(3), 
+    .red .team-details:nth-child(4) { margin-bottom: 0; }
+    .red #testimonial .color-overlay { padding-bottom: 90px; padding-top: 90px; }
+}
+@media screen and (max-width:767px) {
+    .red .expertise { padding-bottom: 30px !important; padding-top: 30px !important; }
+    .red #about { padding-top:  30px; }
+    .red #team { padding: 30px 0 30px; }
+    .red #blog { padding: 30px 0; }
+    .red #testimonial .color-overlay { padding-bottom: 30px; padding-top: 30px; }
+    .red .row.group.margin-top { margin-top: 15px !important; }
+    .red .description h6 { font-size: 18px; line-height: 24px; }
+    .red h2.title { font-size: 42px; line-height: 42px; }
+    .red .blue-line { margin: 5px auto 8px; }
+    .red .margin-bottom { margin-bottom: 10px !important; }
+    .red .col-md-3.col-sm-3:last-child > .dishes-main { margin-bottom: 0; }
+    .red .spa-details p { margin: 10px 0 20px; }
+    .red .isotope-filters { margin: 5% 3%; }
+    .red .isotope-filters li a { font-size: 18px; }
+    .red .margin-bottom-100 { margin-bottom: 30px; }
+    .red .work-count-box { display: table; margin-bottom: 15px; padding: 0; }
+    .red span.title { font-size: inherit; margin: 10px 0 10px !important; }
+    .red .margin-bottom-50 { margin-bottom: 15px !important; }
+    .red .work-count-box .gray-text { width: 96%; line-height: 20px; }
+    .red .work-count-box:last-child { margin-bottom: 0; }
+    .red .count-box:nth-child(3) { margin-bottom: 6%; }
+    .red .counterBoxNumber { font-size: 40px; line-height: 40px; }
+    .red .conter-box .col-md-3 { margin: 0 0 30px; }
+    .red .counterBoxDetails { line-height: 15px; margin-bottom: 0; }
+    .red .white-line { margin: 7px auto 13px; }
+    .red .form-group { margin-bottom: 0; }
+    .red .form-group button { margin-bottom: 0; }
+    .red .contact .title-text { padding-top: 5%; }
+    .red .margin-top-50 { margin-top: 20px !important; }
+    .red .about .row .col-sm-3, 
+    .red .expertise .row .col-sm-3 { padding: 0 15px; float: left; }
+    .red .dishes-main-text .small-button { margin: 15px 0 !important; }
+    .red .dishes-main { margin-bottom: 0 !important; }
+    .red .expertise .col-sm-3 { margin-bottom: 15px !important; }
+    .red .featured-projects h2.title { padding-bottom: 0; }
+    .red .contact .row:last-child { padding: 0; margin-top: 0; }
+}
+@media screen and (max-width:600px) {
+    .red .home-slider h1 { font-size: 45px; }
+    .red .team-details:hover .our-team { padding-top: 115px; }
+    .red .team-details .namerol { padding: 10px 6px; }
+}
+@media screen and (max-width:480px) {
+    .red .home-slider h1 { font-size: 27px; padding: 20px 22px; line-height: 32px; }
+    .red h2.title { font-size: 32px; line-height: 32px; }
+    .red .title-text { height: inherit !important; }
+    .red .description h6 { font-size: 16px; line-height: 20px; }
+    .red .dishes-main-text h4 { font-size: 16px; }
+    .red .team-details:hover .our-team { padding-top: 215px; }
+    .red .team-details { margin: 0 auto 15px; padding: 0; }
+    .red .namerol .content { margin-bottom: 0; }
+    .red .isotope-filters li a:hover, 
+    .red .isotope-filters li a:focus, 
+    .red .isotope-filters li a:active, 
+    .red .isotope-filters li a.active { border-bottom: 1px solid #b6b6b6; }
+    .red .work-count h6 { font-size: 14px; margin: 0; }
+    .red .count-box { margin: 0 0 6%; padding: 0; }
+    .red .chart7 span { font-size: 28px; }
+    .red .count-box h3.title { line-height: 18px; margin: 2% 0 5px !important; font-size: 18px; }
+    .red .count-box:last-child { margin-bottom: 0; }
+    .red .team .team-details { width: 100%; }
+    .red .counterBoxNumber { font-size: 34px; line-height: 36px; }
+    .red .buttons .small-button { margin-top: 15px; }
+    .red span.title { margin: 11px 0 11px !important; }
+    .red .about .row .col-sm-3, 
+    .red .expertise .row .col-sm-3 { margin-bottom: 15px; padding: 0; width: 100%; }
+    .red .about .row .col-sm-3:nth-child(3), 
+    .red .team-details:nth-child(3), 
+    .red .expertise .row .col-sm-3:nth-child(3) { margin-bottom: 15px !important; }
+    .red .margin-top-50 { margin-top: 10px !important; }
+    .red .project-list .portfolio-figure figcaption { padding: 0px 15px; }
+}
+@media screen and (max-width:320px) {
+    .red h2.title { font-size: 30px; line-height: 30px; padding-bottom: 10px; }
+    .red .description h6 { margin: 8px 0; }
+    .red .team-details:hover .our-team { padding-top: 115px; }
+    .red .work-count h6 { line-height: 20px; }
+    .red .chart7 span { font-size: 32px; top: 44%; }
+    .red .count-box:nth-child(3) { margin-bottom: 10%; }
+    .red .spa-details p { margin: 9px 0 9px; width: 100%; }
+    .red .contact .title-text { padding-top: 26px; }
+}

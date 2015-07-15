@@ -1,0 +1,33 @@
+/* ----------------------------------
+
+Name:gold-responsive.css
+Version:1.3
+
+---------------------------------- */
+
+@media screen and (max-width:992px) {
+    .gold .highlight { font-size: 68px; }
+    .gold .intro-bg { height: 487px; }
+}
+@media screen and (max-width:991px) {
+    .gold .intro-bg { height: 410px; }
+}
+@media screen and (max-width:767px) {
+    .gold .highlight { font-size: 48px; }
+}
+@media screen and (max-width:600px) {
+    .gold .highlight { font-size: 40px; }
+}
+@media screen and (max-width:480px) {
+    .gold header .intro-section .intro, 
+    .gold .intro { font-size: 20px; }
+    .gold span.highlight { font-size: 24px; }
+    .gold .small-button { margin-top: 15px; }
+}
+@media screen and (max-width:320px) {
+    .gold span.highlight { font-size: 22px; }
+    .gold header .intro-section .intro, 
+    .gold .intro { font-size: 18px; line-height: 24px; }
+    .highlight-button, 
+    .highlight-button:focus { font-size: 14px; }
+}
