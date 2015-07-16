@@ -1,7 +1,10 @@
 import webapp2
 import logging
-from service.get_photo import GetPhotu
 from handlers.home import Home
+from handlers.webhome import WebHome
+
+from service.get_photo import GetPhotu
+
 from service._users.login import Login
 from service._users.image_url import ImageUrl
 from service._users.search_users import SearchUsers
@@ -40,6 +43,7 @@ application = webapp2.WSGIApplication([
 	#Services
 	#('/', MyClassName),
 	('/',Home),
+	('/web',WebHome),
 	('/login',Login),
 	('/imageurl',ImageUrl),
 	('/pic/(.*)',GetPhotu),

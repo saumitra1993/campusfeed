@@ -7,6 +7,14 @@ threadsafe: true
 handlers:
 - url: /js
   static_dir: static/js
+- url: /js/lib
+  static_dir: static/js/lib
+- url: /js/controllers
+  static_dir: static/js/controllers
+- url: /js/services
+  static_dir: static/js/services
+- url: /js/directives
+  static_dir: static/js/directives
 - url: /css
   static_dir: static/css
 - url: /fonts
