@@ -1,11 +1,13 @@
 import webapp2
 import logging
 import json
-from db.database import Channels, Users, Channel_Admins
+from datetime import datetime, timedelta
+from db.database import Channels, Users, Channel_Admins, Channel_Followers
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 from service._users.sessions import BaseHandler
 from google.appengine.ext import ndb
+from google.appengine.api import search
 
 class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 		
@@ -23,7 +25,7 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 				out = []
 				for channel_admin in channel_admins:
 					_dict = {}
-					if channel_admin.isAnonymous == True: #for admin who don't want to reveal their names.
+					if channel_admin.isAnonymous == 'True': #for admin who don't want to reveal their names.
 						_dict['first_name'] = 'Anonymous'
 						_dict['last_name'] = ''
 					else:
@@ -70,6 +72,18 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 				else:
 					logging.info('Admin/s could NOT be inserted as Follower/s of their Channel.')
 				
+				name = db.channel_name
+				descr = db.description
+				channel_id = str(db.key.id())
+				fields = [
+				search.TextField(name="channel_name", value=name),
+				search.TextField(name="channel_descr", value=descr),]
+				d = search.Document(doc_id=channel_id, fields=fields)
+				try:
+					add_result = search.Index(name="channelsearch").put(d)
+				except search.Error:	  
+					logging.error("Document not saved in index!")
+
 				self.session['last-seen'] = datetime.now()
 				self.response.set_status(200, 'Awesome.Channel approved by SUPERUSER.Admins becomes Followers of their Channel.')
 		else:

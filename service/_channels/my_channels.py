@@ -21,7 +21,7 @@ class MyChannels(webapp2.RequestHandler):
 			result = user_query.fetch()
 			if len(result) == 1:
 				user = result[0]
-				if user.type_ == 'admin':
+				if user.type_ == 'admin' or user.type_ == 'superuser':
 					channel_admins_qry = Channel_Admins.query(Channel_Admins.user_ptr == user.key)
 					if limit!=-1:
 						channel_admins = channel_admins_qry.fetch(limit,offset= offset)

@@ -18,7 +18,7 @@ class Users(ndb.Model):
 	email_id = ndb.StringProperty()
 	password = ndb.StringProperty()
 	user_id = ndb.StringProperty()
-	user_img_url = ndb.BlobKeyProperty()
+	user_img_url = ndb.BlobProperty()
 	last_seen = ndb.DateTimeProperty() # given when the app gets killed/update after every api call
 
 class Channels(ndb.Model):
@@ -26,27 +26,13 @@ class Channels(ndb.Model):
 	
 	#channel_id = [p]	
 	channel_name = ndb.StringProperty()
-	channel_img_url = ndb.BlobKeyProperty()
+	channel_img_url = ndb.BlobProperty()
 	description = ndb.StringProperty()
 	pending_bit = ndb.IntegerProperty(default=1)	#keep it 1 while inserting
 	curated_bit = ndb.IntegerProperty(default=1)	#curated/open, 1 means curated(rok k rakho salle ko!)
 	isDeleted = ndb.IntegerProperty(default=0)
 	edited_time = ndb.DateTimeProperty(auto_now = True)
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
-
-	def _post_put_hook(self, future):
-		if self == future.get_result().get():
-			name = self.channel_name
-			descr = self.description
-			channel_id = str(self.key.id())
-			fields = [
-			  search.TextField(name="channel_name", value=name),
-			  search.TextField(name="channel_descr", value=descr),]
-			d = search.Document(doc_id=channel_id, fields=fields)
-			try:
-				add_result = search.Index(name="channelsearch").put(d)
-			except search.Error:	  
-				logging.error("Document not saved in index!")
 
 class Posts(ndb.Model):
 	"""docstring for Post"""
@@ -55,13 +41,16 @@ class Posts(ndb.Model):
 	user_ptr = ndb.KeyProperty(kind=Users)
 	channel_ptr = ndb.KeyProperty(kind=Channels)
 	text = ndb.StringProperty()
-	post_img_url = ndb.BlobKeyProperty()
+	post_img_url = ndb.BlobProperty()
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
 	pending_bit = ndb.IntegerProperty(default=1)
 	isAnonymous = ndb.StringProperty(
 					choices = ['True','False'],
-					default = 'False')	#True means pending
+					default = 'False')	#True means anonymous
 	edited_time = ndb.DateTimeProperty(auto_now = True)
+	post_by = ndb.StringProperty(
+					choices = ['user','channel'],
+					default = 'user')	
 #	isDeleted = ndb.IntegerProperty(default=0)
 
 class Channel_Admins(ndb.Model):

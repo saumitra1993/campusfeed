@@ -5,7 +5,7 @@ import datetime
 from service._users.sessions import BaseHandler
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
-from db.database import Users, Channels, Posts
+from db.database import Users, Channels, Posts, Channel_Admins
 from google.appengine.api import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext import ndb
@@ -13,66 +13,79 @@ from google.appengine.ext import ndb
 class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 	"""docstring for Posts"""
 	# Request URL - /channels/:channel_id/posts POST
-	# Request Params - user_id, channel_id(generated), text, img
+	# Request Params - user_id, channel_id(generated), text, img, post_by (user or channel)
 	# Response - status, post:(  post_id(generated),
 	#							 text, img_url, 
 	#							 time, first_name, last_name, 
 	#							 user_img_url, user_branch)
 	# if curated_bit is not set, status = 200
-	# else status = 911
+	
 	
 	def post(self,channel_id):
 
-		logging.info(self.request)
 		isAnonymous = self.request.get('is_Anonymous').strip() #fetching True/False
 		user_id = self.request.get('user_id').strip()
+		post_by = self.request.get('post_by').strip()
+		text = self.request.get('text').strip()
 		query = Users.query(Users.user_id == user_id).fetch()
-		user = query[0]
-		user_ptr = user.key
-		first_name = user.first_name
-		last_name = user.last_name
-		user_img_url = user.user_img_url
-		branch = user.branch
-		
-		channel_id = int(channel_id)
-		result = Channels.get_by_id(channel_id)
-		curated_bit = result.curated_bit
-		channel_ptr = result.key
+		if len(query) == 1:
+			user = query[0]
+			user_ptr = user.key
+			first_name = user.first_name
+			last_name = user.last_name
+			user_img_url = user.user_img_url
+			branch = user.branch
+			
+			channel_id = int(channel_id)
+			channel = Channels.get_by_id(channel_id)
+			if channel:
+				channel_ptr = channel.key
+				db = Posts()
+				admin_query = Channel_Admins.query(Channel_Admins.channel_ptr == channel_ptr, Channel_Admins.user_ptr == user_ptr).fetch()    #  if the person posting is admin, pending bit should be 0
+				if len(admin_query) == 1:
+					db.pending_bit = 0
+				db.text = text
+				try:
+					db.post_img_url = self.get_uploads('post_img_url')[0].key()
+				except:
+					db.post_img_url = blobstore.BlobKey(DEFAULT_IMG_ID)
+				db.channel_ptr = channel_ptr
+				db.user_ptr = user_ptr
+				db.isAnonymous = isAnonymous
+				db.post_by = post_by
+				k=db.put()
+				post_items = k.get()
+				post_key = post_items.key
+				text = post_items.text
+				post_img_url = post_items.post_img_url
+				created_time = date_to_string(utc_to_ist(post_items.created_time))
 
-		db = Posts()
-		db.text = self.request.get('text').strip()
-		try:
-			db.post_img_url = self.get_uploads('post_img_url')[0].key()
-		except:
-			db.post_img_url = blobstore.BlobKey(DEFAULT_IMG_ID)
-		db.channel_ptr = channel_ptr
-		db.user_ptr = user_ptr
-		k=db.put()
-		post_items = k.get()
-		post_key = post_items.key
-		text = post_items.text
-		post_img_url = post_items.post_img_url
-		created_time = date_to_string(utc_to_ist(post_items.created_time))
-
-		#TODO isAnonymous to be checked
-		_dict = {}
-		if curated_bit:
-			logging.info("Rukk ja bhai tu ,please _/\_")
-			_dict['status'] = 911
-		else:
-			if isAnonymous:
-				_dict['first_name'] = 'Anonymous'
-				_dict['last_name'] = ''
+				#TODO isAnonymous to be checked
+				_dict = {}
+				
+				if isAnonymous == 'True':
+					_dict['first_name'] = 'Anonymous'
+					_dict['last_name'] = ''
+				else:
+					if post_by == 'user':
+						_dict['first_name'] = first_name
+						_dict['last_name'] = last_name
+						_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(user_img_url)
+					else:
+						_dict['first_name'] = channel.channel_name
+						_dict['last_name'] = ''
+						_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.channel_img_url)
+				_dict['post_by'] = post_by
+				_dict['branch'] = branch
+				_dict['post_id'] = post_key.id()
+				_dict['text'] = text
+				_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post_img_url)
+				_dict['created_time'] = created_time
+				self.response.set_status(200, 'Awesome')
 			else:
-				_dict['first_name'] = first_name
-				_dict['last_name'] = last_name
-			_dict['user_img_url'] = DEFAULT_ROOT_IMG_URL + str(user_img_url)
-			_dict['branch'] = branch
-			_dict['post_id'] = post_key.id()
-			_dict['text'] = text
-			_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post_img_url)
-			_dict['created_time'] = created_time
-			self.response.set_status(200, 'Awesome')
+				self.response.set_status(401, 'Invalid channel')
+		else:
+			self.response.set_status(401, 'Invalid user')
 
 		self.response.write(json.dumps(_dict))
 
@@ -94,7 +107,7 @@ class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 				user = Users.get_by_id(user_id)
 		#		posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
 				
-				if user.type_ == 'admin':
+				if user.type_ == 'admin' or user.type_ == 'superuser':
 					is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key).fetch()
 					if len(is_admin) == 1:
 						posts_query = Posts.query(Posts.channel_ptr == channel.key) 
@@ -118,13 +131,19 @@ class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 					_dict = {}
 					_dict['post_id'] = post.key.id()
 					_dict['text'] = post.text
-					_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(post.post_img_url)
-					if post.isAnonymous == True:
-						_dict['user_full_name'] = 'Anonymous'
-					else:		
-						_dict['user_full_name'] = posting_user.first_name+' '+posting_user.last_name
+					_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.post_img_url)
+					if post.isAnonymous == 'True':
+						_dict['full_name'] = 'Anonymous'
+					else:
+						if post.post_by == 'user':		
+							_dict['full_name'] = posting_user.first_name+' '+posting_user.last_name
+							_dict['img_url'] = posting_user.user_img_url
+						else:
+							_dict['full_name'] = channel.channel_name
+							_dict['img_url'] = channel.channel_img_url
+
+					_dict['post_by'] = post.post_by
 					_dict['created_time'] = date_to_string(utc_to_ist(post.created_time))					
-					_dict['user_img_url'] = posting_user.user_img_url
 					_dict['branch'] = posting_user.branch
 					_dict['pending_bit'] = post.pending_bit
 					out.append(_dict)

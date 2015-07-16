@@ -9,6 +9,6 @@ class ChannelImageUrl(webapp2.RequestHandler):
 
 	def get(self):
 		dict_={}
-		dict_['post_url_channel'] = blobstore.create_upload_url('/channels')
+		dict_['img_url_channel'] = blobstore.create_upload_url('/channels')
 		self.response.write(json.dumps(dict_))
 		
