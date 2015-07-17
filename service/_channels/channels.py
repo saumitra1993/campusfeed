@@ -6,6 +6,8 @@ from google.appengine.api import blobstore
 from service._users.sessions import BaseHandler
 from db.database import Users, Channel_Admins, Channels, Channel_Followers
 from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.api import images
+from google.appengine.ext import ndb
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 
@@ -20,45 +22,58 @@ class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 		
 		user_id = self.request.get('user_id').strip()
 		isAnonymous = str(self.request.get('isAnonymous'))
-		channel_name = (self.request.get('channel_name').strip()).lower()
+		channel_name = self.request.get('channel_name').strip()
+		descr = self.request.get('description').strip()
 		user_query = Users.query(Users.user_id == user_id).fetch() #query will store entire 'list' of db cols
-		
+		image = self.request.get('channel_img')
+		if image!='':
+			image = images.Image(image)
+			# Transform the image
+			image.resize(width=400, height=200)
+			image = image.execute_transforms(output_encoding=images.JPEG)
+			size = len(image)
+			if size > 1000000:
+				self.response.set_status(400,"Image too big")
+				return
 		if len(user_query) == 1:
 			user = user_query[0]
 			user_key = user.key
-			if user.type_ == 'user':
-				user.type_ = 'admin'   #updating 'user' to 'admin
-				user.put()
-			check_channel_name_query = Channels.query(Channels.channel_name == channel_name).fetch()
+			check_channel_name_query = Channels.query(ndb.OR(Channels.channel_name == channel_name, Channels.channel_name == channel_name.upper(), Channels.channel_name == channel_name.title())).fetch()  #Channel name can be either all caps or first letter caps, rest small. .title() function converts string into the latter format
 			if len(check_channel_name_query) == 0:
+
 				db = Channels()
 				db.channel_name = channel_name
-				db.description = self.request.get('description').strip()
-				try:
-					db.channel_img_url = self.get_uploads('channel_img_url')[0].key()
-				except:
-					db.channel_img_url = blobstore.BlobKey(DEFAULT_IMG_ID)
+				db.description = descr
 				
-				logging.info(db.channel_img_url)
-				k = db.put()
-				channel_items = k.get()
-				channel_key = channel_items.key
-
+				if user.type_ == 'user':
+					user.type_ = 'admin'   #updating 'user' to 'admin
+					user.put()
+				elif user.type_ == 'superuser':
+					db.pending_bit = 0
 				
+				if image != '':
+					db.img = image
+				else:
+					db.img = ''
+				channel_key = db.put()
 
 				db1 = Channel_Admins()
 				db1.user_ptr = user_key
 				db1.channel_ptr = channel_key
 				db1.isAnonymous = isAnonymous
 				k1 = db1.put()
+
+				if user.type_ == 'superuser':
+					db2 = Channel_Followers()
+					db2.user_ptr = user_key
+					db2.channel_ptr = channel_key
+					db2.put()
 				self.session['last-seen'] = datetime.now()
-				db2 = Channel_Followers()
-				db2.user_ptr = user_key
-				db2.channel_ptr = channel_key
-				k2 = db2.put()
 				logging.info('...Inserted into DB user with key... %s ' % k1)
 			else:
 				self.response.set_status(400,'Channel name already exists')
+		else:
+			self.response.set_status(401,'Invalid user')
 
 	# Request URL - /channels GET
 
@@ -95,8 +110,8 @@ class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 						dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).count()
 						dict_['channel_id'] = channel.key.id()
 						dict_['channel_name'] = channel.channel_name
-						if channel.channel_img_url:
-							dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.channel_img_url)
+						if channel.img != '':
+							dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 						else:
 							dict_['channel_img_url'] = DEFAULT_IMG_URL
 

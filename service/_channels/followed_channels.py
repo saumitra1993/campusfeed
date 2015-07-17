@@ -46,8 +46,8 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 						_dict['channel_name'] = channel.channel_name
 						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == followed_channel.channel_ptr).count()
 						
-						if channel.channel_img_url:
-							_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.channel_img_url)
+						if channel.img != '':
+							_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 						else:
 							_dict['channel_img_url'] = DEFAULT_IMG_URL
 						

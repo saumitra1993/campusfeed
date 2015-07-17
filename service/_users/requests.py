@@ -2,10 +2,11 @@ import webapp2
 import json
 import logging
 from datetime import datetime
+from service._users.sessions import BaseHandler
 from db.database import Users, Channel_Admins, Channels, Channel_Followers
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 
-class PendingChannels(webapp2.RequestHandler):
+class PendingChannels(BaseHandler,webapp2.RequestHandler):
 	
 		def get(self, user_id):
 			limit = self.request.get('limit')
@@ -18,9 +19,9 @@ class PendingChannels(webapp2.RequestHandler):
 				result = user_query.fetch()
 				if len(result) == 1:
 					user = result[0]
-					if user.type == 'superuser':
+					if user.type_ == 'superuser':
 						pending_channels_qry = Channels.query(Channels.pending_bit == 1)
-						if limitc!=-1:
+						if limit!=-1:
 							pending_channels = pending_channels_qry.fetch(limit,offset= offset)
 						else:
 							pending_channels = pending_channels_qry.fetch(offset= offset)
@@ -31,8 +32,8 @@ class PendingChannels(webapp2.RequestHandler):
 							_dict['channel_id'] = pending_channel.key.id()
 							_dict['channel_name'] = pending_channel.channel_name
 							_dict['num_followers'] = 0
-							if channel.channel_img_url:
-								_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(pending_channel.channel_img_url)
+							if pending_channel.img != '':
+								_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(pending_channel.key.urlsafe())
 							else:
 								_dict['channel_img_url'] = DEFAULT_IMG_URL
 							

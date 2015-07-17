@@ -18,7 +18,7 @@ class Users(ndb.Model):
 	email_id = ndb.StringProperty()
 	password = ndb.StringProperty()
 	user_id = ndb.StringProperty()
-	user_img_url = ndb.BlobProperty()
+	img = ndb.BlobProperty()
 	last_seen = ndb.DateTimeProperty() # given when the app gets killed/update after every api call
 
 class Channels(ndb.Model):
@@ -26,7 +26,7 @@ class Channels(ndb.Model):
 	
 	#channel_id = [p]	
 	channel_name = ndb.StringProperty()
-	channel_img_url = ndb.BlobProperty()
+	img = ndb.BlobProperty()
 	description = ndb.StringProperty()
 	pending_bit = ndb.IntegerProperty(default=1)	#keep it 1 while inserting
 	curated_bit = ndb.IntegerProperty(default=1)	#curated/open, 1 means curated(rok k rakho salle ko!)
@@ -41,7 +41,7 @@ class Posts(ndb.Model):
 	user_ptr = ndb.KeyProperty(kind=Users)
 	channel_ptr = ndb.KeyProperty(kind=Channels)
 	text = ndb.StringProperty()
-	post_img_url = ndb.BlobProperty()
+	img = ndb.BlobProperty()
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
 	pending_bit = ndb.IntegerProperty(default=1)
 	isAnonymous = ndb.StringProperty(
