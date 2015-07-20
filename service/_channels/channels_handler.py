@@ -17,7 +17,7 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 		channel = Channels.get_by_id(int(channel_id))
 		dict_ = {}
 		if channel:
-			channel_admins = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key).fetch()
+			channel_admins = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).fetch()
 			if len(channel_admins) > 0:
 				dict_['description'] = channel.description
 				dict_['channel_name'] = channel.channel_name
@@ -25,7 +25,7 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 				out = []
 				for channel_admin in channel_admins:
 					_dict = {}
-					if channel_admin.isAnonymous == 'True': #for admin who don't want to reveal their names.
+					if channel_admin.isAnonymous == 'True': #for admins who don't want to reveal their names.
 						_dict['first_name'] = 'Anonymous'
 						_dict['last_name'] = ''
 					else:

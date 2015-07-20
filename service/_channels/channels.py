@@ -11,7 +11,7 @@ from google.appengine.ext import ndb
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 
-class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
+class AllChannels(BaseHandler,webapp2.RequestHandler):
 	"""docstring for Channels"""
 	# Request URL - /channels POST
 	# Request params - user_id, channel_name, channel_img_url, description, isAnonymous
@@ -105,7 +105,7 @@ class AllChannels(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 				out = []
 				for channel_key in channel_keys:
 					channel = Channels.get_by_id(channel_key.id())
-					if channel.pending_bit == 0:
+					if channel.pending_bit == 0 and channel.isDeleted == 0:
 						dict_ = {}
 						dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).count()
 						dict_['channel_id'] = channel.key.id()

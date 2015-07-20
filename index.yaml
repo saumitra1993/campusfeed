@@ -18,6 +18,12 @@ indexes:
 - kind: Posts
   properties:
   - name: channel_ptr
+  - name: created_time
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: channel_ptr
   - name: pending_bit
   - name: time
 

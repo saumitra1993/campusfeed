@@ -1,12 +1,13 @@
 import webapp2
 import json
 import logging
+from datetime import datetime, timedelta
 from service._users.sessions import BaseHandler
 from db.database import Users, Channel_Admins, Channels, Channel_Followers
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 
-class MyChannels(webapp2.RequestHandler):
+class MyChannels(BaseHandler, webapp2.RequestHandler):
 	
 	# Request URL: /users/userid/mychannels GET
 	# Response : Dictionary of status, all_channels: array of (channel_id, channel_name, channel_img_url, num_folllowers)

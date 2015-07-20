@@ -12,7 +12,7 @@ class GetPhotu(webapp2.RequestHandler):
 	def get(self, img_id):
 		entity_key = ndb.Key(urlsafe=img_id)
 		entity = entity_key.get()
-		if entity.img:
+		if entity.img != '':
 			self.response.headers['Content-Type'] = 'image/jpeg'
 			self.response.out.write(entity.img)
 		else:

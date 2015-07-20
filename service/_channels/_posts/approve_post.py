@@ -16,10 +16,9 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 		user = Users.get_by_id(user_id)
 		channel_key = Key('Channel', int(channel_id))
 		if user.type_ == 'admin':
-			users_channel = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.channel_ptr == channel_key).fetch()
+			users_channel = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.channel_ptr == channel_key, Channel_Admins.isDeleted == 0).fetch()
 			if len(users_channel) == 1:
 				db = Posts.get_by_id(int(post_id))
-				logging.info(db.pending_bit)
 				if db.pending_bit == 1:
 					db.pending_bit = 0
 				logging.info(db.pending_bit)
@@ -47,7 +46,6 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 			dict_ = {	
 						'post_id' : post.key.id(),
 						'post_text' : post.text,
-						'post_img_url' : post.post_img_url,
 						'created_time':date_to_string(utc_to_ist(post.created_time)),
 						'channel_id':channel.key.id(),
 						'channel_name':channel.channel_name,
@@ -55,6 +53,10 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 						'user_name': name,
 						'num_upvotes':num_upvotes,
 					}
+			if post.img != '':
+				dict_['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
+			else:
+				dict_['post_img_url'] = ''
 			logging.info(json.dumps(dict_, indent=2))
 			notifications_query = Upvote_Notifications.query(Upvote_Notifications.user_ptr == logged_in_user_key, Upvote_Notifications.post_ptr == post.key).fetch()
 			if len(notifications_query) == 1:

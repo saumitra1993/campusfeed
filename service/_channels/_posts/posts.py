@@ -8,9 +8,10 @@ from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_I
 from db.database import Users, Channels, Posts, Channel_Admins
 from google.appengine.api import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.api import images
 from google.appengine.ext import ndb
 
-class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
+class PostsHandler(BaseHandler,webapp2.RequestHandler):
 	"""docstring for Posts"""
 	# Request URL - /channels/:channel_id/posts POST
 	# Request Params - user_id, channel_id(generated), text, img, post_by (user or channel)
@@ -23,17 +24,27 @@ class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 	
 	def post(self,channel_id):
 
-		isAnonymous = self.request.get('is_Anonymous').strip() #fetching True/False
+		isAnonymous = self.request.get('isAnonymous').strip() #fetching True/False
 		user_id = self.request.get('user_id').strip()
 		post_by = self.request.get('post_by').strip()
 		text = self.request.get('text').strip()
+		image = self.request.get('post_img')
+		if image!='':
+			image = images.Image(image)
+			# Transform the image
+			image.resize(width=400, height=200)
+			image = image.execute_transforms(output_encoding=images.JPEG)
+			size = len(image)
+			if size > 1000000:
+				self.response.set_status(400,"Image too big")
+				return
 		query = Users.query(Users.user_id == user_id).fetch()
 		if len(query) == 1:
 			user = query[0]
 			user_ptr = user.key
 			first_name = user.first_name
 			last_name = user.last_name
-			user_img_url = user.user_img_url
+			user_img_url = user_ptr.urlsafe()
 			branch = user.branch
 			
 			channel_id = int(channel_id)
@@ -45,41 +56,44 @@ class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 				if len(admin_query) == 1:
 					db.pending_bit = 0
 				db.text = text
-				try:
-					db.post_img_url = self.get_uploads('post_img_url')[0].key()
-				except:
-					db.post_img_url = blobstore.BlobKey(DEFAULT_IMG_ID)
+				if image != '':
+					db.img = image
+				else:
+					db.img = ''
+
 				db.channel_ptr = channel_ptr
 				db.user_ptr = user_ptr
 				db.isAnonymous = isAnonymous
 				db.post_by = post_by
 				k=db.put()
 				post_items = k.get()
-				post_key = post_items.key
 				text = post_items.text
-				post_img_url = post_items.post_img_url
+				
 				created_time = date_to_string(utc_to_ist(post_items.created_time))
 
 				#TODO isAnonymous to be checked
 				_dict = {}
 				
 				if isAnonymous == 'True':
-					_dict['first_name'] = 'Anonymous'
-					_dict['last_name'] = ''
+					_dict['full_name'] = 'Anonymous'
 				else:
 					if post_by == 'user':
-						_dict['first_name'] = first_name
-						_dict['last_name'] = last_name
+						_dict['full_name'] = first_name + ' ' + last_name
+						
 						_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(user_img_url)
 					else:
-						_dict['first_name'] = channel.channel_name
-						_dict['last_name'] = ''
-						_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.channel_img_url)
+						_dict['full_name'] = channel.channel_name
+						_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 				_dict['post_by'] = post_by
 				_dict['branch'] = branch
-				_dict['post_id'] = post_key.id()
+				_dict['post_id'] = k.id()
 				_dict['text'] = text
-				_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post_img_url)
+
+				if image != '':
+					_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(k.urlsafe())
+				else:
+					_dict['post_img_url'] = ''
+
 				_dict['created_time'] = created_time
 				self.response.set_status(200, 'Awesome')
 			else:
@@ -120,9 +134,9 @@ class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 					posts_query = posts_query.filter(Posts.created_time >= lastSeenTime)
 
 				if limit != -1:
-					posts = posts_query.fetch(limit,offset=offset)
+					posts = posts_query.order(-Posts.created_time).fetch(limit,offset=offset)
 				else:
-					posts = posts_query.fetch(offset=offset)
+					posts = posts_query.order(-Posts.created_time).fetch(offset=offset)
 
 				out = []
 				dict_={}
@@ -131,17 +145,16 @@ class PostsHandler(blobstore_handlers.BlobstoreUploadHandler, BaseHandler):
 					_dict = {}
 					_dict['post_id'] = post.key.id()
 					_dict['text'] = post.text
-					_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.post_img_url)
+					_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
 					if post.isAnonymous == 'True':
 						_dict['full_name'] = 'Anonymous'
 					else:
-						if post.post_by == 'user':		
-							_dict['full_name'] = posting_user.first_name+' '+posting_user.last_name
-							_dict['img_url'] = posting_user.user_img_url
+						if post.post_by == 'user':
+							_dict['full_name'] = posting_user.first_name + ' ' + posting_user.last_name
+							_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(posting_user.key.urlsafe())
 						else:
 							_dict['full_name'] = channel.channel_name
-							_dict['img_url'] = channel.channel_img_url
-
+							_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 					_dict['post_by'] = post.post_by
 					_dict['created_time'] = date_to_string(utc_to_ist(post.created_time))					
 					_dict['branch'] = posting_user.branch

@@ -76,7 +76,8 @@ class Login(BaseHandler, webapp2.RequestHandler):
 				logging.info("done")
 			else:
 				logging.info("Incorrect password.")
+				self.response.set_status(401,'Fail')
 		else:
-			self.response.set_status(400,'Fail')
-			logging.info("Login Failed!")	
+			self.response.set_status(401,'Fail')
+
 
