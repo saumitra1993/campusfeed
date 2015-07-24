@@ -27,7 +27,7 @@ from service._channels.search_channel import SearchChannels
 
 from service._channels._posts.image_url_post import PostImageUrl
 from service._channels._posts.posts import PostsHandler
-from service._channels._posts.upvote_post import UpvotePost
+from service._channels._posts.view_post import PostViewed
 from service._channels._posts.approve_post import OnePost
 
 config = {}
@@ -68,6 +68,6 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts',PostsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts/<:[0-9][a-z][A-Z]{16}>',OnePost),
 	webapp2.Route(r'/channels/search',SearchChannels),
-	webapp2.Route(r'/posts/<:[0-9a-zA-Z]{16}>/upvotes',UpvotePost),
+	webapp2.Route(r'/posts/<:[0-9a-zA-Z]{16}>/views', PostViewed),
 
 ], config=config, debug=True)

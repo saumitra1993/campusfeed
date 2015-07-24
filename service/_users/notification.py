@@ -17,6 +17,7 @@ class Notifications(BaseHandler, webapp2.RequestHandler):
 	#     'new_followers': [channel_id, channel_name, num_new_followers]
 	#     'new_upvotes': [post_id, channel_name, new_upvote_count]
 	#  }
+	#TODO PENDING POSTS NOTIFICATION FOR ADMIN AND IF POST IS APPROVED FOR USER
 	def get(self, user_id):
 		user_query = Users.query(Users.user_id == user_id)
 		result = user_query.fetch()
@@ -60,22 +61,22 @@ class Notifications(BaseHandler, webapp2.RequestHandler):
 				final_dict['new_posts'] = out2
 				final_dict['new_followers'] = out3
 			else:
-				upvote_notifications_query = Upvote_Notifications.query(Upvote_Notifications.user_ptr == user.key, Upvote_Notifications.new_upvote_count > 0).fetch()
-				out4 = []
-				for upvote_notification in upvote_notifications_query:
-					post = upvote_notification.post_ptr.get()
-					channel = post.channel_ptr.get()
-					new_upvote_count = upvote_notification.new_upvote_count
-					dict_ = {}
-					dict_['post_id'] = post.key.id()
-					dict_['channel_name'] = channel.channel_name
-					dict_['new_upvote_count'] = new_upvote_count
-					out4.append(dict_)
-					upvote_notification.new_upvote_count = 0
-					upvote_notification.put()
+				# upvote_notifications_query = Upvote_Notifications.query(Upvote_Notifications.user_ptr == user.key, Upvote_Notifications.new_upvote_count > 0).fetch()
+				# out4 = []
+				# for upvote_notification in upvote_notifications_query:
+				# 	post = upvote_notification.post_ptr.get()
+				# 	channel = post.channel_ptr.get()
+				# 	new_upvote_count = upvote_notification.new_upvote_count
+				# 	dict_ = {}
+				# 	dict_['post_id'] = post.key.id()
+				# 	dict_['channel_name'] = channel.channel_name
+				# 	dict_['new_upvote_count'] = new_upvote_count
+				# 	out4.append(dict_)
+				# 	upvote_notification.new_upvote_count = 0
+				# 	upvote_notification.put()
 
-				final_dict['new_upvotes'] = out4
-				self.response.set_status(200, 'Awesome')
+				# final_dict['new_upvotes'] = out4
+			self.response.set_status(200, 'Awesome')
 		else:
 			self.response.set_status(400, 'Unauthorized')
 		

@@ -5,7 +5,7 @@ import datetime
 from service._users.sessions import BaseHandler
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
-from db.database import Users, Channels, Posts, Channel_Admins
+from db.database import Users, Channels, Posts, Channel_Admins, Views
 from google.appengine.api import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
@@ -120,10 +120,11 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				user_id = self.session['userid']
 				user = Users.get_by_id(user_id)
 		#		posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
-				
+				admin_bool = 0				# variable that tells whether the user is admin of the channel or not
 				if user.type_ == 'admin' or user.type_ == 'superuser':
 					is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key).fetch()
 					if len(is_admin) == 1:
+						admin_bool = 1
 						posts_query = Posts.query(Posts.channel_ptr == channel.key) 
 				if user.type_ == 'user':
 					posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
@@ -142,6 +143,8 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				dict_={}
 				for post in posts:
 					posting_user = Users.get_by_id(post.user_ptr.id())
+					has_viewed_query = Views.query(Views.post_ptr == post.key,Views.user_ptr == user.key).fetch()
+					num_views_count = Views.query(Views.post_ptr == post.key).count()
 					_dict = {}
 					_dict['post_id'] = post.key.id()
 					_dict['text'] = post.text
@@ -152,16 +155,22 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 						if post.post_by == 'user':
 							_dict['full_name'] = posting_user.first_name + ' ' + posting_user.last_name
 							_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(posting_user.key.urlsafe())
+							_dict['branch'] = posting_user.branch
 						else:
 							_dict['full_name'] = channel.channel_name
 							_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 					_dict['post_by'] = post.post_by
 					_dict['created_time'] = date_to_string(utc_to_ist(post.created_time))					
-					_dict['branch'] = posting_user.branch
 					_dict['pending_bit'] = post.pending_bit
+					_dict['num_views'] = num_views_count
+					if len(has_viewed_query) == 1:
+						_dict['has_viewed'] = 1
+					else:
+						_dict['has_viewed'] = 0
 					out.append(_dict)
 
 				dict_['posts'] = out
+				dict_['is_admin'] = admin_bool
 				self.response.set_status(200, 'Awesome')
 			else:
 				self.response.set_status(404, 'Channel not found')

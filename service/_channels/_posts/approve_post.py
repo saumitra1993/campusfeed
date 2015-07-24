@@ -1,6 +1,6 @@
 import webapp2
 import logging
-from db.database import Posts, Channel_Admins, Channels, Upvotes, Upvote_Notifications
+from db.database import Posts, Channel_Admins, Channels, Views, Upvote_Notifications
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from service._users.sessions import BaseHandler
 
@@ -41,8 +41,15 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 		if post:
 			user = post.user_ptr.get()
 			channel = post.channel_ptr.get()
-			name = user.first_name + " " + user.last_name
-			num_upvotes = Upvotes.query(Upvotes.post_ptr == post.key).count()
+			if post.isAnonymous == 'True':
+				name = 'Anonymous'
+			else:
+				if post.post_by == 'user':
+					name = user.first_name + ' ' + user.last_name
+				else:
+					_dict['full_name'] = channel.channel_name
+			
+			num_views = Views.query(Views.post_ptr == post.key).count()
 			dict_ = {	
 						'post_id' : post.key.id(),
 						'post_text' : post.text,
@@ -51,18 +58,19 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 						'channel_name':channel.channel_name,
 						'user_id':user.key.id(),
 						'user_name': name,
-						'num_upvotes':num_upvotes,
+						'num_Views':num_views,
 					}
 			if post.img != '':
 				dict_['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
 			else:
 				dict_['post_img_url'] = ''
+			dict_['post_by'] = post.post_by
 			logging.info(json.dumps(dict_, indent=2))
-			notifications_query = Upvote_Notifications.query(Upvote_Notifications.user_ptr == logged_in_user_key, Upvote_Notifications.post_ptr == post.key).fetch()
-			if len(notifications_query) == 1:
-				new_notif = notifications_query[0]
-				new_notif.new_upvote_count = 0
-				new_notif.put()
+			# notifications_query = Upvote_Notifications.query(Upvote_Notifications.user_ptr == logged_in_user_key, Upvote_Notifications.post_ptr == post.key).fetch()
+			# if len(notifications_query) == 1:
+			# 	new_notif = notifications_query[0]
+			# 	new_notif.new_upvote_count = 0
+			# 	new_notif.put()
 			response = json.dumps(dict_)
 			self.session['last-seen'] = datetime.now()
 			self.response.set_status(200, 'Awesome')
