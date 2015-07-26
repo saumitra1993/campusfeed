@@ -1,8 +1,10 @@
 import webapp2
 import logging
-from db.database import Posts, Channel_Admins, Channels, Views, Upvote_Notifications
+from datetime import datetime
+from db.database import Posts, Channel_Admins, Channels, Views, Users
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from service._users.sessions import BaseHandler
+from google.appengine.ext import ndb
 
 class OnePost(BaseHandler, webapp2.RequestHandler):
 	"""docstring for ApprovePost"""
@@ -14,8 +16,8 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 
 		user_id = self.session['userid']
 		user = Users.get_by_id(user_id)
-		channel_key = Key('Channel', int(channel_id))
-		if user.type_ == 'admin':
+		channel_key = ndb.Key('Channels', int(channel_id))
+		if user.type_ == 'admin' or user.type_ == 'superuser':
 			users_channel = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.channel_ptr == channel_key, Channel_Admins.isDeleted == 0).fetch()
 			if len(users_channel) == 1:
 				db = Posts.get_by_id(int(post_id))

@@ -10,6 +10,7 @@ from google.appengine.api import images
 from google.appengine.ext import ndb
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
+from operator import itemgetter
 
 class AllChannels(BaseHandler,webapp2.RequestHandler):
 	"""docstring for Channels"""
@@ -26,10 +27,14 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 		descr = self.request.get('description').strip()
 		user_query = Users.query(Users.user_id == user_id).fetch() #query will store entire 'list' of db cols
 		image = self.request.get('channel_img')
+		logging.info(channel_name)
+		logging.info(descr)
+		logging.info(isAnonymous)
+		logging.info(user_id)
 		if image!='':
 			image = images.Image(image)
 			# Transform the image
-			image.resize(width=400, height=200)
+			image.resize(width=400, height=400)
 			image = image.execute_transforms(output_encoding=images.JPEG)
 			size = len(image)
 			if size > 1000000:
@@ -89,48 +94,35 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 		if limit and offset:
 			limit = int(limit)
 			offset= int(offset)
-			try:
-				user_id = self.session['userid']
-				user = Users.get_by_id(user_id)
-				channels_qry = Channel_Followers.query(Channel_Followers.user_ptr != user.key)
-				if timestamp:
-					lastSeenTime = string_to_date(timestamp) 
-					lastSeenTime = ist_to_utc(lastSeenTime)
-					channels_qry = channels_qry.filter(Channel_Followers.created_time >= lastSeenTime)
-				if limit!=-1:
-					channel_keys = channels_qry.fetch(limit,offset= offset)
+			user_id = self.session['userid']
+			user = Users.get_by_id(user_id)
+			channels_qry = Channels.query(Channels.isDeleted==0,Channels.pending_bit==0).order(-Channels.created_time)
+			if timestamp:
+				lastSeenTime = string_to_date(timestamp) 
+				lastSeenTime = ist_to_utc(lastSeenTime)
+				channels_qry = channels_qry.filter(Channels.created_time >= lastSeenTime)
+			if limit!=-1:
+				channels = channels_qry.fetch(limit,offset= offset)
+			else:
+				channels = channels_qry.fetch(offset= offset)
+
+			out = []
+			for channel in channels:
+				dict_ = {}
+				dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).count()
+				dict_['is_following'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key).count()
+				dict_['channel_id'] = channel.key.id()
+				dict_['channel_name'] = channel.channel_name
+				if channel.img != '':
+					dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 				else:
-					channel_keys = channels_qry.fetch(offset= offset)
+					dict_['channel_img_url'] = DEFAULT_IMG_URL
+				out.append(dict_)
 
-				out = []
-				for channel_key in channel_keys:
-					channel = Channels.get_by_id(channel_key.id())
-					if channel.pending_bit == 0 and channel.isDeleted == 0:
-						dict_ = {}
-						dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).count()
-						dict_['channel_id'] = channel.key.id()
-						dict_['channel_name'] = channel.channel_name
-						if channel.img != '':
-							dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
-						else:
-							dict_['channel_img_url'] = DEFAULT_IMG_URL
-
-						if len(out) > 0:
-							i = 0
-							for elem in out:
-								i = i+1
-								if elem['num_followers'] < dict_['num_followers']:
-									out[:i-1].append(dict_) + out[i:]
-								elif i == len(out):
-									out.append(dict_)
-						else:
-							out.append(dict_)
-
-				_dict['all_channels'] = out
-				self.response.set_status(200, 'Awesome')
-				self.session['last-seen'] = datetime.now()
-			except:
-				self.response.set_status(400, 'Somethings wrong')
+			out = sorted(out, key=itemgetter('num_followers'), reverse=True)
+			_dict['all_channels'] = out
+			self.response.set_status(200, 'Awesome')
+			self.session['last-seen'] = datetime.now()
 		else:
 			self.response.set_status(400, 'Limit offset standards are not followed')
 		self.response.write(json.dumps(_dict))

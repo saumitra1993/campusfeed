@@ -68,7 +68,7 @@ class Login(BaseHandler, webapp2.RequestHandler):
 				dict_['last_name'] = result[0].last_name
 				mAuthToken = self.generate_and_store_mobile_token(user_id, result[0].first_name + result[0].last_name)
 				dict_['mAuthToken'] = mAuthToken
-				self.session['name'] = result[0].first_name + result[0].last_name
+				self.session['name'] = result[0].first_name + " " + result[0].last_name
 				self.session['userid'] = result[0].key.id()
 				self.session['last-seen'] = datetime.now()
 				self.response.set_status(200, 'Awesome')

@@ -1,8 +1,9 @@
 import webapp2
 import logging
+import json
 from datetime import datetime
 from service._users.sessions import BaseHandler
-from db.database import Channel_Admins, Users
+from db.database import *
 from google.appengine.ext import ndb
 
 class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
@@ -13,19 +14,20 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 	# Response: status=200 else 400(not promoted)
 
 	def post(self,channel_id):
-
-		user_ids = self.request.get('user_id')	 #array of user_ids(sent by Chinmay)
-		isAnonymous = self.request.get('is_Anonymous').strip()
+		data = json.loads(self.request.body)
+		user_id = data.get('user_id')	 #array of user_ids(sent by Chinmay)
+		isAnonymous = data.get('isAnonymous')
 		channel = Channels.get_by_id(int(channel_id))
 		logged_in_userid = self.session['userid']
 		logged_in_user = Users.get_by_id(logged_in_userid)
 		if channel:
 			check_if_admin_query = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == logged_in_user.key).fetch()
 			if len(check_if_admin_query) == 1:
-				for user_id in user_ids:
-					result = Users.query(Users.user_id == user_id).fetch()
-					if len(result) == 1 :
-						user = result[0]
+				result = Users.query(Users.user_id == user_id).fetch()
+				if len(result) == 1 :
+					user = result[0]
+					if_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key).count()
+					if if_admin == 0:
 						db = Channel_Admins()
 						db.user_ptr = user.key
 						db.channel_ptr = channel.key
@@ -36,11 +38,13 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 						db1.user_ptr = user.key
 						db1.channel_ptr = channel.key
 						db1.put()
-						self.response.set_status(200,'Awesome')
-						self.session['last-seen'] = datetime.now()
-					else:
-						self.response.set_status(401,'Unable to fetch user from Users.')
+					self.response.set_status(200,'Awesome')
+					self.session['last-seen'] = datetime.now()
+				else:
+					logging.info("Yoyo")
+					self.response.set_status(401,'Unable to fetch user from Users.')
 			else:
+				logging.info("Yoyoh")
 				self.response.set_status(401,'Unauthorized')
 		else:
 			self.response.set_status(400,'Unable to fetch channel from Channels.')	

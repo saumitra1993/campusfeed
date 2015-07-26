@@ -65,8 +65,8 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>',ChannelsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/followers',ChannelFollowers),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/admins',ChannelAdmins),
+	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts/<:[0-9a-zA-Z]{16}>',OnePost),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts',PostsHandler),
-	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts/<:[0-9][a-z][A-Z]{16}>',OnePost),
 	webapp2.Route(r'/channels/search',SearchChannels),
 	webapp2.Route(r'/posts/<:[0-9a-zA-Z]{16}>/views', PostViewed),
 

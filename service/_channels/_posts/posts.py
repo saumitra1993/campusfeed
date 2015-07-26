@@ -14,7 +14,7 @@ from google.appengine.ext import ndb
 class PostsHandler(BaseHandler,webapp2.RequestHandler):
 	"""docstring for Posts"""
 	# Request URL - /channels/:channel_id/posts POST
-	# Request Params - user_id, channel_id(generated), text, img, post_by (user or channel)
+	# Request Params - user_id, channel_id(generated), text, post_img, post_by (user or channel)
 	# Response - status, post:(  post_id(generated),
 	#							 text, img_url, 
 	#							 time, first_name, last_name, 
@@ -32,7 +32,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 		if image!='':
 			image = images.Image(image)
 			# Transform the image
-			image.resize(width=400, height=200)
+			image.resize(width=400, height=400)
 			image = image.execute_transforms(output_encoding=images.JPEG)
 			size = len(image)
 			if size > 1000000:
@@ -88,7 +88,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				_dict['branch'] = branch
 				_dict['post_id'] = k.id()
 				_dict['text'] = text
-
+				_dict['pending_bit'] = post_items.pending_bit
 				if image != '':
 					_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(k.urlsafe())
 				else:
@@ -123,9 +123,10 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				admin_bool = 0				# variable that tells whether the user is admin of the channel or not
 				if user.type_ == 'admin' or user.type_ == 'superuser':
 					is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key).fetch()
+					posts_query = Posts.query(Posts.channel_ptr == channel.key)
 					if len(is_admin) == 1:
 						admin_bool = 1
-						posts_query = Posts.query(Posts.channel_ptr == channel.key) 
+
 				if user.type_ == 'user':
 					posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
 				
@@ -148,7 +149,10 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					_dict = {}
 					_dict['post_id'] = post.key.id()
 					_dict['text'] = post.text
-					_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
+					if post.img != '':
+						_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
+					else:
+						_dict['post_img_url'] = ''
 					if post.isAnonymous == 'True':
 						_dict['full_name'] = 'Anonymous'
 					else:
@@ -162,15 +166,22 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					_dict['post_by'] = post.post_by
 					_dict['created_time'] = date_to_string(utc_to_ist(post.created_time))					
 					_dict['pending_bit'] = post.pending_bit
-					_dict['num_views'] = num_views_count
-					if len(has_viewed_query) == 1:
-						_dict['has_viewed'] = 1
+					
+
+					if len(has_viewed_query) == 0:
+						_dict['num_views'] = num_views_count + 1   #This user is now viewing it
+						db = Views()
+						db.user_ptr = user.key
+						db.post_ptr = post.key
+						db.put()	
 					else:
-						_dict['has_viewed'] = 0
+						_dict['num_views'] = num_views_count					
+
 					out.append(_dict)
 
 				dict_['posts'] = out
 				dict_['is_admin'] = admin_bool
+				dict_['channel_pending_bit'] = channel.pending_bit
 				self.response.set_status(200, 'Awesome')
 			else:
 				self.response.set_status(404, 'Channel not found')

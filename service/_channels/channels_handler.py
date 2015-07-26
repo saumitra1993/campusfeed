@@ -12,7 +12,7 @@ from google.appengine.api import search
 class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 		
 	# 	Request URL: /channels/:channel_id GET
-	# Response : status, description, created_time, admins: array of (first_name,last_name)
+	# Response : status, description, created_time, admins: array of (full_name)
 	def get(self, channel_id):
 		channel = Channels.get_by_id(int(channel_id))
 		dict_ = {}
@@ -26,12 +26,10 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 				for channel_admin in channel_admins:
 					_dict = {}
 					if channel_admin.isAnonymous == 'True': #for admins who don't want to reveal their names.
-						_dict['first_name'] = 'Anonymous'
-						_dict['last_name'] = ''
+						_dict['full_name'] = 'Anonymous'
 					else:
 						admin = Users.get_by_id(channel_admin.user_ptr.id())
-						_dict['first_name'] = admin.first_name
-						_dict['last_name'] = admin.last_name
+						_dict['full_name'] = admin.first_name + ' ' + admin.last_name
 					
 					out.append(_dict)
 				dict_['admins'] = out

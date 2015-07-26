@@ -16,8 +16,8 @@ class PostViewed(BaseHandler, webapp2.RequestHandler):
 
 		user_ID = self.session['userid']
 		user_ID = ndb.Key('Users',user_ID)
-
-		query = Views.query(Views.user_ptr == user_ID, Views.post_ptr == post_id)
+		post_key = ndb.Key('Posts',post_id)
+		query = Views.query(Views.user_ptr == user_ID, Views.post_ptr == post_key)
 		result = query.fetch()
 		
 		if len(result) == 1:

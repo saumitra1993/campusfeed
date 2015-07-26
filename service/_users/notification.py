@@ -1,7 +1,7 @@
 import webapp2
 import logging
 import json
-from db.database import Channels, Users, Channel_Admins, Channel_Followers, Upvote_Notifications
+from db.database import Channels, Users, Channel_Admins, Channel_Followers
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
 from service._users.sessions import BaseHandler
@@ -60,7 +60,7 @@ class Notifications(BaseHandler, webapp2.RequestHandler):
 						out3.append(dict_2)
 				final_dict['new_posts'] = out2
 				final_dict['new_followers'] = out3
-			else:
+			#else:
 				# upvote_notifications_query = Upvote_Notifications.query(Upvote_Notifications.user_ptr == user.key, Upvote_Notifications.new_upvote_count > 0).fetch()
 				# out4 = []
 				# for upvote_notification in upvote_notifications_query:

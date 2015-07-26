@@ -68,19 +68,18 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 	def post(self, user_id):
 		user_query = Users.query(Users.user_id == user_id)
 		result = user_query.fetch()
-
-		channel_id = int(self.request.get('channel_id').strip())
-		channel_key = ndb.Key('Channels', channel_id)
+		data = json.loads(self.request.body)
+		channel_id = int(data.get('channel_id').strip())
 		
-		channel = Channels.get_by_id(channel_key.id())
+		channel = Channels.get_by_id(channel_id)
 		
 		if len(result) == 1 and channel:
 			user = result[0]
-			relationship = Channel_Followers.query(Channel_Followers.user_ptr == user.key, Channel_Followers.channel_ptr == channel_key).fetch()
+			relationship = Channel_Followers.query(Channel_Followers.user_ptr == user.key, Channel_Followers.channel_ptr == channel.key).fetch()
 			if len(relationship) == 0:
 				db = Channel_Followers()
 				db.user_ptr = user.key
-				db.channel_ptr = channel_key
+				db.channel_ptr = channel.key
 				db.put()
 				self.response.set_status(200,'Awesome')
 				self.session['last-seen'] = datetime.now()

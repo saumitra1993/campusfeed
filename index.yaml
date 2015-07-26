@@ -15,6 +15,13 @@ indexes:
   - name: created_time
   - name: channel_name
 
+- kind: Channels
+  properties:
+  - name: isDeleted
+  - name: pending_bit
+  - name: created_time
+    direction: desc
+
 - kind: Posts
   properties:
   - name: channel_ptr
