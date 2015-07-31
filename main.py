@@ -6,6 +6,7 @@ from handlers.webhome import WebHome
 from service.get_photo import GetPhotu
 
 from service._users.login import Login
+from service._users.signup import Signup
 from service._users.image_url import ImageUrl
 from service._users.search_users import SearchUsers
 from service._users.edit_profile import Profile
@@ -14,7 +15,6 @@ from service._users.requests import PendingChannels
 from service._users.user_feed import UserFeed
 
 from service._users.notification import Notifications
-
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.channels_handler import ChannelsHandler
@@ -45,6 +45,7 @@ application = webapp2.WSGIApplication([
 	('/',Home),
 	('/web',WebHome),
 	('/login',Login),
+	('/signup',Signup),
 	('/imageurl',ImageUrl),
 	('/pic/(.*)',GetPhotu),
 	('/channelimageurl',ChannelImageUrl),

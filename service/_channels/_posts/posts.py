@@ -65,7 +65,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				db.user_ptr = user_ptr
 				db.isAnonymous = isAnonymous
 				db.post_by = post_by
-				k=db.put()
+				k = db.put()
 				post_items = k.get()
 				text = post_items.text
 				
@@ -120,13 +120,10 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				user_id = self.session['userid']
 				user = Users.get_by_id(user_id)
 		#		posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
-				admin_bool = 0				# variable that tells whether the user is admin of the channel or not
 				if user.type_ == 'admin' or user.type_ == 'superuser':
 					is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key).fetch()
 					posts_query = Posts.query(Posts.channel_ptr == channel.key)
-					if len(is_admin) == 1:
-						admin_bool = 1
-
+					
 				if user.type_ == 'user':
 					posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
 				
@@ -180,8 +177,6 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					out.append(_dict)
 
 				dict_['posts'] = out
-				dict_['is_admin'] = admin_bool
-				dict_['channel_pending_bit'] = channel.pending_bit
 				self.response.set_status(200, 'Awesome')
 			else:
 				self.response.set_status(404, 'Channel not found')

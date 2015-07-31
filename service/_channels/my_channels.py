@@ -14,6 +14,8 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 	def get(self, user_id):
 		limit = self.request.get('limit')
 		offset = self.request.get('offset')
+		user_id = str(user_id)
+		logging.info(user_id)
 		dict_ = {}
 		if limit and offset:
 			limit = int(limit)
@@ -48,8 +50,10 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 					self.response.set_status(200, 'Awesome')
 					self.session['last-seen'] = datetime.now()
 				else:
+					logging.info("here")
 					self.response.set_status(401, 'You are not an admin.')	
 			else:
+				logging.info("or here")
 				self.response.set_status(401, 'User is malicious. Ask him to go fuck himself.')
 		else:
 			self.response.set_status(400, 'Limit offset standards are not followed')

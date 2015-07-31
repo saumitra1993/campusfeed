@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timedelta
 from google.appengine.ext import ndb
 from service._users.sessions import BaseHandler
-from db.database import Channels, Users, Channel_Followers
+from db.database import Channels, Users, Channel_Followers, Channel_Admins
 from const.constants import DEFAULT_ROOT_URL, DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL
 
 class FollowedChannels(BaseHandler, webapp2.RequestHandler):
@@ -19,6 +19,8 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 	def get(self,user_id):
 		limit = self.request.get('limit')
 		offset = self.request.get('offset')
+		user_id = str(user_id)
+		logging.info(user_id)
 		dict_ = {}
 		if limit and offset:
 			logging.info("%s %s"%(limit, offset))
@@ -42,8 +44,10 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 					logging.info(channel)
 					if channel.pending_bit == 0:
 						_dict = {}
+						_dict['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user[0].key, Channel_Admins.channel_ptr == channel.key).count()
 						_dict['channel_id'] = followed_channel.channel_ptr.id()
 						_dict['channel_name'] = channel.channel_name
+						_dict['pending_bit'] = channel.pending_bit
 						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == followed_channel.channel_ptr).count()
 						
 						if channel.img != '':

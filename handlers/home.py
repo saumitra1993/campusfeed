@@ -7,4 +7,4 @@ import logging
 class Home(webapp2.RequestHandler):
 		def get(self):
 			 
-				self.response.write(open('static/html/index.html').read())
+			self.response.write(open('html/index.html').read())

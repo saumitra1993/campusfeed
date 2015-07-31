@@ -22,7 +22,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 
 		
 		user_id = self.request.get('user_id').strip()
-		isAnonymous = str(self.request.get('isAnonymous'))
+		isAnonymous = self.request.get('isAnonymous')
 		channel_name = self.request.get('channel_name').strip()
 		descr = self.request.get('description').strip()
 		user_query = Users.query(Users.user_id == user_id).fetch() #query will store entire 'list' of db cols
@@ -101,23 +101,27 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 				lastSeenTime = string_to_date(timestamp) 
 				lastSeenTime = ist_to_utc(lastSeenTime)
 				channels_qry = channels_qry.filter(Channels.created_time >= lastSeenTime)
-			if limit!=-1:
-				channels = channels_qry.fetch(limit,offset= offset)
-			else:
-				channels = channels_qry.fetch(offset= offset)
+			
+			channels = channels_qry.fetch(offset= offset)
 
 			out = []
+			i = 0
+			limit = limit - offset
 			for channel in channels:
-				dict_ = {}
-				dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).count()
-				dict_['is_following'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key).count()
-				dict_['channel_id'] = channel.key.id()
-				dict_['channel_name'] = channel.channel_name
-				if channel.img != '':
-					dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
-				else:
-					dict_['channel_img_url'] = DEFAULT_IMG_URL
-				out.append(dict_)
+				if i < limit:
+					dict_ = {}
+					is_following = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key).count()
+					if is_following == 0:
+						dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).count()
+						dict_['channel_id'] = channel.key.id()
+						dict_['channel_name'] = channel.channel_name
+						dict_['pending_bit'] = 0
+						if channel.img != '':
+							dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
+						else:
+							dict_['channel_img_url'] = DEFAULT_IMG_URL
+						out.append(dict_)
+						i = i + 1
 
 			out = sorted(out, key=itemgetter('num_followers'), reverse=True)
 			_dict['all_channels'] = out
