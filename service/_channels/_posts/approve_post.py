@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 from db.database import Posts, Channel_Admins, Channels, Views, Users
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
-from service._users.sessions import BaseHandler
+from service._users.sessions import BaseHandler, LoginRequired
 from google.appengine.ext import ndb
 
 class OnePost(BaseHandler, webapp2.RequestHandler):
@@ -11,10 +11,10 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 	
 	# Request URL : channels/:channel_id/posts/:post_id PUT
 	# Response: status=200 else 400
-
+	@LoginRequired
 	def put(self, channel_id, post_id):
 
-		user_id = self.session['userid']
+		user_id = int(self.userid)
 		user = Users.get_by_id(user_id)
 		channel_key = ndb.Key('Channels', int(channel_id))
 		if user.type_ == 'admin' or user.type_ == 'superuser':
@@ -35,9 +35,9 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 	
 	# RequestURL: /channels/:channel_id/posts/:post_id GET
 	# Response: text,post_img_url,description
-
+	@LoginRequired
 	def get(self,channel_id,post_id):
-		logged_in_userid = self.session['userid']
+		logged_in_userid = self.userid
 		logged_in_user_key = Key('Users',logged_in_userid)
 		post = Posts.get_by_id(int(post_id))
 		if post:

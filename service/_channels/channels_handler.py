@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from db.database import Channels, Users, Channel_Admins, Channel_Followers
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
-from service._users.sessions import BaseHandler
+from service._users.sessions import BaseHandler, LoginRequired
 from google.appengine.ext import ndb
 from google.appengine.api import search
 
@@ -42,9 +42,10 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 
 		self.response.write(json.dumps(dict_))
 
+	@LoginRequired
 	def put(self, channel_id):
 
-		userID = self.session['userid']
+		userID = int(self.userid)
 		user = Users.get_by_id(userID)
 		
 		if user.type_ == 'superuser':

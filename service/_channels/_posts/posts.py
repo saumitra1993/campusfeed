@@ -2,9 +2,9 @@ import webapp2
 import json
 import logging
 import datetime
-from service._users.sessions import BaseHandler
+from service._users.sessions import BaseHandler, LoginRequired
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
-from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
+from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL
 from db.database import Users, Channels, Posts, Channel_Admins, Views
 from google.appengine.api import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
@@ -76,16 +76,17 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				
 				if isAnonymous == 'True':
 					_dict['full_name'] = 'Anonymous'
+					_dict['img_url'] = DEFAULT_ANON_IMG_URL
 				else:
 					if post_by == 'user':
 						_dict['full_name'] = first_name + ' ' + last_name
-						
+						_dict['branch'] = branch
 						_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(user_img_url)
 					else:
 						_dict['full_name'] = channel.channel_name
 						_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 				_dict['post_by'] = post_by
-				_dict['branch'] = branch
+				
 				_dict['post_id'] = k.id()
 				_dict['text'] = text
 				_dict['pending_bit'] = post_items.pending_bit
@@ -107,6 +108,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 	# Response: Dictionary of status, posts: array of (post_id(generated),text, img_url, time, user_full_name, user_img_url, user_branch )
 
 	# Query params - limit, offset, timestamp
+	@LoginRequired
 	def get(self, channel_id):
 		limit = self.request.get('limit')
 		offset = self.request.get('offset')
@@ -117,7 +119,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 			offset= int(offset)
 			channel = Channels.get_by_id(int(channel_id))
 			if channel:
-				user_id = self.session['userid']
+				user_id = int(self.userid)
 				user = Users.get_by_id(user_id)
 		#		posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
 				if user.type_ == 'admin' or user.type_ == 'superuser':

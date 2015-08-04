@@ -75,7 +75,6 @@ class LoginRequired(object):
                         _user.expiration = now + datetime.timedelta(days=MOBILE_USER_SESSION_DURATION_DAYS)
                         _user.put()
                     obj.session['userid'] = _user.user_id
-                    obj.session['name'] = _user.name
                     r = self.f(obj, *args, **kwargs)
                     return r
                 else:

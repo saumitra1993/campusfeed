@@ -2,7 +2,7 @@ import webapp2
 import logging
 import json
 from datetime import datetime
-from service._users.sessions import BaseHandler
+from service._users.sessions import BaseHandler, LoginRequired
 from db.database import *
 from google.appengine.ext import ndb
 
@@ -12,13 +12,13 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 	# Request URL: /channels/channel_id/admins POST
 	# request params: array (user_id)
 	# Response: status=200 else 400(not promoted)
-
+	@LoginRequired
 	def post(self,channel_id):
 		data = json.loads(self.request.body)
 		user_id = data.get('user_id')	 #array of user_ids(sent by Chinmay)
 		isAnonymous = data.get('isAnonymous')
 		channel = Channels.get_by_id(int(channel_id))
-		logged_in_userid = self.session['userid']
+		logged_in_userid = int(self.userid)
 		logged_in_user = Users.get_by_id(logged_in_userid)
 		if channel:
 			check_if_admin_query = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == logged_in_user.key).fetch()
@@ -49,11 +49,11 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 		else:
 			self.response.set_status(400,'Unable to fetch channel from Channels.')	
 
-
+	@LoginRequired
 	def delete(self,channel_id):
 	# Request URL: /channels/:channel_id/admins DELETE
 	# Response : status
-		userID = self.session['userid']
+		userID = int(self.userid)
 		user_ptr = ndb.Key('Users',userID)		
 		
 		channel_ptr = ndb.Key('Channels', int(channel_id))

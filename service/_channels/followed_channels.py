@@ -47,7 +47,7 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 						_dict['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user[0].key, Channel_Admins.channel_ptr == channel.key).count()
 						_dict['channel_id'] = followed_channel.channel_ptr.id()
 						_dict['channel_name'] = channel.channel_name
-						_dict['pending_bit'] = channel.pending_bit
+						_dict['pending_bit'] = 0
 						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == followed_channel.channel_ptr).count()
 						
 						if channel.img != '':

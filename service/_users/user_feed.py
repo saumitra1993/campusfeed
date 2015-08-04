@@ -4,8 +4,8 @@ from google.appengine.ext import ndb
 from service._channels._posts.posts import PostsHandler
 from db.database import *
 import json
-from service._users.sessions import BaseHandler
-from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
+from service._users.sessions import BaseHandler, LoginRequired
+from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 
 class UserFeed(BaseHandler, webapp2.RequestHandler):
@@ -28,14 +28,15 @@ class UserFeed(BaseHandler, webapp2.RequestHandler):
 	#               }
 	#              ]
 	#      }
-
+	@LoginRequired
 	def get(self,user_id):
 
 		limit = int(self.request.get('limit'))
 		offset = int(self.request.get('offset'))
 		timestamp = self.request.get('timestamp')
-		user_id = self.session['userid']
-		user = Users.get_by_id(user_id)
+		u_id = int(self.userid)
+		logging.info(u_id);
+		user = Users.get_by_id(u_id)
 		result = Channel_Followers.query(Channel_Followers.user_ptr == user.key)
 		
 		if limit != -1:
@@ -94,6 +95,7 @@ class UserFeed(BaseHandler, webapp2.RequestHandler):
 
 						if channel_post.isAnonymous == 'True':
 							_dict_channel_posts['full_name'] = 'Anonymous'
+							_dict_channel_posts['img_url'] = DEFAULT_ANON_IMG_URL
 						else:
 							if channel_post.post_by == 'user':
 								_dict_channel_posts['full_name'] = posting_user.first_name + ' ' + posting_user.last_name

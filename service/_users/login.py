@@ -28,7 +28,6 @@ class Login(BaseHandler, webapp2.RequestHandler):
 		return mAuthToken
 
 	def post(self):
-		logging.info("i am in Login")
 
 		# db = Users()
 		# db.first_name = self.request.get("first_name").strip()
@@ -64,9 +63,10 @@ class Login(BaseHandler, webapp2.RequestHandler):
 		dict_={}
 		if result:
 			if(passwords_match(result[0].password, password)):
+				
 				dict_['first_name'] = result[0].first_name
 				dict_['last_name'] = result[0].last_name
-				mAuthToken = self.generate_and_store_mobile_token(user_id, result[0].first_name + result[0].last_name)
+				mAuthToken = self.generate_and_store_mobile_token(str(result[0].key.id()), result[0].first_name + result[0].last_name)
 				dict_['mAuthToken'] = mAuthToken
 				self.session['name'] = result[0].first_name + " " + result[0].last_name
 				self.session['userid'] = result[0].key.id()

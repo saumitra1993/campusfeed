@@ -3,7 +3,7 @@ import json
 import logging
 from datetime import datetime
 from google.appengine.api import blobstore
-from service._users.sessions import BaseHandler
+from service._users.sessions import BaseHandler, LoginRequired
 from db.database import Users, Channel_Admins, Channels, Channel_Followers
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
@@ -34,7 +34,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 		if image!='':
 			image = images.Image(image)
 			# Transform the image
-			image.resize(width=400, height=400)
+			image.resize(width=200, height=200)
 			image = image.execute_transforms(output_encoding=images.JPEG)
 			size = len(image)
 			if size > 1000000:
@@ -86,6 +86,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 
 	# Query params-
 	# limit and offset
+	@LoginRequired
 	def get(self):
 		limit = self.request.get('limit')
 		offset = self.request.get('offset')
@@ -94,7 +95,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 		if limit and offset:
 			limit = int(limit)
 			offset= int(offset)
-			user_id = self.session['userid']
+			user_id = int(self.userid)
 			user = Users.get_by_id(user_id)
 			channels_qry = Channels.query(Channels.isDeleted==0,Channels.pending_bit==0).order(-Channels.created_time)
 			if timestamp:
