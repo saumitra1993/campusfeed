@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html > 
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, minimum-scale=1, width=device-width" />
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+        <title>Campusfeed</title>
+        <link rel="stylesheet" href="css/mobile-angular-ui-base.css" />
+        <link rel="stylesheet" href="css/orange.css" />
+        <link rel="stylesheet" href="css/image-crop-styles.css" />
+        <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+        <script src="js/angular.min.js"></script>
+        <script src="js/angular-route.min.js"></script>
+        <script src="js/mobile-angular-ui.min.js"></script>
+        <script src="js/image-crop.js"></script>
+        <script src="js/mobile-angular-ui.gestures.min.js"></script>
+        <script src="js/jquery-1.11.0.min.js"></script>
+        
+        <style>
+            .navbar {
+                color:#f96015;
+            }
+            .app-body {
+                background-color: #fff;
+            }
+            .sidebar-own {
+                background-color: #fff;
+                color:#f96015;
+                border-bottom: 1px solid #e6e6e6;
+            }
+            .background-own {
+              background-color: #fff;
+            }
+            .vertical-center {
+              margin-top: 65%;
+            }
+
+        </style>
+    </head>
+    <body >
+      <!-- Sidebars -->
+        <div class="sidebar sidebar-left" ng-controller="sidebarController">
+            <div class="scrollable">
+                <h1 class="scrollable-header app-name sidebar-own">{{personalisedText}}</h1>  
+                <div class="scrollable-content background-own">
+                    <div class="list-group background-own" ui-turn-off='uiSidebarLeft'>
+                      <a class="list-group-item" href="#/">Home <i class="fa fa-chevron-right pull-right"></i></a>
+                      <a class="list-group-item" href="#/mychannels">Channels I own <i class="fa fa-chevron-right pull-right"></i></a>
+                      <a class="list-group-item" href="#/followedchannels/view">Channels I follow <i class="fa fa-chevron-right pull-right"></i></a>
+                      <a class="list-group-item" href="#/discoverchannels">Discover Channels<i class="fa fa-chevron-right pull-right"></i></a>
+                      <a class="list-group-item" href="#/followedchannels/addpost">Add a post<i class="fa fa-chevron-right pull-right"></i></a>
+                      <a class="list-group-item" href="#/createchannel">Create a channel <i class="fa fa-chevron-right pull-right"></i></a>
+                      <a class="list-group-item" href="#/logout">Logout <i class="fa fa-chevron-right pull-right"></i></a>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="app"
+            ng-swipe-right='Ui.turnOn("uiSidebarLeft")'
+            ng-swipe-left='Ui.turnOff("uiSidebarLeft")'>
+            <div class="navbar navbar-app navbar-absolute-top">
+                <div class="navbar-brand navbar-brand-center" ui-yield-to="title">
+                  
+                </div>
+                <div class="btn-group pull-left">
+                    <div ui-toggle="uiSidebarLeft" class="btn sidebar-toggle" style="color:#f96015;">
+                        <i class="fa fa-bars fa-lg"></i>
+                    </div>
+                </div>
+                <div class="btn-group pull-right" ui-yield-to="navbarAction">
+                    
+                </div>
+            </div>
+
+            
+            <!-- App body -->
+
+            <div class='app-body' ng-class="{loading: loading}">
+                
+                <div class='app-content'>
+                    <ng-view></ng-view>
+                </div>
+            </div>
+
+        </div><!-- ~ .app -->
+
+
+      <!-- Modals and Overlays -->
+      <div ui-yield-to="modals">
+      </div>
+        
+        
+        <script src="js/app.js"></script>
+        <script type="text/javascript" src="js/services/fsCordova.js"></script>
+        <script type="text/javascript" src="js/services/appfactory.js"></script>
+        <script type="text/javascript" src="js/controllers/homeController.js"></script>
+        <script type="text/javascript" src="js/controllers/signupController.js"></script>
+        <script type="text/javascript" src="js/controllers/loginController.js"></script>
+        <script type="text/javascript" src="js/controllers/logoutController.js"></script>
+        <script type="text/javascript" src="js/controllers/myChannelsController.js"></script>
+        <script type="text/javascript" src="js/controllers/followedChannelsController.js"></script>
+        <script type="text/javascript" src="js/controllers/channelController.js"></script>
+        <script type="text/javascript" src="js/controllers/createChannelController.js"></script>
+        <script type="text/javascript" src="js/controllers/addPostController.js"></script>
+        <script type="text/javascript" src="js/controllers/addAdminController.js"></script>
+        <script type="text/javascript" src="js/controllers/allChannelsController.js"></script>
+        <script type="text/javascript" src="js/controllers/sidebarController.js"></script>
+        <script type="text/javascript" src="js/directives/textFilter.js"></script>
+        <script type="text/javascript" src="js/directives/picture.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function(){
+            var domElement = document.querySelector('body');
+            angular.bootstrap(domElement, ["campusfeed"]);
+        }); 
+        </script>
+    </body>
+</html>

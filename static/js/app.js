@@ -1,37 +1,41 @@
-angular.module("campusfeed",['ngRoute','ngCookies','ui.bootstrap']);
-
-angular.module("campusfeed").config(function($routeProvider){
+angular.module('campusfeed', ['ngRoute','mobile-angular-ui','mobile-angular-ui.gestures','ImageCropper'])
+.config(function($routeProvider){
   $routeProvider
-   .when('/',                                      //add to cart button
+   .when('/',                                      
     {controller:'homeController',
-    templateUrl:'views/home.html'})
-  .when('/product/:productId',                                      //add to cart button
-    {controller:'productController',
-    templateUrl:'views/product-detail.html'})
-  .when('/checkout',
-    {controller:'checkoutController',
-    templateUrl:'views/checkout.html'})
-  .when('/paymentsuccess',
-    {controller:'paymentController',
-    templateUrl:'views/paymentsuccess.html'})
-  .when('/login',
-      {controller:'loginController',
-      templateUrl:'views/login.html'})
-  .when('/register',
-      {controller:'regController',
-      templateUrl:'views/register.html'})
-  .when('/productlisting',
-      {controller:'PLController',
-      templateUrl:'views/productlisting.html'})
-  .when('/searchresults',
-      {controller:'srController',
-      templateUrl:'views/searchresults.html'})
-  .when('/myorder',
-      {controller:'myoController',
-      templateUrl:'views/myorder.html'})
-  .when('/checkout',
-      {controller:'checkController',
-      templateUrl:'views/checkout.html'})    
-  .otherwise({redirectTo: '/' });
+    templateUrl:'html/home.html'})
+   .when('/login',                                      
+    {controller:'loginController',
+    templateUrl:'html/login.html'})
+   .when('/signup',                                      
+    {controller:'signupController',
+    templateUrl:'html/signup.html'})
+   .when('/createchannel',                                      
+    {controller:'createChannelController',
+    templateUrl:'html/createchannel.html'})
+   .when('/channels/:channelId/addpost',                                      
+    {controller:'addPostController',
+    templateUrl:'html/addpost.html'})
+   .when('/channels/:channelId/addadmin',                                      
+    {controller:'addAdminController',
+    templateUrl:'html/addadmin.html'})
+   .when('/mychannels',                                      
+    {controller:'myChannelsController',
+    templateUrl:'html/channel_listing.html'})
+   .when('/followedchannels/:action',                                      
+    {controller:'followedChannelsController',
+    templateUrl:'html/channel_listing.html'})
+   .when('/discoverchannels',                                      
+    {controller:'allChannelsController',
+    templateUrl:'html/channel_listing.html'})
+   .when('/logout',                                      
+    {controller:'logoutController',
+    templateUrl:'html/logout.html'})
+   .when('/channels/:type/:channelId',                                      
+    {controller:'channelController',
+    templateUrl:'html/channel_home.html'})
+   .otherwise({redirectTo: '/' });
 
 });
+
+

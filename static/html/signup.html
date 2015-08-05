@@ -1,0 +1,84 @@
+
+<div class="scrollable">
+ <div class="scrollable-content section">
+   
+  <form name="createUserForm" role="form">
+    <fieldset>
+      <legend>Sign Up with Campusfeed</legend>
+      <p ng-show="errorBox==true" class="text-danger">Network error. Please try again.</p>
+        <div class="form-group has-success has-feedback">
+          
+          <input type="text"
+                 ng-model="first_name"
+                 class="form-control input-lg"
+                 placeholder="First name" required>
+        </div>
+        <div class="form-group has-success has-feedback" >
+            <input type="text"
+                 ng-model="last_name"
+                 class="form-control input-lg"
+                 placeholder="Last name" required>
+        </div>
+        <div class="form-group has-success has-feedback" >
+          
+          <input type="text"
+                 ng-model="branch"
+                 class="form-control input-lg"
+                 placeholder="Department" required>
+        </div>
+        <div class="form-group has-success has-feedback" >
+            <input type="number"
+                 ng-model="phone"
+                 class="form-control input-lg"
+                 placeholder="Phone number" required>
+        </div>
+        <div class="form-group has-success has-feedback" >
+          
+            <input type="text"
+                 ng-model="email"
+                 class="form-control input-lg"
+                 placeholder="Email ID" required>
+        </div>
+        <div class="form-group has-success has-feedback" >
+          
+            <input type="number"
+                 ng-model="user_id"
+                 class="form-control input-lg"
+                 placeholder="College ID Number" required>
+        </div>
+        <div class="form-group has-success has-feedback">
+          
+            <input type="password"
+                 ng-model="password"
+                 class="form-control input-lg"
+                 placeholder="Your password" required>
+        </div>
+
+        <div class="form-group has-success has-feedback">
+          <label>Your image: </label>
+          <image-crop
+             data-width="200"
+             data-height="200"
+             data-shape="square"
+             data-result="picture"
+             data-step="imageCropStep"
+            ></image-crop>
+        </div>
+        
+    </fieldset>
+    <hr>
+    <div >
+          <h4 class="text-center" ng-show="progress>0"><b>{{progress}}% complete </b></h4>
+    </div>
+
+    <button class="btn btn-primary btn-block btn-lg" ng-click="createUserForm.$valid && submit() && statusText != 'Loading...' ">
+      {{statusText}}
+    </button>
+
+    
+  </form>
+ </div>
+</div>
+<div ui-content-for="modals">
+  <div ng-include="'html/user_creation_feedback.html'"></div>
+</div>

@@ -30,7 +30,7 @@ class Signup(webapp2.RequestHandler):
 		if image!='':
 			image = images.Image(image)
 			# Transform the image
-			image.resize(width=400, height=400)
+			image.resize(width=200, height=200)
 			image = image.execute_transforms(output_encoding=images.JPEG)
 			size = len(image)
 			if size > 1000000:

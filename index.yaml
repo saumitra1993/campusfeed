@@ -25,6 +25,24 @@ indexes:
 - kind: Posts
   properties:
   - name: channel_ptr
+  - name: isDeleted
+  - name: created_time
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: channel_ptr
+  - name: isDeleted
+  - name: pending_bit
+  - name: created_time
+    direction: desc
+
+- kind: Posts
+  properties:
+  - name: channel_ptr
+  - name: isDeleted
+  - name: pending_bit
+  - name: user_ptr
   - name: created_time
     direction: desc
 

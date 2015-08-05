@@ -1,0 +1,58 @@
+
+<div class="scrollable">
+ <div class="scrollable-content section">
+   
+  <form name="createChannelForm" role="form">
+    <fieldset>
+      <legend>Create a channel</legend>
+      <p ng-show="errorBox==true" class="text-danger">Network error. Please try again.</p>
+        <div class="form-group has-success has-feedback">
+          
+          <input type="text"
+                 ng-model="name"
+                 class="form-control input-lg"
+                 placeholder="Enter a suitable name for your channel" required>
+        </div>
+
+        <div class="form-group has-success has-feedback">
+          
+          <textarea rows="3"
+                 class="form-control input-lg"
+                 ng-model="descr"
+                 placeholder="Description for your channel" required></textarea>
+        </div>
+
+        <div class="form-group has-success has-feedback">
+          <label>Photo for your channel: </label>
+          <image-crop
+             data-width="200"
+             data-height="200"
+             data-shape="square"
+             data-result="picture"
+             data-step="imageCropStep"
+            ></image-crop>
+        </div>
+
+        <div class="form-group">
+          <label>Create anonymously?</label>
+          <ui-switch 
+            ng-model='isAnonymous'></ui-switch>
+        </div>
+        
+    </fieldset>
+    <hr>
+    <div >
+          <h4 class="text-center" ng-show="progress>0"><b>{{progress}}% complete </b></h4>
+    </div>
+
+    <button class="btn btn-primary btn-block btn-lg" ng-click="submit() && createChannelForm.$valid && statusText != 'Loading...' ">
+      {{statusText}}
+    </button>
+
+    
+  </form>
+ </div>
+</div>
+<div ui-content-for="modals">
+  <div ng-include="'html/channel_creation_feedback.html'"></div>
+</div>

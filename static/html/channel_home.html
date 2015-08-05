@@ -1,0 +1,136 @@
+<style>
+.seen {
+	color:#f96015; 
+}
+</style>
+
+<div class="scrollable">
+	<div class="scrollable-header">
+		<table class="table" >
+		  <tbody style="border-bottom:1px solid #e6e6e6;">
+		  	<tr >
+		  		<td class="col-xs-4"><img ng-src="{{otherData.channel_img_url}}" class="img-responsive img-rounded" ></td>
+		  		
+		  		<td class="col-xs-8"><h4 class="text-capitalize"><b>{{otherData.channel_name}}</b><div class="btn-group pull-right" ng-show="is_admin==1">
+		            <a ui-turn-on='myDropdown' class='btn'>
+		              <i class="fa fa-ellipsis-v fa-lg"></i>
+		            </a>
+		            <ul 
+		              ui-state="myDropdown"
+
+		              class="dropdown-menu"
+		              ui-outer-click="Ui.turnOff('myDropdown')"
+		              ui-outer-click-if="Ui.active('myDropdown')"
+		              role="menu"
+		              ui-show="myDropdown"
+		              ui-turn-off="myDropdown">
+
+		              <li><a ng-href="#/channels/{{channel_id}}/addadmin">Add admin</a></li>
+		            </ul>
+          		</div></h4>
+				<p><i class="fa fa-reply-all"></i> 
+				<ng-pluralize count="otherData.num_followers"
+                when="{'0': 'Nobody is following',
+                       '1': '1 person following',
+                       'other': '{} people following'}">
+  				</ng-pluralize></p>
+  				<p><a ng-click="getChannelDetails()">Click</a> for more info</p>
+		  		</td>
+		  	</tr>
+		  </tbody>
+		</table>
+	</div>
+ 	<div class="scrollable-content section">
+		<div class="panel panel-default" ng-if="type=='unrelated' || showDetails == 1">
+			<div class="panel-body">
+			    <table  style="border:none;">
+			  		<tbody style="border:none;">
+					  	<tr style="border:none;">
+					  		<td class="col-xs-12"><h5><b>Created on:</b> {{channelDetails.created_time}}</h5></td>
+					  	</tr>
+					  	<tr style="border:none;">
+					  		<td class="col-xs-12"><h5><b>Channel admins:</b> <span class="text-capitalize" ng-repeat="admin in channelDetails.admins">{{admin.full_name}} {{$last ? '' : ($index==channelDetails.admins.length-2) ? 'and' : ','}}  </span></h5></td>
+					  	</tr>
+					  	<tr style="border:none;">
+					  		<td class="col-xs-12"><h5>{{channelDetails.description}}</h5></td>
+					  	</tr>
+					  	<tr style="border:none;">
+					  		<td class="col-xs-12"><button class="btn btn-primary btn-block" ng-click="follow() && followText != 'Loading...'" >
+	     					{{followText}}
+	    					</button>
+							</td>
+					  	</tr>
+					 </tbody>
+				</table>
+			</div>
+		</div>
+		<div class="app-content-loading text-center vertical-center" ng-if="pending_request==1">
+          <i class="fa fa-cog fa-spin loading-spinner fa-5x"></i>
+        </div>
+        <h4 ng-show="anyAval==0 && is_admin==1" class="center-block">You haven't added any posts yet.<br/> <a ng-href="#/channels/{{channel_id}}/addpost">Let's fix that!</a></h4>
+ 		<div  ng-repeat="post in channelPosts" ng-class="{'panel panel-default' : post.pending_bit==0, 'panel panel-danger' : post.pending_bit==1}" ng-init="post.showMore=0;post.approveText='Approve'" >
+		  <div class="panel-body">
+		    <table  style="border:none;">
+		  		<tbody style="border:none;">
+				  	<tr style="border:none;">
+				  		<td class="col-xs-4">
+				  			<img ng-src="{{post.img_url}}" class="img-responsive img-rounded" ></td>
+				  		<td class="col-xs-8" >
+				  			<table>
+				  				<tr>
+				  					<td><h5 class="text-capitalize" style="margin-top:12%;">{{post.full_name}}</h5></td>
+				  				</tr>
+				  				<tr style="color:#898888;"><td><p>{{post.created_time}}</p></td></tr>
+				  			</table>
+						</td>
+				  	</tr>
+				  	<tr><td><br /></td></tr>
+				  	<tr ng-if="post.post_img_url != ''" >
+				  		<td colspan="2" class="col-xs-12" style="background-color:#f0efef;">
+				  			<div class="btn-group pull-right">
+					            <a ui-turn-on='post.download' class='btn'>
+					              <i class="fa fa-ellipsis-v fa-lg"></i>
+					            </a>
+					            <ul 
+					              ui-state="post.download"
+
+					              class="dropdown-menu"
+					              ui-outer-click="Ui.turnOff('post.download')"
+					              ui-outer-click-if="Ui.active('post.download')"
+					              role="menu"
+					              ui-show="post.download"
+					              ui-turn-off="post.download">
+
+					              <li><a ng-click="download(post.post_img_url)">Download Image</a></li>
+					            </ul>
+			          		</div>
+				  			<img  ng-src="{{post.post_img_url}}" class="center-block img-responsive" />
+				  		</td>
+				  	</tr>
+				  	<tr style="border-bottom:1px solid #f96015;">
+				  		<td colspan="2" class="col-xs-12">
+				  			<br />
+							<h5 ng-show="post.text.length>150 && post.showMore==0">{{post.text | cut:true:100:'....'}}<a ng-click="post.showMore=1">Show more</a></h5>
+							<h5 ng-show="post.text.length<=150 || post.showMore==1">{{post.text}}<a ng-show="post.showMore==1" ng-click="post.showMore=0">Show less</a></h5>
+						</td>
+				  	</tr>
+				  	<tr>
+				  		<td colspan="2" class="col-xs-12" style="margin-top:2%;">
+				  			<p class="pull-right">
+				  			<button class="btn btn-primary" ng-show="post.pending_bit==1 && is_admin==1" ng-click="approve(post) && post.approveText != 'Loading...'">{{post.approveText}}</button>	
+				  			<i class="fa fa-eye fa-lg seen" ></i>    {{post.num_views}}</p>
+				  		</td>
+				  	</tr>
+		  		</tbody>
+			</table>
+		  </div>
+		</div>
+		<button class="btn btn-primary btn-block" ng-click="loadMore() && statusText != 'Loading...'" ng-show="anyAval==1 && moreAval==1 && errorBox==false && pending_request == 0">
+	      {{statusText}}
+	    </button>
+ 	</div>
+ </div>
+ <div ng-if="(type=='related' || type == 'mine') && channel_pending_bit==0" ui-content-for="navbarAction">
+	<a class="btn" ng-href="#/channels/{{channel_id}}/addpost">
+ Add a post</a>
+</div>

@@ -17,6 +17,7 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 		user_id = str(user_id)
 		logging.info(user_id)
 		dict_ = {}
+		out = []
 		if limit and offset:
 			limit = int(limit)
 			offset= int(offset)
@@ -31,7 +32,7 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 					else:
 						channel_admins = channel_admins_qry.fetch(offset= offset)
 
-					out = []
+					
 					for channel_admin in channel_admins:
 						channel = Channels.get_by_id(channel_admin.channel_ptr.id())
 						_dict = {}
@@ -46,12 +47,11 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 						
 						logging.info(_dict)
 						out.append(_dict)
-					dict_['my_channels'] = out
-					self.response.set_status(200, 'Awesome')
-					self.session['last-seen'] = datetime.now()
-				else:
-					logging.info("here")
-					self.response.set_status(401, 'You are not an admin.')	
+						
+				dict_['my_channels'] = out
+				self.response.set_status(200, 'Awesome')
+				self.session['last-seen'] = datetime.now()
+					
 			else:
 				logging.info("or here")
 				self.response.set_status(401, 'User is malicious. Ask him to go fuck himself.')

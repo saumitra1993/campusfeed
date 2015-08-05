@@ -1,0 +1,42 @@
+
+
+<div class="scrollable">
+ <div class="scrollable-content section">
+   
+  <form name="loginForm" role="form" ng-submit='login() && loginForm.$valid && statusText != "Loading..."'>
+    <fieldset>
+      <legend>Login</legend>
+      <p ng-show="errorBox==true" class="text-danger">There was some error with your login. Please try again.</p>
+        <div class="form-group has-success has-feedback">
+          
+          <input type="text"
+                 ng-model="studentid"
+                 class="form-control input-lg"
+                 placeholder="Enter student id" required>
+        </div>
+
+        <div class="form-group has-success has-feedback">
+          
+          <input type="password" 
+                 class="form-control input-lg"
+                 ng-model="password"
+                 placeholder="Password" required>
+        </div>
+
+        <div class="form-group">
+          <label>Remember Me</label>
+          <ui-switch 
+            ng-model='rememberMe'></ui-switch>
+        </div>
+    </fieldset>
+    <hr>
+
+    <button class="btn btn-primary btn-block btn-lg">
+      {{statusText}}
+    </button>
+    <br />
+    <h5><a href="#/signup">Sign Up</a> with Campusfeed</h5>
+    
+  </form>
+ </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="scrollable">
+ <div class="scrollable-content section">
+   
+  <form name="addPostForm" role="form">
+    <fieldset>
+      <legend>Add post</legend>
+      <p ng-show="errorBox==true" class="text-danger">Network error. Please try again.</p>
+        <div class="form-group has-success has-feedback">
+          
+          <textarea rows="3"
+                 ng-model="text"
+                 class="form-control input-lg"
+                 placeholder="What do you wanna say?" required></textarea>
+        </div>
+
+        <div class="form-group has-success has-feedback" ng-if="is_admin==1">
+          <label>Want to add this post as:</label><br />
+          <label >
+            <input type="radio" value="user" ng-model="post_by" /> {{username}}
+          </label><br /><br />
+          <label>
+            <input type="radio" value="channel" ng-model="post_by"  /> {{channelname}}
+          </label>
+        </div>
+
+        <div class="form-group has-success has-feedback">
+          <label>Add an image (if you wish):</label>
+          <image-crop
+             data-width="400"
+             data-height="400"
+             data-shape="square"
+             data-result="picture"
+             data-step="imageCropStep"
+            ></image-crop>
+        </div>
+
+        <div class="form-group">
+          <label>Add anonymously?</label>
+          <ui-switch 
+            ng-model='isAnonymous'></ui-switch>
+        </div>
+        
+    </fieldset>
+    <hr>
+
+    <button class="btn btn-primary btn-block btn-lg" ng-click="submit() && addPostForm.$valid && statusText != 'Loading'">
+      {{statusText}}
+    </button>
+
+    
+  </form>
+ </div>
+</div>
+<div ui-content-for="modals">
+  <div ng-include="'html/post_creation_feedback.html'"></div>
+</div>

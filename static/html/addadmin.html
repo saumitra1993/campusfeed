@@ -1,0 +1,32 @@
+<div class="scrollable">
+	<div class="scrollable-header">
+		<div class="form-group has-success has-feedback">
+          
+          <label class="col-xs-10"><input type="text"
+                 ng-model='search_string'
+                 class="form-control"
+                 placeholder="Search by first name or last name" ></label>
+                 <button  ng-click="search() && searchText != 'Loading'" class="btn btn-primary col-xs-2">{{searchText}}</button>
+        </div>
+        
+	</div>
+	<div class="scrollable-content section" ng-if="users.length>0">
+		<p ng-show="errorBox==true" class="text-danger">Network error. Please try again.</p>
+		<div class="panel panel-default" >
+			<div class="panel-body">
+			    <table class="table" >
+				  <tbody style="border-bottom:1px solid #e6e6e6;">
+				  	<tr ng-repeat="user in users" ng-init="user.isAnonymous=0;user.is_admin=0;" ng-show="user.is_admin==0">
+				  		<td class="col-xs-4"><img ng-src="{{user.user_img_url}}" class="img-responsive img-circle" ></td>
+				  		
+				  		<td class="col-xs-8"><h4 class="text-capitalize"><b>{{user.name}}</b></h4>
+				  		<p ng-show="user.is_admin==0"><input type="checkbox"  ng-true-value="1" ng-false-value="0" ng-model="user.isAnonymous"/> Add as anonymous admin?</p>
+						<button ng-click="addAdmin(user) && addAdminText!='Loading...'" ng-show="user.is_admin==0" class="btn btn-primary">{{addAdminText}}</button>
+				  		</td>
+				  	</tr>
+				  </tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

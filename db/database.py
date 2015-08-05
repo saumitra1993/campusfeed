@@ -51,7 +51,7 @@ class Posts(ndb.Model):
 	post_by = ndb.StringProperty(
 					choices = ['user','channel'],
 					default = 'user')	
-#	isDeleted = ndb.IntegerProperty(default=0)
+	isDeleted = ndb.IntegerProperty(default=0)
 
 class Channel_Admins(ndb.Model):
 	"""docstring for Channel_Admin"""

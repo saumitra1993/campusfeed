@@ -124,10 +124,10 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 		#		posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
 				if user.type_ == 'admin' or user.type_ == 'superuser':
 					is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key).fetch()
-					posts_query = Posts.query(Posts.channel_ptr == channel.key)
+					posts_query = Posts.query(Posts.channel_ptr == channel.key, Posts.isDeleted == 0)
 					
 				if user.type_ == 'user':
-					posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
+					posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0, Posts.isDeleted == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1, Posts.isDeleted == 0)))
 				
 				if timestamp:
 					lastSeenTime = string_to_date(timestamp) 
