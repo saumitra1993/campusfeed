@@ -100,11 +100,17 @@ class UserFeed(BaseHandler, webapp2.RequestHandler):
 					else:
 						if channel_post.post_by == 'user':
 							_dict_channel_posts['full_name'] = posting_user.first_name + ' ' + posting_user.last_name
-							_dict_channel_posts['img_url'] = DEFAULT_ROOT_IMG_URL + str(posting_user.key.urlsafe())
+							if posting_user.img != '':
+								_dict_channel_posts['img_url'] = DEFAULT_ROOT_IMG_URL+ str(posting_user.key.urlsafe())
+							else:
+								_dict_channel_posts['img_url'] = DEFAULT_IMG_URL
 							_dict_channel_posts['branch'] = posting_user.branch
 						else:
 							_dict_channel_posts['full_name'] = channel_details.channel_name
-							_dict_channel_posts['img_url'] = DEFAULT_ROOT_IMG_URL + str(channel_details.key.urlsafe())
+							if channel_details.img != '':
+								_dict_channel_posts['img_url'] = DEFAULT_ROOT_IMG_URL + str(channel_details.key.urlsafe())
+							else:
+								_dict_channel_posts['img_url'] = DEFAULT_IMG_URL
 					_dict_channel_posts['post_by'] = channel_post.post_by
 					_dict_channel_posts['created_time'] = date_to_string(utc_to_ist(channel_post.created_time))					
 					_dict_channel_posts['pending_bit'] = channel_post.pending_bit

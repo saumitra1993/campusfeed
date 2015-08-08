@@ -13,8 +13,8 @@
 		    <table  style="border:none;">
 		  		<tbody style="border:none;">
 				  	<tr style="border:none;">
-				  		<td class="col-xs-4"><img ng-src="{{post.img_url}}" class="img-responsive img-rounded" ></td>
-				  		<td class="col-xs-8" >
+				  		<td class="col-xs-2"><img ng-src="{{post.img_url}}" class="img-responsive img-rounded" ></td>
+				  		<td class="col-xs-10" >
 				  			<table>
 				  				<tr>
 				  					<td><h5 class="text-capitalize" style="margin-top:12%;">{{post.full_name}}</h5></td>
@@ -26,23 +26,6 @@
 				  	<tr><td><br /></td></tr>
 				  	<tr ng-if="post.post_img_url != ''">
 				  		<td colspan="2" class="col-xs-12" style="background-color:#f0efef;">
-				  			<div class="btn-group pull-right">
-					            <a ui-turn-on='post.download' class='btn'>
-					              <i class="fa fa-ellipsis-v fa-lg"></i>
-					            </a>
-					            <ul 
-					              ui-state="post.download"
-
-					              class="dropdown-menu"
-					              ui-outer-click="Ui.turnOff('post.download')"
-					              ui-outer-click-if="Ui.active('post.download')"
-					              role="menu"
-					              ui-show="post.download"
-					              ui-turn-off="post.download">
-
-					              <li><a ng-click="download(post.post_img_url)">Download Image</a></li>
-					            </ul>
-			          		</div>
 				  			<img ng-src="{{post.post_img_url}}" class="center-block img-responsive" />
 				  		</td>
 				  	</tr>

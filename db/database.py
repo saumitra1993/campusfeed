@@ -33,6 +33,21 @@ class Channels(ndb.Model):
 	isDeleted = ndb.IntegerProperty(default=0)
 	edited_time = ndb.DateTimeProperty(auto_now = True)
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
+	tag = ndb.StringProperty(
+		choices = ['club','event','course','committee'])
+	def _post_put_hook(self, future):
+		if self == future.get_result().get():
+			name = self.channel_name
+			descr = self.description
+			channel_id = str(self.key.id())
+			fields = [
+			  search.TextField(name="channel_name", value=name),
+			  search.TextField(name="channel_descr", value=descr),]
+			d = search.Document(doc_id=channel_id, fields=fields)
+			try:
+				add_result = search.Index(name="channelsearch").put(d)
+			except search.Error:	  
+				logging.error("Document not saved in index!")
 
 class Posts(ndb.Model):
 	"""docstring for Post"""
@@ -73,6 +88,9 @@ class Channel_Followers(ndb.Model):
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
 	edited_time = ndb.DateTimeProperty(auto_now = True)
 	isDeleted = ndb.IntegerProperty(default=0)
+	getNotification = ndb.IntegerProperty(
+					choices = [0,1],
+					default = 0)
 
 class DBMobileAuth(ndb.Model):
 	name = ndb.StringProperty(indexed=False)
@@ -95,3 +113,31 @@ class Views(ndb.Model):
 # 	user_ptr = ndb.KeyProperty(kind=Users)
 # 	post_ptr = ndb.KeyProperty(kind=Posts)
 # 	new_upvote_count = ndb.IntegerProperty(default=0)
+
+class DBUserGCMId(ndb.Model):
+    """ Database to store the GCM Id when a driver logs in
+        GCM id is used to send push message
+    """
+    gcm_id = ndb.StringProperty(indexed=False)
+    creation_time = ndb.DateTimeProperty(auto_now_add=True)
+
+    def _pre_put_hook(self):
+        #logout the same user from other device.
+        #conditions to check
+        # same username
+        # user should have logged in before current time
+        # device id should be different
+        old_key = self.key
+        try:
+            if old_key and old_key.id():
+                old_object = old_key.get(use_cache=False)
+                if not old_object:
+                    logging.info('no old object')
+                    return
+                old_gcm_id = old_object.gcm_id
+                if old_gcm_id != self.gcm_id:
+                    old_key.delete()
+                else:
+                    logging.info('gcm id and or driver_id match. no action')
+        except:
+            pass

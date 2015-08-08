@@ -9,9 +9,9 @@
 		<table class="table" >
 		  <tbody style="border-bottom:1px solid #e6e6e6;">
 		  	<tr >
-		  		<td class="col-xs-4"><img ng-src="{{otherData.channel_img_url}}" class="img-responsive img-rounded" ></td>
+		  		<td class="col-xs-2"><img ng-src="{{otherData.channel_img_url}}" class="img-responsive img-rounded" ></td>
 		  		
-		  		<td class="col-xs-8"><h4 class="text-capitalize"><b>{{otherData.channel_name}}</b><div class="btn-group pull-right" ng-show="is_admin==1">
+		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{otherData.channel_name}}</b><div class="btn-group pull-right" ng-show="is_admin==1">
 		            <a ui-turn-on='myDropdown' class='btn'>
 		              <i class="fa fa-ellipsis-v fa-lg"></i>
 		            </a>
@@ -87,23 +87,6 @@
 				  	<tr><td><br /></td></tr>
 				  	<tr ng-if="post.post_img_url != ''" >
 				  		<td colspan="2" class="col-xs-12" style="background-color:#f0efef;">
-				  			<div class="btn-group pull-right">
-					            <a ui-turn-on='post.download' class='btn'>
-					              <i class="fa fa-ellipsis-v fa-lg"></i>
-					            </a>
-					            <ul 
-					              ui-state="post.download"
-
-					              class="dropdown-menu"
-					              ui-outer-click="Ui.turnOff('post.download')"
-					              ui-outer-click-if="Ui.active('post.download')"
-					              role="menu"
-					              ui-show="post.download"
-					              ui-turn-off="post.download">
-
-					              <li><a ng-click="download(post.post_img_url)">Download Image</a></li>
-					            </ul>
-			          		</div>
 				  			<img  ng-src="{{post.post_img_url}}" class="center-block img-responsive" />
 				  		</td>
 				  	</tr>

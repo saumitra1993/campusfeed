@@ -4,9 +4,10 @@ import random
 import string
 import json
 from datetime import datetime, timedelta
-from db.database import Users, DBMobileAuth
+from db.database import Users, DBMobileAuth, DBUserGCMId
 from google.appengine.api import users
 from service._users.sessions import BaseHandler
+from google.appengine.ext import ndb
 from service._users.authentication import get_password_hash, passwords_match
 from const.constants import MOBILE_USER_SESSION_DURATION_DAYS
 
@@ -59,7 +60,7 @@ class Login(BaseHandler, webapp2.RequestHandler):
 		password = data.get("password")
 		logging.info(self.request)
 		logging.info(user_id)
-		result = Users.query().filter(Users.user_id == user_id).fetch()
+		result = Users.query().filter(ndb.OR(Users.user_id == user_id,Users.email_id == user_id)).fetch()
 		dict_={}
 		if result:
 			if(passwords_match(result[0].password, password)):
