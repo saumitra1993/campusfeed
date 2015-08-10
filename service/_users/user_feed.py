@@ -48,7 +48,6 @@ class UserFeed(BaseHandler, webapp2.RequestHandler):
 		out = []
 		dict_ = {}	
 		for user_followed_channel in user_followed_channels:	
-			logging.info("Came here")
 			# posts_handler = PostsHandler()
 			# posts_of_channel = posts_handler.get(channel_ptr.id())
 			# logging.warn(posts_of_channel)
@@ -81,6 +80,7 @@ class UserFeed(BaseHandler, webapp2.RequestHandler):
 					num_views_count = Views.query(Views.post_ptr == channel_post.key).count()
 					_dict_channel_posts = {}
 					_dict_channel_posts['channel_name'] = channel_details.channel_name
+					_dict_channel_posts['channel_tag'] = channel_details.tag
 					if channel_details.img != '':
 						_dict_channel_posts['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel_details.key.urlsafe())
 					else:

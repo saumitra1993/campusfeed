@@ -9,7 +9,7 @@ from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
 from google.appengine.ext import ndb
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
-from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID
+from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, tags
 from operator import itemgetter
 
 class AllChannels(BaseHandler,webapp2.RequestHandler):
@@ -20,13 +20,13 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 
 	def post(self):
 
-		
 		user_id = self.request.get('user_id').strip()
 		isAnonymous = self.request.get('isAnonymous')
 		channel_name = self.request.get('channel_name').strip()
 		descr = self.request.get('description').strip()
 		user_query = Users.query(Users.user_id == user_id).fetch() #query will store entire 'list' of db cols
 		image = self.request.get('channel_img')
+		tag = self.request.get('tag')
 		logging.info(channel_name)
 		logging.info(descr)
 		logging.info(isAnonymous)
@@ -60,6 +60,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 					db.img = image
 				else:
 					db.img = ''
+				db.tag = tag
 				channel_key = db.put()
 
 				db1 = Channel_Admins()
@@ -97,35 +98,41 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 			offset= int(offset)
 			user_id = int(self.userid)
 			user = Users.get_by_id(user_id)
-			channels_qry = Channels.query(Channels.isDeleted==0,Channels.pending_bit==0).order(-Channels.created_time)
-			if timestamp:
-				lastSeenTime = string_to_date(timestamp) 
-				lastSeenTime = ist_to_utc(lastSeenTime)
-				channels_qry = channels_qry.filter(Channels.created_time >= lastSeenTime)
-			
-			channels = channels_qry.fetch(offset= offset)
+			for tag in tags:
+				dict1 = {}
+				channels_qry = Channels.query(Channels.isDeleted==0,Channels.pending_bit==0,Channels.tag==tag).order(-Channels.created_time)
+				if timestamp:
+					lastSeenTime = string_to_date(timestamp) 
+					lastSeenTime = ist_to_utc(lastSeenTime)
+					channels_qry = channels_qry.filter(Channels.created_time >= lastSeenTime)
+				
+				channels = channels_qry.fetch(offset= offset)
 
-			out = []
-			i = 0
-			limit = limit - offset
-			for channel in channels:
-				if i < limit:
-					dict_ = {}
-					is_following = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key).count()
-					if is_following == 0:
-						dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).count()
-						dict_['channel_id'] = channel.key.id()
-						dict_['channel_name'] = channel.channel_name
-						dict_['pending_bit'] = 0
-						if channel.img != '':
-							dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
-						else:
-							dict_['channel_img_url'] = DEFAULT_IMG_URL
-						out.append(dict_)
-						i = i + 1
+				out = []
+				i = 0
+				limit = limit - offset
+				for channel in channels:
+					if i < limit:
+						dict_ = {}
+						is_following = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key,Channel_Followers.isDeleted == 0).count()
+						if is_following == 0:
+							dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
+							dict_['channel_id'] = channel.key.id()
+							dict_['channel_name'] = channel.channel_name
+							dict_['pending_bit'] = 0
+							if channel.img != '':
+								dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
+							else:
+								dict_['channel_img_url'] = DEFAULT_IMG_URL
+							out.append(dict_)
+							i = i + 1
+					else:
+						break
 
-			out = sorted(out, key=itemgetter('num_followers'), reverse=True)
-			_dict['all_channels'] = out
+				out = sorted(out, key=itemgetter('num_followers'), reverse=True)
+				dict1[tag] = out
+				
+			_dict['all_channels'] = dict1
 			self.response.set_status(200, 'Awesome')
 			self.session['last-seen'] = datetime.now()
 		else:

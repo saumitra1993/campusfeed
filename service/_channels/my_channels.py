@@ -26,7 +26,7 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 			if len(result) == 1:
 				user = result[0]
 				if user.type_ == 'admin' or user.type_ == 'superuser':
-					channel_admins_qry = Channel_Admins.query(Channel_Admins.user_ptr == user.key)
+					channel_admins_qry = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.isDeleted == 0)
 					if limit!=-1:
 						channel_admins = channel_admins_qry.fetch(limit,offset= offset)
 					else:
@@ -38,7 +38,8 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 						_dict = {}
 						_dict['channel_id'] = channel.key.id()
 						_dict['channel_name'] = channel.channel_name
-						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).count()
+						_dict['channel_tag'] = channel.tag
+						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
 						_dict['pending_bit'] = channel.pending_bit
 						if channel.img != '':
 							_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())

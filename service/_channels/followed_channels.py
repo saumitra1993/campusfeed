@@ -30,7 +30,7 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 			limit = int(limit)
 			offset= int(offset)
 			if len(user) == 1:
-				qry = Channel_Followers.query(Channel_Followers.user_ptr == user[0].key)
+				qry = Channel_Followers.query(Channel_Followers.user_ptr == user[0].key, Channel_Followers.isDeleted == 0)
 				if limit!=-1:
 					followed_channels = qry.fetch(limit,offset= offset)
 					
@@ -44,11 +44,12 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 					logging.info(channel)
 					if channel.pending_bit == 0:
 						_dict = {}
-						_dict['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user[0].key, Channel_Admins.channel_ptr == channel.key).count()
+						_dict['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user[0].key, Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).count()
 						_dict['channel_id'] = followed_channel.channel_ptr.id()
 						_dict['channel_name'] = channel.channel_name
+						_dict['channel_tag'] = channel.tag
 						_dict['pending_bit'] = 0
-						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == followed_channel.channel_ptr).count()
+						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == followed_channel.channel_ptr, Channel_Followers.isDeleted == 0).count()
 						
 						if channel.img != '':
 							_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
