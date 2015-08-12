@@ -1,42 +1,153 @@
+<section class="page-title">
+                <div class="container">
+
+                    <header>
+
+                        <ul class="breadcrumb"><!-- breadcrumb -->
+                            
+                        </ul><!-- /breadcrumb -->
+
+                        <h2><!-- Page Title -->
+                        </h2><!-- /Page Title -->
+
+                    </header>
+
+                </div>          
+            </section>
 
 
-<div class="scrollable">
- <div class="scrollable-content section">
-   
-  <form name="loginForm" role="form" ng-submit='login() && loginForm.$valid && statusText != "Loading..."'>
-    <fieldset>
-      <legend>Login</legend>
-      <p ng-show="errorBox==true" class="text-danger">There was some error with your login. Please try again.</p>
-        <div class="form-group has-success has-feedback">
-          
-          <input type="text"
-                 ng-model="studentid"
-                 class="form-control input-lg"
-                 placeholder="Enter student id" required>
+<!-- CONTENT -->
+<section>
+    <div class="container">
+
+        <div class="row">
+        
+            <!-- LOGIN -->
+            <div class="col-md-6 col-sm-6">
+                <p ng-show="errorBox==true" class="text-danger">There was some error with your login. Please try again.</p>
+                <!-- login form -->
+                <form name="loginForm" class="sky-form boxed" ng-submit='login() && loginForm.$valid && statusText != "Loading..."'>
+                    <header>Login to Campusfeed</header>
+                    
+                    <fieldset>
+  
+                        <section>
+                            <label class="input">
+                                <i class="icon-append fa fa-envelope"></i>
+                                <input required ng-model="studentid" type="text" placeholder="Enter ID or email address">
+                            </label>
+                        </section>
+                        
+                        <section>
+                            <label class="input">
+                                <i class="icon-append fa fa-lock"></i>
+                                <input required ng-model="pass" type="password" placeholder="Password">
+                            </label>
+                            <div class="note"><a href="#">Forgot Password?</a></div>
+                        </section>
+                        
+                        <section>
+                            <label class="checkbox"><input type="checkbox" ng-model='rememberMe' name="checkbox-inline"><i></i>Keep me logged in</label>
+                        </section>
+
+                    </fieldset>
+                    <footer>
+                        <button type="submit" class="button">{{statusText}}</button>
+                    </footer>
+                </form>
+                <!-- /login form -->
+
+            </div>
+            <!-- /LOGIN -->
+
+            <!-- REGISTER -->
+            <div class="col-md-6 col-sm-6">
+                <p ng-show="errorBox2==true" class="text-danger">There was some error with your login. Please try again.</p>
+                <!-- registration form -->
+                <form name="createUserForm" class="sky-form boxed" >
+                    <header>Register an account</header>
+                    
+                    <fieldset>                              
+                        <section>
+                            <label class="input">
+                                <i class="icon-append fa fa-envelope"></i>
+                                <input required ng-model="email" type="email" placeholder="Email address">
+                            </label>
+                        </section>
+
+                        <section>
+                            <label class="input">
+                                <i class="icon-append fa fa-hand-o-up"></i>
+                                <input required ng-model="user_id" type="number" placeholder="Your college ID">
+                            </label>
+                        </section>
+
+                        <section>
+                            <label class="input">
+                                <i class="icon-append fa fa-lock"></i>
+                                <input required ng-model="password" type="password" placeholder="Password">
+                            </label>
+                        </section>
+                    </fieldset>
+                        
+                    <fieldset>
+                        <div class="row">
+                            <section class="col col-md-6">
+                                <label class="input">
+                                    <input required ng-model="first_name" type="text" placeholder="First name">
+                                </label>
+                            </section>
+                            <section class="col col-md-6">
+                                <label class="input">
+                                    <input required ng-model="last_name" type="text" placeholder="Last name">
+                                </label>
+                            </section>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-md-6">
+                                <label class="input">
+                                    <input required ng-model="branch" type="text" placeholder="Department">
+                                </label>
+                            </section>
+                            <section class="col col-md-6">
+                                <label class="input">
+                                    <input required ng-model="phone" type="tel" placeholder="Phone number">
+                                </label>
+                            </section>
+                        </div>
+                        
+                        
+
+                        <div class="row">
+                            <section class="col col-md-12">
+                                <label>Your image: </label>
+                                  <image-crop
+                                     data-width="200"
+                                     data-height="200"
+                                     data-shape="square"
+                                     data-result="picture"
+                                     data-step="imageCropStep"
+                                    ></image-crop>
+                            </section>
+                        </div>
+                        
+                    </fieldset>
+                    <footer>
+                        <button type="submit" class="button" ng-click="statusText != 'Loading...' && createUserForm.$valid && submit()">{{statusText2}}</button>
+                    </footer>
+                </form>
+                <!-- /registration form -->
+
+            </div>
+            <!-- /REGISTER -->
+
         </div>
 
-        <div class="form-group has-success has-feedback">
-          
-          <input type="password" 
-                 class="form-control input-lg"
-                 ng-model="password"
-                 placeholder="Password" required>
-        </div>
-
-        <div class="form-group">
-          <label>Remember Me</label>
-          <ui-switch 
-            ng-model='rememberMe'></ui-switch>
-        </div>
-    </fieldset>
-    <hr>
-
-    <button class="btn btn-primary btn-block btn-lg">
-      {{statusText}}
-    </button>
-    <br />
-    <h5><a href="#/signup">Sign Up</a> with Campusfeed</h5>
-    
-  </form>
- </div>
+    </div>
+</section>
+<div ui-content-for="modals">
+  <div ng-include="'html/user_creation_feedback.html'"></div>
 </div>
+
+ 

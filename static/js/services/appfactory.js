@@ -1,7 +1,7 @@
 angular.module("campusfeed").factory('appfactory',function($q,$rootScope,SharedState){
 
 var factory={};
-var ip='http://campusfeed-1018.appspot.com/';
+var ip='http://localhost:9080/';
 var user_id= window.localStorage.getItem("user_id");
 SharedState.initialize($rootScope, "loggedIn", false);
 if(user_id){
@@ -9,6 +9,7 @@ if(user_id){
     factory.first_name = window.localStorage.getItem("first_name");
     factory.last_name = window.localStorage.getItem("last_name");
     factory.token = window.localStorage.getItem("token");
+    factory.isSuperuser=window.localStorage.getItem("isSuperuser");
     factory.loggedIn = true;
     SharedState.setOne('loggedIn',true);
     /*cordovaHTTP.setHeader("token", factory.token).then(function() {
@@ -38,15 +39,23 @@ factory.login=function(studentid, password){
             defer1.notify('Loading...');
         },
         success: function(data, textStatus, xhr){
-            factory.first_name=data.first_name;
-            factory.last_name=data.last_name;
+            factory.first_name = data.first_name;
+            factory.last_name = data.last_name;
             factory.token = data.mAuthToken;
             factory.loggedIn = true;
-            SharedState.setOne('loggedIn',true);
+            console.log(data.type);
+            if(data.type=="superuser"){
+                factory.isSuperuser=1;
+            }
+            else{
+                factory.isSuperuser=0;
+            }
+            $rootScope.$broadcast('login', {loggedIn:factory.loggedIn});
             window.localStorage.setItem("user_id", factory.user_id);
             window.localStorage.setItem("first_name", factory.first_name);
             window.localStorage.setItem("last_name", factory.last_name);
             window.localStorage.setItem("token", factory.token);
+            window.localStorage.setItem("isSuperuser", factory.isSuperuser);
             /*cordovaHTTP.setHeader("token", factory.token).then(function() {
                 console.log('success!');
             }, function() {
@@ -534,6 +543,7 @@ factory.logout = function(){
   factory.first_name = "";
   factory.last_name = "";
   factory.token="";
+  factory.isSuperuser=0;
   return 1;
 };
 

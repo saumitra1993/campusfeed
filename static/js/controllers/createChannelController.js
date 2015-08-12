@@ -1,10 +1,10 @@
 angular.module("campusfeed").controller("createChannelController", function($scope,$location,SharedState,$http,appfactory,$routeParams){
 $scope.errorBox=false;
 $scope.picture='';
-SharedState.initialize($scope, "result", false);
 $scope.creating="channel";
 $scope.statusText = "Create Channel";
 $scope.picture="";
+$scope.tag="course";
 if(appfactory.loggedIn==false){
     $location.path('/login');
 }
@@ -24,6 +24,7 @@ $scope.submit = function(){
     $scope.name = name_arr.join(' ');
     formData.append("channel_name", $scope.name);
     formData.append("description", $scope.descr);
+    formData.append("tag", $scope.tag);
     if($scope.picture!=""){
         formData.append("channel_img", dataURItoBlob($scope.picture));
     }
@@ -38,14 +39,18 @@ $scope.submit = function(){
     appfactory.createchannel(formData,$scope.name, $scope.descr, isAnonymous, $scope.picture).then(function(data){
         
             $scope.title="Welcome Feed Admin!";
-            $scope.content="Your channel is currently under review. You can see your channel in My channels option. You will be able to post in your channel shortly. And oh, you are awesome.";
-            SharedState.setOne('result',true);
+            $scope.content="Your channel is currently under review. You can see your channel in 'Channels I own' panel. You will be able to post in your channel shortly.";
             $scope.statusText = "Create Channel";
+            $('#channel_modal').modal({
+              keyboard: true
+            });
         },function(status){
             $scope.title="Oh shoot!";
             $scope.content="Something's wrong. Can't hurt to try again.";
-            SharedState.setOne('result',true);    
             $scope.statusText = "Create Channel";
+            $('#channel_modal').modal({
+              keyboard: true
+            });
         },function(update){
             $scope.statusText = update.text;
             $scope.progress = update.progress;

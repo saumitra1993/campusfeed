@@ -42,42 +42,45 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 				return
 		if len(user_query) == 1:
 			user = user_query[0]
-			user_key = user.key
-			check_channel_name_query = Channels.query(ndb.OR(Channels.channel_name == channel_name, Channels.channel_name == channel_name.upper(), Channels.channel_name == channel_name.title())).fetch()  #Channel name can be either all caps or first letter caps, rest small. .title() function converts string into the latter format
-			if len(check_channel_name_query) == 0:
+			if user.type_ == 'superuser':
+				user_key = user.key
+				check_channel_name_query = Channels.query(ndb.OR(Channels.channel_name == channel_name, Channels.channel_name == channel_name.upper(), Channels.channel_name == channel_name.title())).fetch()  #Channel name can be either all caps or first letter caps, rest small. .title() function converts string into the latter format
+				if len(check_channel_name_query) == 0:
 
-				db = Channels()
-				db.channel_name = channel_name
-				db.description = descr
-				
-				if user.type_ == 'user':
-					user.type_ = 'admin'   #updating 'user' to 'admin
-					user.put()
-				elif user.type_ == 'superuser':
-					db.pending_bit = 0
-				
-				if image != '':
-					db.img = image
+					db = Channels()
+					db.channel_name = channel_name
+					db.description = descr
+					
+					if user.type_ == 'user':
+						user.type_ = 'admin'   #updating 'user' to 'admin
+						user.put()
+					elif user.type_ == 'superuser':
+						db.pending_bit = 0
+					
+					if image != '':
+						db.img = image
+					else:
+						db.img = ''
+					db.tag = tag
+					channel_key = db.put()
+
+					db1 = Channel_Admins()
+					db1.user_ptr = user_key
+					db1.channel_ptr = channel_key
+					db1.isAnonymous = isAnonymous
+					k1 = db1.put()
+
+					if user.type_ == 'superuser':
+						db2 = Channel_Followers()
+						db2.user_ptr = user_key
+						db2.channel_ptr = channel_key
+						db2.put()
+					self.session['last-seen'] = datetime.now()
+					logging.info('...Inserted into DB user with key... %s ' % k1)
 				else:
-					db.img = ''
-				db.tag = tag
-				channel_key = db.put()
-
-				db1 = Channel_Admins()
-				db1.user_ptr = user_key
-				db1.channel_ptr = channel_key
-				db1.isAnonymous = isAnonymous
-				k1 = db1.put()
-
-				if user.type_ == 'superuser':
-					db2 = Channel_Followers()
-					db2.user_ptr = user_key
-					db2.channel_ptr = channel_key
-					db2.put()
-				self.session['last-seen'] = datetime.now()
-				logging.info('...Inserted into DB user with key... %s ' % k1)
+					self.response.set_status(400,'Channel name already exists')
 			else:
-				self.response.set_status(400,'Channel name already exists')
+				self.response.set_status(401,'Unauthorized')
 		else:
 			self.response.set_status(401,'Invalid user')
 

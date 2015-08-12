@@ -1,21 +1,20 @@
-<div class="modal modal-overlay" ui-if='resultuser==true' ui-state='resultuser'>
+<div class="modal" id="user_modal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="close"
-                ui-turn-off="resultuser">&times;</button>
+        <button class="close">&times;</button>
         <h4 class="modal-title">{{title}}</h4>
       </div>
       <div class="modal-body">
         
         <div class="text-center">
-          <i class="fa fa-user-secret fa-5x"></i>
+          <i class="fa fa-user-secret"></i>
         </div>
         <br />
         <p class="text-center">{{content}}</p>
       </div>
       <div class="modal-footer">
-        <button ui-turn-off="resultuser" ng-click="navigate()" class="btn btn-default">Close</button>
+        <button  ng-click="close()" class="btn btn-default">Close</button>
       </div>
     </div>
   </div>

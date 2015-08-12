@@ -1,101 +1,159 @@
-<!DOCTYPE html>
 
-<html > 
+<!DOCTYPE html>
+<!--[if IE 8]>          <html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>          <html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->  <html> <!--<![endif]-->
     <head>
         <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, minimum-scale=1, width=device-width" />
-        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
-        <title>Campusfeed</title>
-        <link rel="stylesheet" href="css/mobile-angular-ui-base.css" />
-        <link rel="stylesheet" href="css/orange.css" />
+        <title>Campusfeed, everything about college, in one place</title>
+        <meta name="keywords" content="HTML5,CSS3,Template" />
+        <meta name="description" content="" />
+        <meta name="Author" content="Saumitra Khanwalker" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <!-- mobile settings -->
+        <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="" />
+
+        <!-- WEB FONTS -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800&amp;subset=latin,latin-ext,cyrillic,cyrillic-ext" rel="stylesheet" type="text/css" />
+
+        <!-- CORE CSS -->
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="css/sky-forms.css" rel="stylesheet" type="text/css" />
+        <link href="css/weather-icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="css/line-icons.css" rel="stylesheet" type="text/css" />
+        <link href="css/magnific-popup.css" rel="stylesheet" type="text/css" />
+        <link href="css/animate.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="css/image-crop-styles.css" />
-        <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+        <!-- THEME CSS -->
+        <link href="css/essentials.css" rel="stylesheet" type="text/css" />
+        <link href="css/layout.css" rel="stylesheet" type="text/css" />
+        <link href="css/header-2.css" rel="stylesheet" type="text/css" />
+        <link href="css/bootcards-desktop.min.css" rel="stylesheet" type="text/css" />
+        <link href="css/footer-default.css" rel="stylesheet" type="text/css" />
+        <link href="css/orange.css" rel="stylesheet" type="text/css" id="color_scheme" />
+        
+        <script src="js/jquery-1.11.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <script src="js/angular.min.js"></script>
         <script src="js/angular-route.min.js"></script>
         <script src="js/mobile-angular-ui.min.js"></script>
         <script src="js/image-crop.js"></script>
         <script src="js/mobile-angular-ui.gestures.min.js"></script>
-        <script src="js/jquery-1.11.0.min.js"></script>
+        <script src="js/ui-bootstrap-tpls-0.13.3.min.js"></script>
         
-        <style>
-            .navbar {
-                color:#f96015;
-            }
-            .app-body {
-                background-color: #fff;
-            }
-            .sidebar-own {
-                background-color: #fff;
-                color:#f96015;
-                border-bottom: 1px solid #e6e6e6;
-            }
-            .background-own {
-              background-color: #fff;
-            }
-            .vertical-center {
-              margin-top: 65%;
-            }
-
-        </style>
     </head>
-    <body>
-      <!-- Sidebars -->
-        
+    
+    <!-- 
+        Available body classes: 
+            smoothscroll            = enable chrome browser smooth scroll
+            grey                    = grey content background
+            boxed                   = boxed style
+            pattern1 ... pattern10  = background pattern
 
-         <div class="sidebar sidebar-left" ng-controller="sidebarController">
-            <div class="scrollable">
-                <h1 class="scrollable-header app-name sidebar-own">{{personalisedText}}</h1>  
-                <div class="scrollable-content background-own">
-                    <div class="list-group background-own" ui-turn-off='uiSidebarLeft'>
-                      <a class="list-group-item" href="#/">Home <i class="fa fa-chevron-right pull-right"></i></a>
-                      <a class="list-group-item" href="#/mychannels">Channels I own <i class="fa fa-chevron-right pull-right"></i></a>
-                      <a class="list-group-item" href="#/followedchannels/view">Channels I follow <i class="fa fa-chevron-right pull-right"></i></a>
-                      <a class="list-group-item" href="#/discoverchannels">Discover Channels<i class="fa fa-chevron-right pull-right"></i></a>
-                      <a class="list-group-item" href="#/followedchannels/addpost">Add a post<i class="fa fa-chevron-right pull-right"></i></a>
-                      <a class="list-group-item" href="#/createchannel">Create a channel <i class="fa fa-chevron-right pull-right"></i></a>
-                      <a class="list-group-item" href="#/logout">Logout <i class="fa fa-chevron-right pull-right"></i></a>
-                      
-                    </div>
-                </div>
+        Background Image - add to body: 
+            data-background="assets/images/boxed_background/1.jpg"
+    -->
+    <body class="smoothscroll">
+
+        <div id="wrapper">
+
+            <div id="header" ng-controller="navController"><!-- class="sticky" for sticky menu -->
+
+                <!-- Top Nav -->
+                <header id="topNav">
+                    <div class="container">
+                        <a class="logo" href="http://campusfeedapp.com">
+                            <img src="images/logo-dark.png" height="50" alt="" />
+                        </a>
+
+                        <!-- Mobile Menu Button -->
+                        <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        
+                        <!-- Top Nav -->
+                        <div class="navbar-collapse nav-main-collapse collapse pull-right">
+                            <nav class="nav-main">
+
+                                <!--
+                                    NOTE
+                                    
+                                    For a regular link, remove "dropdown" class from LI tag and "dropdown-toggle" class from the href.
+                                    Direct Link Example: 
+
+                                    <li>
+                                        <a href="#">HOME</a>
+                                    </li>
+                                -->
+                                <ul id="topMain" class="nav nav-pills nav-main">
+                                    <li >
+                                        <a  href="#/">
+                                            Home<span>Updates</span>
+                                        </a>
+                                    </li>
+                                    <li >
+                                        <a  href="#/mychannels">
+                                            Channels I own<span>Track your channels</span>
+                                        </a>
+                                    </li>
+                                    <li >
+                                        <a  href="#/discoverchannels">
+                                            Discover Channels<span>Others' broadcasts</span>
+                                        </a>
+                                    </li>
+                                    <li >
+                                        <a  href="#/followedchannels/addpost">
+                                            Add a post<span>Post on channels you own</span>
+                                        </a>
+                                    </li>
+                                    <li ng-if="isSuperuser==1">
+                                        <a  href="#/createchannel">
+                                            Create a channel<span>Get broadcasted</span>
+                                        </a>
+                                    </li>
+                                    
+                                </ul>   
+
+                            </nav>
+                        </div>
+                        <!-- /Top Nav -->
+
+                    </div><!-- /.container -->
+                </header>
+                <!-- /Top Nav -->
+
             </div>
-        </div>
 
-        <div class="app"
-            ng-swipe-right='Ui.turnOn("uiSidebarLeft")'
-            ng-swipe-left='Ui.turnOff("uiSidebarLeft")'>
-            <div class="navbar navbar-app navbar-absolute-top">
-                <div class="navbar-brand navbar-brand-center" ui-yield-to="title">
-                  
-                </div>
-                <div class="btn-group pull-left">
-                    <div ui-toggle="uiSidebarLeft" class="btn sidebar-toggle" style="color:#f96015;">
-                        <i class="fa fa-bars fa-lg"></i>
-                    </div>
-                </div>
-                <div class="btn-group pull-right" ui-yield-to="navbarAction">
-                    
-                </div>
+
+ 
+            <!-- /CONTENT -->
+
+            <ng-view></ng-view>
+            <div ui-yield-to="modals">
             </div>
-
-            
-            <!-- App body -->
-
-            <div class='app-body' ng-class="{loading: loading}">
+            <!-- FOOTER -->
+            <footer id="footer">
                 
-                <div class='app-content'>
-                    <ng-view></ng-view>
+                <div class="copyright">
+                    <div class="container text-center fsize12">
+                        <a href="http://www.campusfeedapp.com" target="_blank" title="bootstrap themes &amp; templates" class="copyright">Campusfeed</a> &bull; All Right Reserved &copy; 
+                        <a href="page-privacy.html" class="fsize11">Privacy Policy</a> &bull; 
+                        <a href="page-terms.html" class="fsize11">Terms of Service</a>
+                    </div>
                 </div>
-            </div>
+            </footer>
+            <!-- /FOOTER -->
 
-        </div><!-- ~ .app -->
-      <!-- Modals and Overlays -->
-      <div ui-yield-to="modals">
-      </div>
-        
-        
+            <a href="#" id="toTop"></a>
+            
+        </div><!-- /#wrapper -->
+
         <script src="js/app.js"></script>
         <script type="text/javascript" src="js/services/fsCordova.js"></script>
         <script type="text/javascript" src="js/services/appfactory.js"></script>
