@@ -7,13 +7,14 @@ $scope.statusText = "Load more";
 $scope.errorBox=false;
 $scope.anyAval=1;
 $scope.approveText = "Approve";
+$scope.tags = ["course","club", "committee", "event"];
 if(appfactory.loggedIn==false){
 	$location.path('/login');
 }
 else{
 	appfactory.feed($scope.limit, $scope.offset).then(function(data){
 		$scope.pending_request=0;
-		if(data.channel_posts.length>0){
+		if(Object.keys(data.channel_posts).length>0){
 			$scope.channelPosts=data.channel_posts;
 		}
 		else{
@@ -26,35 +27,14 @@ else{
 		$scope.statusText = update;
 	});
 }
-$scope.download = function(img_url){
-	var fileTransfer = new FileTransfer();
-	var uri = encodeURI(img_url);
-	var filename = makeid();
-	fileTransfer.download(
-	    uri,
-	    '/sdcard/'+filename+".jpg",
-	    function(entry) {
-	        console.log("download complete: " + entry.fullPath);
-	    },
-	    function(error) {
-	        console.log("download error source " + error.source);
-	        console.log("download error target " + error.target);
-	        console.log("upload error code" + error.code);
-	    },
-	    false,
-	    {
-	        headers: {
-	        }
-	    }
-);
-};
+
 $scope.loadMore = function(){
 	$scope.offset = $scope.limit;
 	$scope.limit += 10;
 	$scope.statusText = "Loading...";
-	appfactory.channelPosts($scope.channel_id, $scope.limit, $scope.offset).then(function(data){
-		if(data.posts.length>0){
-			$scope.channelPosts = $scope.channelPosts.concat(data.posts);
+	appfactory.feed($scope.limit, $scope.offset).then(function(data){
+		if(Object.keys(data.channel_posts).length>0){
+			$scope.channelPosts = $scope.channelPosts.concat(data.channel_posts);
 		}
 		else{
 			$scope.moreAval=0;
@@ -69,13 +49,14 @@ $scope.loadMore = function(){
 	});
 };
 $scope.approve = function(channel_id,post){
-	$scope.approveText = "Loading...";
+	post.approveText = "Loading...";
 	appfactory.approvePost(channel_id,post.post_id).then(function(data){
 		post.pending_bit=0;
-		$scope.approveText = "Approve";
+		post.approveText = "Approve";
 	},
 	function(status) {
 		$scope.errorBox=true;
+		post.approveText = "Approve";
 	},function(update){
 		$scope.approveText = update;
 	});

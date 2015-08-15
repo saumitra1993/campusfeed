@@ -3,8 +3,9 @@ import logging
 import json
 from datetime import datetime, timedelta
 from google.appengine.ext import ndb
-from service._users.sessions import BaseHandler
-from db.database import Channels, Users, Channel_Followers, Channel_Admins
+from service._users.sessions import BaseHandler, LoginRequired
+from db.database import Channels, Users, Channel_Followers, Channel_Admins, Posts
+from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_ROOT_URL, DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL
 
 class FollowedChannels(BaseHandler, webapp2.RequestHandler):
@@ -15,33 +16,32 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 	#                       channel_name, 
 	#                   channel_img_url, num_followers)
 	# Query params-
-	# limit and offset  
+	# limit and offset 
+	@LoginRequired
 	def get(self,user_id):
 		limit = self.request.get('limit')
-		offset = self.request.get('offset')
 		user_id = str(user_id)
-		logging.info(user_id)
+		logging.info(self.userid)
 		dict_ = {}
-		if limit and offset:
-			logging.info("%s %s"%(limit, offset))
+		if limit:
+			logging.info("%s"%(limit))
 			user_query = Users.query(Users.user_id == user_id)
 			user = user_query.fetch()
 			logging.info(user)
 			limit = int(limit)
-			offset= int(offset)
 			if len(user) == 1:
 				qry = Channel_Followers.query(Channel_Followers.user_ptr == user[0].key, Channel_Followers.isDeleted == 0)
 				if limit!=-1:
-					followed_channels = qry.fetch(limit,offset= offset)
+					followed_channels = qry.fetch(limit)
 					
 				else:
-					followed_channels = qry.fetch(offset= offset)
+					followed_channels = qry.fetch()
 					
 				logging.info(followed_channels)
 				out=[]
+				timestamp = user[0].last_seen
 				for followed_channel in followed_channels:
 					channel = followed_channel.channel_ptr.get()
-					logging.info(channel)
 					if channel.pending_bit == 0:
 						_dict = {}
 						_dict['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user[0].key, Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).count()
@@ -50,7 +50,11 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 						_dict['channel_tag'] = channel.tag
 						_dict['pending_bit'] = 0
 						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == followed_channel.channel_ptr, Channel_Followers.isDeleted == 0).count()
+						posts_query = Posts.query(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0, Posts.isDeleted == 0))
 						
+						posts_query = posts_query.filter(Posts.created_time >= timestamp)
+						post_count = posts_query.count()
+						_dict['new_post_count'] = post_count
 						if channel.img != '':
 							_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 						else:
@@ -60,7 +64,6 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 						out.append(_dict)
 				dict_['followed_channels'] = out
 				self.response.set_status(200, 'Awesome')
-				self.session['last-seen'] = datetime.now()
 			else:
 				self.response.set_status(401, 'User is malicious. Ask him to go fuck himself.')
 		else:
@@ -87,7 +90,6 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 				db.channel_ptr = channel.key
 				db.put()
 				self.response.set_status(200,'Awesome')
-				self.session['last-seen'] = datetime.now()
 			else:
 				self.response.set_status(400,'User id and channel id are related.')
 		else:

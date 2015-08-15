@@ -10,12 +10,12 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 	"""docstring for ChannelAdmins"""
 	
 	# Request URL: /channels/channel_id/admins POST
-	# request params: array (user_id)
+	# request params:  (user_id, isAnonymous)
 	# Response: status=200 else 400(not promoted)
 	@LoginRequired
 	def post(self,channel_id):
 		data = json.loads(self.request.body)
-		user_id = data.get('user_id')	 #array of user_ids(sent by Chinmay)
+		user_id = data.get('user_id')	 
 		isAnonymous = data.get('isAnonymous')
 		channel = Channels.get_by_id(int(channel_id))
 		logged_in_userid = int(self.userid)
@@ -39,12 +39,9 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 						db1.channel_ptr = channel.key
 						db1.put()
 					self.response.set_status(200,'Awesome')
-					self.session['last-seen'] = datetime.now()
 				else:
-					logging.info("Yoyo")
 					self.response.set_status(401,'Unable to fetch user from Users.')
 			else:
-				logging.info("Yoyoh")
 				self.response.set_status(401,'Unauthorized')
 		else:
 			self.response.set_status(400,'Unable to fetch channel from Channels.')	
@@ -69,7 +66,6 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 					if db.isDeleted == 0:
 						db.isDeleted = 1
 						db.put()
-						self.session['last-seen'] = datetime.now()
 						self.response.set_status(200,'Awesome.You are no more admin.')
 					else:
 						self.response.set_status(400,'Sorry,you are already NOT an admin.')	

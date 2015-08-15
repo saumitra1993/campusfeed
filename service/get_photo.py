@@ -14,6 +14,20 @@ class GetPhotu(webapp2.RequestHandler):
 		entity = entity_key.get()
 		if entity.img != '':
 			self.response.headers['Content-Type'] = 'image/jpeg'
-			self.response.out.write(entity.img)
+			try:
+				channel = entity.channel_name
+				img = images.Image(entity.img)
+				img.resize(width=80, height=80)
+				thumbnail = img.execute_transforms(output_encoding=images.JPEG)
+				self.response.out.write(thumbnail)
+			except:
+				try:
+					user = entity.first_name
+					img = images.Image(entity.img)
+					img.resize(width=80, height=80)
+					thumbnail = img.execute_transforms(output_encoding=images.JPEG)
+					self.response.out.write(thumbnail)
+				except:
+					self.response.out.write(entity.img)
 		else:
 			self.response.out.write('No image')

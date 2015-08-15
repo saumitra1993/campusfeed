@@ -34,7 +34,6 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 					out.append(_dict)
 				dict_['admins'] = out
 				self.response.set_status(200, 'Awesome')
-				self.session['last-seen'] = datetime.now()
 			else:
 				self.response.set_status(400, 'No admins of the channel! Weird!')
 		else:
@@ -83,7 +82,6 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 				except search.Error:	  
 					logging.error("Document not saved in index!")
 
-				self.session['last-seen'] = datetime.now()
 				self.response.set_status(200, 'Awesome.Channel approved by SUPERUSER.Admins becomes Followers of their Channel.')
 		else:
 			self.response.set_status(400, 'You are not an SUPERUSER.You cannot approve a CHANNEL.')

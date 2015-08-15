@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 from google.appengine.api import blobstore
 from service._users.sessions import BaseHandler, LoginRequired
-from db.database import Users, Channel_Admins, Channels, Channel_Followers
+from db.database import Users, Channel_Admins, Channels, Channel_Followers, Posts
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
 from google.appengine.ext import ndb
@@ -75,7 +75,6 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 						db2.user_ptr = user_key
 						db2.channel_ptr = channel_key
 						db2.put()
-					self.session['last-seen'] = datetime.now()
 					logging.info('...Inserted into DB user with key... %s ' % k1)
 				else:
 					self.response.set_status(400,'Channel name already exists')
@@ -101,16 +100,16 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 			offset= int(offset)
 			user_id = int(self.userid)
 			user = Users.get_by_id(user_id)
+			dict1 = {}
 			for tag in tags:
-				dict1 = {}
-				channels_qry = Channels.query(Channels.isDeleted==0,Channels.pending_bit==0,Channels.tag==tag).order(-Channels.created_time)
+				channels_qry = Channels.query(Channels.isDeleted == 0,Channels.pending_bit == 0,Channels.tag == tag).order(-Channels.created_time)
 				if timestamp:
 					lastSeenTime = string_to_date(timestamp) 
 					lastSeenTime = ist_to_utc(lastSeenTime)
 					channels_qry = channels_qry.filter(Channels.created_time >= lastSeenTime)
 				
 				channels = channels_qry.fetch(offset= offset)
-
+				
 				out = []
 				i = 0
 				limit = limit - offset
@@ -134,10 +133,8 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 
 				out = sorted(out, key=itemgetter('num_followers'), reverse=True)
 				dict1[tag] = out
-				
 			_dict['all_channels'] = dict1
 			self.response.set_status(200, 'Awesome')
-			self.session['last-seen'] = datetime.now()
 		else:
 			self.response.set_status(400, 'Limit offset standards are not followed')
 		self.response.write(json.dumps(_dict))

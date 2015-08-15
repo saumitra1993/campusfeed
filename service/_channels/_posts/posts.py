@@ -21,7 +21,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 	#							 user_img_url, user_branch)
 	# if curated_bit is not set, status = 200
 	
-	
+	@LoginRequired
 	def post(self,channel_id):
 
 		isAnonymous = self.request.get('isAnonymous').strip() #fetching True/False

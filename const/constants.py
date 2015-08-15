@@ -7,3 +7,4 @@ DEFAULT_IMG_ID = "lpwhf_cRJVOdru_4zmW3BA=="
 GCM_PUSH_MESSAGE_API_KEY = "AIzaSyAuUTU-p8sM7SPpMNWYFig0lWcvyokyrRk"
 GCM_PUSH_MESSAGE_API_KEY_MOBILE = GCM_PUSH_MESSAGE_API_KEY
 tags = ['course', 'event', 'club', 'committee']
+POST_LIMIT = 5

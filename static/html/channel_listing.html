@@ -33,33 +33,3 @@
 </div>
 
 
-<div class="col-md-12">
-  <tabset justified="true">
-    <tab heading="Courses">
-      <accordion close-others="false">
-        <accordion-group>
-            <accordion-heading>
-                <div class="col-md-2">
-                  <img ng-src="{{channel.channel_img_url}}" class="img-responsive img-rounded" >
-                </div>
-                <div class="col-md-10"><!-- company detail -->
-                  <h3 class="margin-bottom10 text-capitalize"><b>{{channel.channel_name}}</b></h3>
-                  <ul class="list-inline">
-                    <li><i class="fa fa-globe text-success"></i> <ng-pluralize count="channel.num_followers"
-                            when="{'0': 'Nobody is following',
-                                   '1': '1 person following',
-                                   'other': '{} people following'}">
-                      </ng-pluralize>
-                    </li>
-                  </ul>
-                </div>
-                 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-            </accordion-heading>
-            This is just some content to illustrate fancy headings.
-        </accordion-group>
-      </accordion>
-
-    </tab>
-    
-  </tabset>
-</div>

@@ -51,7 +51,6 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 						
 				dict_['my_channels'] = out
 				self.response.set_status(200, 'Awesome')
-				self.session['last-seen'] = datetime.now()
 					
 			else:
 				logging.info("or here")

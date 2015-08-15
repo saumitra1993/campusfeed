@@ -19,7 +19,7 @@ class Users(ndb.Model):
 	password = ndb.StringProperty()
 	user_id = ndb.StringProperty()
 	img = ndb.BlobProperty()
-	last_seen = ndb.DateTimeProperty() # given when the app gets killed/update after every api call
+	last_seen = ndb.DateTimeProperty(auto_now_add = True) # given when the app gets killed/update after every api call
 
 class Channels(ndb.Model):
 	"""docstring for Channel"""
@@ -35,19 +35,20 @@ class Channels(ndb.Model):
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
 	tag = ndb.StringProperty(
 		choices = ['club','event','course','committee'])
-	def _post_put_hook(self, future):
-		if self == future.get_result().get():
-			name = self.channel_name
-			descr = self.description
-			channel_id = str(self.key.id())
-			fields = [
-			  search.TextField(name="channel_name", value=name),
-			  search.TextField(name="channel_descr", value=descr),]
-			d = search.Document(doc_id=channel_id, fields=fields)
-			try:
-				add_result = search.Index(name="channelsearch").put(d)
-			except search.Error:	  
-				logging.error("Document not saved in index!")
+	# DOCUMENT ADDED TO BE SEARCHED AFTER APPROVAL IN CHANNEL HANDLER PUT API
+	# def _post_put_hook(self, future):
+	# 	if self == future.get_result().get():
+	# 		name = self.channel_name
+	# 		descr = self.description
+	# 		channel_id = str(self.key.id())
+	# 		fields = [
+	# 		  search.TextField(name="channel_name", value=name),
+	# 		  search.TextField(name="channel_descr", value=descr),]
+	# 		d = search.Document(doc_id=channel_id, fields=fields)
+	# 		try:
+	# 			add_result = search.Index(name="channelsearch").put(d)
+	# 		except search.Error:	  
+	# 			logging.error("Document not saved in index!")
 
 class Posts(ndb.Model):
 	"""docstring for Post"""

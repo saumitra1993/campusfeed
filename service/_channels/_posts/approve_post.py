@@ -25,7 +25,6 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 					db.pending_bit = 0
 				logging.info(db.pending_bit)
 				db.put()
-				self.session['last-seen'] = datetime.now()
 				self.response.set_status(200, 'Awesome.Post approved')
 			else:
 				self.response.set_status(400, 'You are not an ADMIN of this channel.You cannot approve a POST.')
@@ -74,7 +73,6 @@ class OnePost(BaseHandler, webapp2.RequestHandler):
 			# 	new_notif.new_upvote_count = 0
 			# 	new_notif.put()
 			response = json.dumps(dict_)
-			self.session['last-seen'] = datetime.now()
 			self.response.set_status(200, 'Awesome')
 			self.response.write(response)
 		else:
