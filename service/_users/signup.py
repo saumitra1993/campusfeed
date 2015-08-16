@@ -18,7 +18,6 @@ class Signup(webapp2.RequestHandler):
 
 	def post(self):
 
-		
 		image = self.request.get('user_img')
 		user_id = self.request.get('user_id')
 		first_name = self.request.get('first_name')
@@ -37,20 +36,25 @@ class Signup(webapp2.RequestHandler):
 				self.response.set_status(400,"Image too big")
 				return
 		
-		
-		pw = get_password_hash(password)
-		a = Users()
-		a.user_id = user_id
-		a.first_name = first_name
-		a.last_name = last_name
-		a.email_id = email_id
-		a.password = password
-		a.branch = branch
-		a.phone = phone
-		a.password = pw
-		if image != '':
-			a.img = image
-		else:
-			a.img = ''
-		a.put()
-		self.response.set_status(200,"Awesome")
+		result = Users.query(ndb.OR((Users.user_id == user_id),(Users.email_id == email_id)))
+		user_already_exists = result.fetch()
+
+		if user_already_exists:
+			self.response.set_status(400,"User Already Exists")
+		elif len(user_already_exists) == 0:
+			new_password = get_password_hash(password)
+			
+			db = Users()
+			db.email_id = email_id
+			db.user_id = user_id
+			db.password = new_password
+			db.first_name = first_name
+			db.last_name = last_name
+			db.branch = branch
+			db.phone = phone
+			if image!='':
+				db.img = image
+			else:
+				db.img = ''
+			db.put()
+			self.response.set_status(200,"Awesome")

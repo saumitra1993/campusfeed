@@ -11,6 +11,7 @@ from service._users.image_url import ImageUrl
 from service._users.search_users import SearchUsers
 from service._users.edit_profile import Profile
 from service._users.requests import PendingChannels
+from service._users.userid_gcmid import UserIdGcmId
 
 from service._users.user_feed import UserFeed
 
@@ -49,6 +50,7 @@ application = webapp2.WSGIApplication([
 	('/imageurl',ImageUrl),
 	('/pic/(.*)',GetPhotu),
 	('/channelimageurl',ChannelImageUrl),
+	('/useridgcmid',UserIdGcmId),
 
 	('/postimageurl',PostImageUrl),
 	('/channels',AllChannels),

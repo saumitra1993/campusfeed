@@ -119,6 +119,7 @@ class DBUserGCMId(ndb.Model):
     """ Database to store the GCM Id when a driver logs in
         GCM id is used to send push message
     """
+    user_ptr = ndb.KeyProperty(kind=Users)
     gcm_id = ndb.StringProperty(indexed=False)
     creation_time = ndb.DateTimeProperty(auto_now_add=True)
 
