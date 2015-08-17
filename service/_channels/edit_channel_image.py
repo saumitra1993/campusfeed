@@ -10,7 +10,7 @@ class EditChannelImage(webapp2.RequestHandler):
 	
 	def post(self):
 
-		image = self.request.get('user_img')
+		image = self.request.get('channel_img')
 		channel_id = self.request.get('channel_id').strip()
 
 		if image!='':
@@ -24,9 +24,9 @@ class EditChannelImage(webapp2.RequestHandler):
 				return
 
 		result = Channels.query(Users.channel_id == channel_id)
-		user_exists = result.fetch()
+		channel_exists = result.fetch()
 
-		if user_exists:
+		if channel_exists:
 			db = Channels()
 			if image!='':
 				db.img = image
