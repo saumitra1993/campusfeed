@@ -81,6 +81,7 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 		result = user_query.fetch()
 		data = json.loads(self.request.body)
 		channel_id = int(data.get('channel_id').strip())
+		getNotification = int(data.get('get_notification').strip())
 		
 		channel = Channels.get_by_id(channel_id)
 		
@@ -91,6 +92,7 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 				db = Channel_Followers()
 				db.user_ptr = user.key
 				db.channel_ptr = channel.key
+				db.getNotification = getNotification
 				db.put()
 				self.response.set_status(200,'Awesome')
 			else:

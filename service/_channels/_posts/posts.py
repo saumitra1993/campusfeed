@@ -5,7 +5,7 @@ import datetime
 from service._users.sessions import BaseHandler, LoginRequired
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL
-from db.database import Users, Channels, Posts, Channel_Admins, Views
+from db.database import Users, Channels, Posts, Channel_Admins, Views, Channel_Followers, DBUserGCMId
 from google.appengine.api import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
@@ -41,6 +41,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 		query = Users.query(Users.user_id == user_id).fetch()
 		if len(query) == 1:
 			user = query[0]
+			lastSeen = self.session['last-seen'] #taking last seen for sending notifs
 			user_ptr = user.key
 			first_name = user.first_name
 			last_name = user.last_name
@@ -96,6 +97,30 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					_dict['post_img_url'] = ''
 
 				_dict['created_time'] = created_time
+
+				#-----------------------Send Notifs-------------------------------
+				result = Channel_Followers.query(Channel_Followers.getNotification == 1, Channel_Followers.user_ptr == user_ptr, Channel_Followers.channel_ptr == channel_ptr)
+				notify_this_user = result.fetch()
+
+				if len(notify_this_user) == 1:
+					dict_for_gcm = {}
+					user_gcm_id = DBUserGCMId.query(DBUserGCMId.user_ptr == user_ptr).fetch()
+					dict_for_gcm['gcm_id'] = user_gcm_id.gcm_id
+
+					result = Posts.query(Posts.user_ptr == user_ptr, Posts.channel_ptr == channel_ptr)
+					posts = result.filter(Posts.created_time > lastSeen)
+					filtered_posts = posts.fetch()
+					out = []
+					for post in filtered_posts:
+						_dict = {}
+						_dict['text'] = post.text
+						out.append(_dict)
+
+					dict_for_gcm['posts'] = out
+				else:
+					self.response.set_status(401, 'User Doesn\'t want notifs on this channel')	
+				#-----------------------------------------------------------
+				
 				self.response.set_status(200, 'Awesome')
 			else:
 				self.response.set_status(401, 'Invalid channel')
