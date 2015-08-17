@@ -70,6 +70,7 @@ class Login(BaseHandler, webapp2.RequestHandler):
 				mAuthToken = self.generate_and_store_mobile_token(str(result[0].key.id()), result[0].first_name + result[0].last_name)
 				dict_['mAuthToken'] = mAuthToken
 				dict_['type'] = result[0].type_
+				dict_['user_id'] = result[0].user_id
 				self.session['name'] = result[0].first_name + " " + result[0].last_name
 				self.session['userid'] = result[0].key.id()
 				self.response.set_status(200, 'Awesome')

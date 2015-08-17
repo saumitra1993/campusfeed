@@ -9,11 +9,11 @@
 	
   	<div class=" section">
   		<div class="app-content-loading text-center vertical-center" ng-if="pending_request==1">
-          <i class="fa fa-cog fa-spin loading-spinner fa-5x"></i>
+          <i class="fa fa-cog fa-spin loading-spinner fa-2x"></i>
         </div>
   		<p ng-show="errorBox==true" class="text-danger">Network error.</p>
-  		<h4 ng-show="anyAval==0 && type=='mine'" class="center-block">You haven't created any channels yet.<br/> <a href="#/createchannel">Let's fix that!</a></h4>
-  		<h4 ng-show="anyAval==0 && type=='related'" class="center-block">You haven't followed any channels yet.<br/> <a href="#/discoverchannels">Let's fix that!</a></h4>
+  		<h4 ng-show="anyAval==0 && type=='mine'" class="center-block vertical-center" style="text-align:center;">You haven't created any channels yet.<br/> <a href="#/createchannel">Let's fix that!</a></h4>
+  		<h4 ng-show="anyAval==0 && type=='related'" class="center-block vertical-center" style="text-align:center;">You haven't followed any channels yet.<br/> <a href="#/discoverchannels">Let's fix that!</a></h4>
   		<table class="table">
 		  <tbody style="border-bottom:1px solid #e6e6e6;">
 		  	<tr ng-repeat="channel in channels" style="cursor:pointer;" ng-init="type == 'unrelated' ? channel.is_admin = 0 : (type == 'mine' ? channel.is_admin = 1 : channel.is_admin) " ng-click="goToChannel(channel)">
@@ -33,7 +33,7 @@
 	      {{statusText}}
 	    </button>
   	</div>
-  	<div class="scrollable-footer"><!-- Input element if the user is admin of channel --></div>
+
 </div>
 
 

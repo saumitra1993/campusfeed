@@ -27,7 +27,7 @@ angular.module('campusfeed', ['ngRoute','mobile-angular-ui','mobile-angular-ui.g
     templateUrl:'html/channel_listing.html'})
    .when('/discoverchannels',                                      
     {controller:'allChannelsController',
-    templateUrl:'html/channel_listing.html'})
+    templateUrl:'html/home.html'})
    .when('/logout',                                      
     {controller:'logoutController',
     templateUrl:'html/logout.html'})

@@ -7,6 +7,7 @@ $scope.channels=[];
 $scope.moreAval=1;
 $scope.anyAval=1;
 $scope.statusText = "Load more";
+$scope.tags = ["course","club", "committee", "event"];
 $scope.pending_request = 1;
 $scope.type = 'unrelated';
 if(appfactory.loggedIn==false){

@@ -47,7 +47,22 @@
         <script src="js/ui-bootstrap-tpls-0.13.3.min.js"></script>
         
     </head>
-    
+    <style>
+    .vertical-center {
+        margin-top: 20%;
+    }
+    .shadow {
+      -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+      -moz-box-shadow:    3px 3px 5px 6px #ccc;  /* Firefox 3.5 - 3.6 */
+      box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+    }
+    .fixedSize {
+        width:400px;
+        height:400px;
+        overflow:hidden;
+        vertical-align:top;
+    }
+    </style>
     <!-- 
         Available body classes: 
             smoothscroll            = enable chrome browser smooth scroll
@@ -159,6 +174,7 @@
         <script type="text/javascript" src="js/controllers/sidebarController.js"></script>
         <script type="text/javascript" src="js/directives/textFilter.js"></script>
         <script type="text/javascript" src="js/directives/picture.js"></script>
+        <script type="text/javascript" src="js/directives/webfile.js"></script>
         <script type="text/javascript">
         $(document).ready(function(){
             var domElement = document.querySelector('body');

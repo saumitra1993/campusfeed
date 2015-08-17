@@ -1,33 +1,34 @@
-<style>
-.shadow {
-  -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow:    3px 3px 5px 6px #ccc;  /* Firefox 3.5 - 3.6 */
-  box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
-}
-.fixedSize {
-	width:400px;
-    height:400px;
-    overflow:hidden;
-    vertical-align:top;
-}
-</style>
+
 <div class="col-md-offset-2 col-md-8 shadow" style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;">
+
   <tabset justified="true">
     <tab ng-repeat="tag in tags" ng-init="req_channel.channel_tag=tag">
     	<tab-heading class="text-capitalize">{{tag}}s</tab-heading>
     	<p ng-show="errorBox==true" class="text-danger">Network error.</p>
- 		<h4 ng-show="anyAval==0" class="center-block">There are no posts here yet!<br/> <a href="#/discoverchannels">Follow channels</a> to get their updates in your feed.</h4>
+    	<div class="app-content-loading text-center vertical-center" ng-if="pending_request==1">
+	      <i class="fa fa-cog fa-spin loading-spinner fa-2x"></i>
+	    </div>
 		<table class="table">
 		  <tbody style="border-bottom:1px solid #e6e6e6;">
-		  	<tr ng-repeat="channel in channels | filter:req_channel" ng-click="goToChannel(channel)">
-		  		<td class="col-xs-1"><img ng-src="{{channel.channel_img_url}}" class="img-responsive img-rounded" ></td>
-		  		<td class="col-xs-11"><h4 class="text-capitalize"><b>{{channel.channel_name}}</b></h4>
+		  	<tr style="cursor:pointer;" ng-repeat="channel in filtered_channels = (channels | filter:req_channel)" ng-click="goToChannel(channel)">
+		  		<td class="col-xs-2"><img ng-src="{{channel.channel_img_url}}" class="img-responsive img-rounded" ></td>
+		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{channel.channel_name}}</b></h4>
 				<p ng-if="channel.new_post_count > 0"><span class="badge">{{channel.new_post_count}} new posts</span></p>
 		  		</td>
+		  		<td ng-if="type=='unrelated'"><p><i class="fa fa-reply-all"></i> 
+				<ng-pluralize count="channel.num_followers"
+                when="{'0': 'Nobody is following',
+                       '1': '1 person following',
+                       'other': '{} people following'}">
+  				</ng-pluralize></p></td>
+		  	</tr>
+		  	<tr ng-if="filtered_channels.length == 0">
+		  		<td><h4 ng-show="type=='unrelated'" class="center-block vertical-center" style="text-align:center;">There are no channels here yet!<br/></h4>
+		  		<h4 ng-show="type=='related'" class="center-block vertical-center" style="text-align:center;">There are no channels here yet!<br/> <a href="#/discoverchannels">Follow channels</a> to get their updates in your feed.</h4></td>
 		  	</tr>
 		  </tbody>
 		</table>
-      	<button class="btn btn-primary btn-block" ng-click="statusText != 'Loading...' && loadMore()" ng-show="anyAval==1 && moreAval==1 && errorBox==false && pending_request == 0">
+      	<button class="btn btn-primary btn-block" ng-click="statusText != 'Loading...' && loadMore()" ng-show="filtered_channels.length > 0 && anyAval==1 && moreAval==1 && errorBox==false && pending_request == 0">
 	      {{statusText}}
 	    </button>
     </tab>

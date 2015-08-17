@@ -11,7 +11,7 @@ if($scope.is_admin==1){
     $scope.post_by = 'channel';
 }
 else{
-    $scope.post_by = 'user';
+    $location.path('/');
 }
 SharedState.initialize($scope, "resultpost", false);
 $scope.navigate = function(){

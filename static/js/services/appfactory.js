@@ -25,7 +25,6 @@ else{
 
 factory.login=function(studentid, password){
 	var defer1=$q.defer();
-    factory.user_id = studentid;
     
     $.ajax({
         type: "POST",
@@ -34,7 +33,6 @@ factory.login=function(studentid, password){
         contentType: "application/json",
         dataType: "json",
         async:true,
-        cache : false,
         beforeSend: function(){
             defer1.notify('Loading...');
         },
@@ -43,6 +41,7 @@ factory.login=function(studentid, password){
             factory.last_name = data.last_name;
             factory.token = data.mAuthToken;
             factory.loggedIn = true;
+            factory.user_id = data.user_id;
             console.log(data.type);
             if(data.type=="superuser"){
                 factory.isSuperuser=1;
@@ -86,7 +85,6 @@ factory.myChannels = function(limit,offset){
             type: "GET",
             async:true,
             url: ip+'users/'+factory.user_id+"/mychannels?limit="+limit+"&offset="+offset,
-            cache : false,
             dataType: "json",
             beforeSend: function(){
                 defer2.notify('Loading...');
@@ -119,7 +117,6 @@ factory.followedChannels = function(limit,offset){
         type: "GET",
         url: ip+'users/'+factory.user_id+"/channels?limit="+limit+"&offset="+offset,
         async:true,
-        cache : false,
         dataType: "json",
         beforeSend: function(){
             defer3.notify('Loading...');
@@ -150,7 +147,6 @@ factory.channelDetails = function(channel_id){
         type: "GET",
         url: ip+'channels/'+channel_id,
         async:true,
-        cache : false,
         dataType: "json",
         beforeSend: function(){
             defer4.notify('Loading...');
@@ -183,7 +179,6 @@ factory.channelPosts=function(channel_id,limit,offset){
         type: "GET",
         url: ip+'channels/'+channel_id+"/posts?limit="+limit+"&offset="+offset,
         async:true,
-        cache : false,
         dataType: "json",
         beforeSend: function(){
             defer5.notify('Loading...');
@@ -243,7 +238,6 @@ factory.createchannel = function(formData,name,descr,isAnonymous,image){
         async:true,
         processData: false,
         contentType: false,
-        cache : false,
         type: 'POST',
         beforeSend: function(){
             defer6.notify('Loading...');
@@ -303,7 +297,6 @@ factory.addPost = function(formData,channel_id,text,post_by,isAnonymous,image){
             url: ip+"channels/"+channel_id+"/posts",
             data: formData,
             async:true,
-            cache : false,
             processData: false,
             contentType: false,
             type: 'POST',
@@ -332,7 +325,6 @@ factory.approvePost = function(channel_id, post_id){
   $.ajax({
         type: "PUT",
         async:true,
-        cache : false,
         url:  ip+"channels/"+channel_id+"/posts/"+post_id,
         data: {},
         beforeSend: function(){
@@ -359,7 +351,6 @@ factory.followChannel=function(channel_id){
     $.ajax({
         type: "POST",
         async:true,
-        cache : false,
         url: ip+'users/'+factory.user_id+"/channels",
         data: JSON.stringify({"channel_id":channel_id}),
         contentType: "application/json; charset=utf-8",
@@ -392,7 +383,6 @@ factory.allChannels = function(limit,offset){
     $.ajax({
         type: "GET",
         async:true,
-        cache : false,
         url:ip+"channels?limit="+limit+"&offset="+offset,
         
         dataType: "json",
@@ -426,7 +416,6 @@ factory.searchUser= function(search_string){
     $.ajax({
         type: "GET",
         async:true,
-        cache : false,
         url:ip+"users/search"+search_string,
         
         dataType: "json",
@@ -452,7 +441,6 @@ factory.addAdmin=function(user,channel_id){
   $.ajax({
         type: "POST",
         async:true,
-        cache : false,
         url: ip+"channels/"+channel_id+"/admins",
         data: JSON.stringify({"user_id":user.user_id,"isAnonymous":user.isAnonymous}),
         contentType: "application/json; charset=utf-8",
@@ -488,7 +476,6 @@ factory.feed = function(limit,offset){
      $.ajax({
         type: "GET",
         async:true,
-        cache : false,
         url:ip+"users/"+factory.user_id+"/feed?limit="+limit+"&offset="+offset,
         
         dataType: "json",
@@ -519,7 +506,6 @@ factory.createuser = function(formData,first_name, last_name, branch,email_id,us
     async:true,
     processData: false,
     contentType: false,
-    cache : false,
     type: 'POST',
     beforeSend: function(){
         defer14.notify('Loading...');
