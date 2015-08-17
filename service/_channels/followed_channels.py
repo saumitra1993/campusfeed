@@ -20,22 +20,24 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 	@LoginRequired
 	def get(self,user_id):
 		limit = self.request.get('limit')
+		offset = self.request.get('offset')
 		user_id = str(user_id)
 		logging.info(self.userid)
 		dict_ = {}
-		if limit:
+		if limit and offset:
 			logging.info("%s"%(limit))
 			user_query = Users.query(Users.user_id == user_id)
 			user = user_query.fetch()
 			logging.info(user)
 			limit = int(limit)
+			offset = int(offset)
 			if len(user) == 1:
 				qry = Channel_Followers.query(Channel_Followers.user_ptr == user[0].key, Channel_Followers.isDeleted == 0)
 				if limit!=-1:
-					followed_channels = qry.fetch(limit)
+					followed_channels = qry.fetch(limit,offset=offset)
 					
 				else:
-					followed_channels = qry.fetch()
+					followed_channels = qry.fetch(offset=offset)
 					
 				logging.info(followed_channels)
 				out=[]
@@ -49,6 +51,7 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 						_dict['channel_name'] = channel.channel_name
 						_dict['channel_tag'] = channel.tag
 						_dict['pending_bit'] = 0
+						_dict['description'] = channel.description
 						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == followed_channel.channel_ptr, Channel_Followers.isDeleted == 0).count()
 						posts_query = Posts.query(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0, Posts.isDeleted == 0))
 						

@@ -6,27 +6,39 @@ $scope.pending_request=1;
 $scope.statusText = "Load more";
 $scope.errorBox=false;
 $scope.anyAval=1;
+$scope.type = 'related';
 $scope.approveText = "Approve";
 $scope.tags = ["course","club", "committee", "event"];
 if(appfactory.loggedIn==false){
 	$location.path('/login');
 }
 else{
-	appfactory.feed($scope.limit, $scope.offset).then(function(data){
-		$scope.pending_request=0;
-		if(Object.keys(data.channel_posts).length>0){
-			$scope.channelPosts=data.channel_posts;
+	
+	appfactory.followedChannels($scope.limit,$scope.offset).then(function(data){
+		if(data.followed_channels.length>0){
+			$scope.channels = data.followed_channels;
 		}
 		else{
 			$scope.anyAval=0;
 		}
+		$scope.pending_request = 0;
 	},function(status){
 		$scope.errorBox=true;
-		$scope.pending_request=0;
+		$scope.pending_request = 0;
 	},function(update){
 		$scope.statusText = update;
 	});
 }
+
+$scope.goToChannel=function(channel){
+	appfactory.active_channel=channel;
+	if($scope.action == 'addpost'){
+		$location.path('/channels/'+channel.channel_id+'/addpost');
+	}
+	else{
+		$location.path('/channels/'+$scope.type+'/'+channel.channel_id);
+	}
+};
 
 $scope.loadMore = function(){
 	$scope.offset = $scope.limit;

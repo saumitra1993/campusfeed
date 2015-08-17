@@ -1,9 +1,13 @@
-<div ui-content-for="title">
-  <span>{{title}}</span>
-</div>
-<div class="scrollable">
-	<div class="scrollable-header"></div>
-  	<div class="scrollable-content section">
+<style>
+.shadow {
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow:    3px 3px 5px 6px #ccc;  /* Firefox 3.5 - 3.6 */
+  box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}
+</style>
+<div class="col-md-offset-2 col-md-8 shadow" style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;">
+	
+  	<div class=" section">
   		<div class="app-content-loading text-center vertical-center" ng-if="pending_request==1">
           <i class="fa fa-cog fa-spin loading-spinner fa-5x"></i>
         </div>
@@ -12,7 +16,7 @@
   		<h4 ng-show="anyAval==0 && type=='related'" class="center-block">You haven't followed any channels yet.<br/> <a href="#/discoverchannels">Let's fix that!</a></h4>
   		<table class="table">
 		  <tbody style="border-bottom:1px solid #e6e6e6;">
-		  	<tr ng-repeat="channel in channels" ng-init="type == 'unrelated' ? channel.is_admin = 0 : (type == 'mine' ? channel.is_admin = 1 : channel.is_admin) " ng-click="goToChannel(channel)">
+		  	<tr ng-repeat="channel in channels" style="cursor:pointer;" ng-init="type == 'unrelated' ? channel.is_admin = 0 : (type == 'mine' ? channel.is_admin = 1 : channel.is_admin) " ng-click="goToChannel(channel)">
 		  		<td class="col-xs-2"><img ng-src="{{channel.channel_img_url}}" class="img-responsive img-rounded" ></td>
 		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{channel.channel_name}}</b></h4>
 				<p><i class="fa fa-reply-all"></i> 

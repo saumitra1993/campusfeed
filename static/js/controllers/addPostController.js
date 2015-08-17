@@ -45,12 +45,17 @@ $scope.submit = function(){
             $scope.title="Your post, coming soon.";
             $scope.content="Your post is currently under review by the Channel Admin. You can see your post in Followed Channel panel. And oh, you are awesome.";
         }
-        SharedState.setOne('resultpost',true);
+        $('#post_modal').modal({
+              keyboard: true
+            });
         $scope.statusText = "Add Post";
     },function(status){
         $scope.title="Daal me kuch kaala hai!";
         $scope.content="Either the channel under which you are posting or you are malicious. Daya will have to break the door to find out.";
         SharedState.setOne('resultpost',true);
+        $('#post_modal').modal({
+              keyboard: true
+            });
         $scope.statusText = "Add Post";
     },function(update){
         $scope.statusText = update.text;

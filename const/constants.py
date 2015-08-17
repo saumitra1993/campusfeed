@@ -1,5 +1,5 @@
-DEFAULT_ROOT_URL = 'http://campusfeed-1018.appspot.com/'
-DEFAULT_ROOT_IMG_URL = 'http://campusfeed-1018.appspot.com/pic/'
+DEFAULT_ROOT_URL = 'http://localhost:9080/'
+DEFAULT_ROOT_IMG_URL = 'http://localhost:9080/pic/'
 DEFAULT_IMG_URL = DEFAULT_ROOT_URL + 'images/default.png'
 DEFAULT_ANON_IMG_URL = DEFAULT_ROOT_URL + 'images/anonymous.jpg'
 MOBILE_USER_SESSION_DURATION_DAYS = 30

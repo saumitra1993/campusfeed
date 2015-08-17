@@ -116,7 +116,7 @@ class Views(ndb.Model):
 # 	new_upvote_count = ndb.IntegerProperty(default=0)
 
 class DBUserGCMId(ndb.Model):
-    """ Database to store the GCM Id when a driver logs in
+    """ Database to store the GCM Id when a user logs in
         GCM id is used to send push message
     """
     gcm_id = ndb.StringProperty(indexed=False)

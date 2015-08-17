@@ -122,6 +122,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 							dict_['channel_id'] = channel.key.id()
 							dict_['channel_name'] = channel.channel_name
 							dict_['pending_bit'] = 0
+							_dict['description'] = channel.description
 							if channel.img != '':
 								dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 							else:

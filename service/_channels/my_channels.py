@@ -39,6 +39,7 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 						_dict['channel_id'] = channel.key.id()
 						_dict['channel_name'] = channel.channel_name
 						_dict['channel_tag'] = channel.tag
+						_dict['description'] = channel.description
 						_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
 						_dict['pending_bit'] = channel.pending_bit
 						if channel.img != '':
