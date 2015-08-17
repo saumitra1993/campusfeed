@@ -12,9 +12,9 @@ from service._users.search_users import SearchUsers
 from service._users.edit_profile import Profile
 from service._users.requests import PendingChannels
 from service._users.userid_gcmid import UserIdGcmId
-
+from service._users.logout import LogoutUser
+from service._users.edit_user_image import EditUserImage
 from service._users.user_feed import UserFeed
-
 from service._users.notification import Notifications
 
 from service._channels.followed_channels import FollowedChannels
@@ -25,6 +25,7 @@ from service._channels.my_channels import MyChannels
 from service._channels.channel_admins import ChannelAdmins
 from service._channels.channel_followers import ChannelFollowers
 from service._channels.search_channel import SearchChannels
+from service._channels.edit_channel_image import EditChannelImage
 
 from service._channels._posts.image_url_post import PostImageUrl
 from service._channels._posts.posts import PostsHandler
@@ -51,6 +52,9 @@ application = webapp2.WSGIApplication([
 	('/pic/(.*)',GetPhotu),
 	('/channelimageurl',ChannelImageUrl),
 	('/useridgcmid',UserIdGcmId),
+	('/logout',LogoutUser),
+	('/edituserimage',EditUserImage),
+	('/editchannelimage',EditChannelImage),
 
 	('/postimageurl',PostImageUrl),
 	('/channels',AllChannels),
