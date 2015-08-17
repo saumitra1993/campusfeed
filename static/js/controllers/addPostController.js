@@ -43,7 +43,7 @@ $scope.submit = function(){
         }
         else{
             $scope.title="Your post, coming soon.";
-            $scope.content="Your post is currently under review by the Channel Admin. You can see your post in Followed Channel panel. And oh, you are awesome.";
+            $scope.content="Your post is currently under review by the Channel Admin. You can see your post in Followed Channel panel.";
         }
         $('#post_modal').modal({
               keyboard: true
