@@ -50,7 +50,7 @@ application = webapp2.WSGIApplication([
 	('/imageurl',ImageUrl),
 	('/pic/(.*)',GetPhotu),
 	('/channelimageurl',ChannelImageUrl),
-	('/useridgcmid',UserIdGcmId),
+	('/pushnotif',UserIdGcmId),
 
 	('/postimageurl',PostImageUrl),
 	('/channels',AllChannels),

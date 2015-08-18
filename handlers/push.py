@@ -5,9 +5,8 @@ import logging
 import json
 import urllib2
 import time
-from util.const import GCM_PUSH_MESSAGE_API_KEY_MOBILE
-from util.const import GCM_PUSH_MESSAGE_API_KEY
-from util.const import DRIVER_PUSH_TIME_TO_LIVE_BOOKING
+from const.constants import GCM_PUSH_MESSAGE_API_KEY_MOBILE
+from const.constants import GCM_PUSH_MESSAGE_API_KEY
 
 def push(json_data):
     """ Push given json(dict) data and send to google gcm server """
@@ -48,7 +47,7 @@ def push_single_message(gcm_id, message):
     }
     push(json_data)
 
-def push_dict(gcm_id, dict_, ttl=DRIVER_PUSH_TIME_TO_LIVE_BOOKING):
+def push_dict(gcm_id, dict_):
     #logging.info('Pushing message to GCM ID: %s' % gcm_id)
     json_data = {
         #"collapse_key" : "msg", 
@@ -56,7 +55,6 @@ def push_dict(gcm_id, dict_, ttl=DRIVER_PUSH_TIME_TO_LIVE_BOOKING):
             "message" : dict_,
         },
         "registration_ids": [gcm_id],
-        "time_to_live" : ttl,
     }
     push(json_data)
 

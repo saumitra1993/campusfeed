@@ -81,7 +81,7 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 		result = user_query.fetch()
 		data = json.loads(self.request.body)
 		channel_id = int(data.get('channel_id').strip())
-		getNotification = int(data.get('get_notification').strip())
+		getNotification = int(data.get('get_notification'))
 		
 		channel = Channels.get_by_id(channel_id)
 		

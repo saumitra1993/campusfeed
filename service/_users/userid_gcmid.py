@@ -11,14 +11,16 @@ class UserIdGcmId(webapp2.RequestHandler):
 	"""docstring for UserIdGcmId"""
 	
 	def post(self):
-
-		user_id = self.request.get("user_id").strip()
-		gcm_id = self.request.get("gcm_id").strip()
-
+		data = json.loads(self.request.body)
+		user_id = data.get("user_id").strip()
+		gcm_id = data.get("gcm_id").strip()
+		logging.info("%s"%user_id)
+		logging.info("%s"%gcm_id)
 		user_query = Users.query(Users.user_id == user_id).fetch()
 
-		if len(user_query) == 1 :
+		if len(user_query) == 1:
 			user = user_query[0]
+			logging.info(user)
 			user_ptr = user.key
 
 			db = DBUserGCMId()

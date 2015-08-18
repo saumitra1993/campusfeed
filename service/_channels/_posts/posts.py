@@ -3,6 +3,7 @@ import json
 import logging
 from datetime import datetime, timedelta
 from service._users.sessions import BaseHandler, LoginRequired
+from handlers.push import push_dict
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL
 from db.database import Users, Channels, Posts, Channel_Admins, Views, Channel_Followers, DBUserGCMId
@@ -100,13 +101,15 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				user.put()
 
 				#-----------------------Send Notifs-------------------------------
-				# result = Channel_Followers.query(Channel_Followers.getNotification == 1, Channel_Followers.channel_ptr == channel_ptr)
-				# notify_this_user = result.fetch()
+				result = Channel_Followers.query(Channel_Followers.getNotification == 1, Channel_Followers.channel_ptr == channel_ptr)
+				notify_these_users = result.fetch()
 
 				
-				# dict_for_gcm = {}
-				# user_gcm_id = DBUserGCMId.get_by_id(user_ptr.id())
-				# dict_for_gcm['gcm_id'] = user_gcm_id.gcm_id
+				for user in notify_these_users:
+					user_ptr = user.user_ptr
+					user_gcm_id = DBUserGCMId.query(DBUserGCMId.user_ptr == user_ptr).fetch()
+					gcm_id = user_gcm_id[0].gcm_id
+					push_dict(gcm_id, _dict)
 
 				
 					

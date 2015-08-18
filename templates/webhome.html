@@ -131,6 +131,16 @@
                                             Create a channel<span>Get broadcasted</span>
                                         </a>
                                     </li>
+                                    <li ng-if="isSuperuser==1">
+                                        <span dropdown on-toggle="toggled(open)">
+                                          <a href id="simple-dropdown" dropdown-toggle>
+                                            <i class="fa fa-sort-desc"></i>
+                                          </a>
+                                          <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
+                                            <li><a ng-href="#/logout">Logout</a></li>
+                                          </ul>
+                                        </span>
+                                    </li>
                                     
                                 </ul>   
 
