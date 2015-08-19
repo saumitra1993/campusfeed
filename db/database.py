@@ -123,23 +123,8 @@ class DBUserGCMId(ndb.Model):
     gcm_id = ndb.StringProperty(indexed=False)
     creation_time = ndb.DateTimeProperty(auto_now_add=True)
 
-    def _pre_put_hook(self):
-        #logout the same user from other device.
-        #conditions to check
-        # same username
-        # user should have logged in before current time
-        # device id should be different
-        old_key = self.key
-        try:
-            if old_key and old_key.id():
-                old_object = old_key.get(use_cache=False)
-                if not old_object:
-                    logging.info('no old object')
-                    return
-                old_gcm_id = old_object.gcm_id
-                if old_gcm_id != self.gcm_id:
-                    old_key.delete()
-                else:
-                    logging.info('gcm id and or driver_id match. no action')
-        except:
-            pass
+class DBUserForgotPassword(ndb.Model):
+
+	user_ptr = ndb.KeyProperty(kind=Users)
+	fid = ndb.StringProperty(indexed=False)
+	creation_time = ndb.DateTimeProperty(auto_now_add=True)

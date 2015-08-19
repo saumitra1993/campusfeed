@@ -27,12 +27,12 @@ class EditUserImage(webapp2.RequestHandler):
 		user_exists = result.fetch()
 
 		if user_exists:
-			db = Users()
+			user = user_exists[0]
 			if image!='':
-				db.img = image
+				user.img = image
 			else:
-				db.img = ''
-			db.put()
+				user.img = ''
+			user.put()
 			self.response.set_status(200,"Awesome")
 		else:
 			self.response.set_status(400,"User is malicious. Tell him to fuck himself.")

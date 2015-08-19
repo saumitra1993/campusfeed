@@ -1,19 +1,19 @@
 <section class="page-title">
-                <div class="container">
+    <div class="container">
 
-                    <header>
+        <header>
 
-                        <ul class="breadcrumb"><!-- breadcrumb -->
-                            
-                        </ul><!-- /breadcrumb -->
+            <ul class="breadcrumb"><!-- breadcrumb -->
+                
+            </ul><!-- /breadcrumb -->
 
-                        <h2><!-- Page Title -->
-                        </h2><!-- /Page Title -->
+            <h2><!-- Page Title -->
+            </h2><!-- /Page Title -->
 
-                    </header>
+        </header>
 
-                </div>          
-            </section>
+    </div>          
+</section>
 
 
 <!-- CONTENT -->
@@ -149,5 +149,24 @@
 <div ui-content-for="modals">
   <div ng-include="'html/user_creation_feedback.html'"></div>
 </div>
-
+<script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Enter your registered mail address.</h3>
+        </div>
+        <div class="modal-body">
+            <form class="form-inline" role="form" ng-submit="sendforlink()">
+                <div class="form-group">
+                    <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
  

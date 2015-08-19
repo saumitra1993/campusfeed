@@ -27,12 +27,12 @@ class EditChannelImage(webapp2.RequestHandler):
 		channel_exists = result.fetch()
 
 		if channel_exists:
-			db = Channels()
+			channel = channel_exists[0]
 			if image!='':
-				db.img = image
+				channel.img = image
 			else:
-				db.img = ''
-			db.put()
+				channel.img = ''
+			channel.put()
 			self.response.set_status(200,"Awesome")
 		else:
 			self.response.set_status(400,"User is malicious. Tell him to fuck himself.")

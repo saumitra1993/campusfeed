@@ -523,14 +523,29 @@ factory.createuser = function(formData,first_name, last_name, branch,email_id,us
 };
 
 factory.logout = function(){
-  window.localStorage.clear();
-  factory.loggedIn=false;
-  factory.user_id = -1;
-  factory.first_name = "";
-  factory.last_name = "";
-  factory.token="";
-  factory.isSuperuser=0;
-  return 1;
+    var defer15=$q.defer();
+    $.ajax({
+        url: ip+"logout",
+        async:true,
+        processData: false,
+        contentType: false,
+        type: 'GET',
+        success: function(data, textStatus, xhr){
+            window.localStorage.clear();
+            factory.loggedIn=false;
+            factory.user_id = -1;
+            factory.first_name = "";
+            factory.last_name = "";
+            factory.token="";
+            factory.isSuperuser=0;
+            defer15.resolve(xhr.status);     
+        },
+        error: function(data, textStatus, xhr){
+            defer15.reject(xhr.status);
+        },
+        timeout: 15000
+    });
+    return defer15.promise;
 };
 
 return factory;

@@ -22,11 +22,14 @@ class UserIdGcmId(webapp2.RequestHandler):
 			user = user_query[0]
 			logging.info(user)
 			user_ptr = user.key
-
-			db = DBUserGCMId()
-			db.user_ptr = user_ptr
-			db.gcm_id = gcm_id
-			db.put()
+			q = DBUserGCMId.query(DBUserGCMId.user_ptr == user_ptr).fetch()
+			if len(q) == 0:
+				db = DBUserGCMId()
+				db.user_ptr = user_ptr
+				db.gcm_id = gcm_id
+				db.put()
+			else:
+				q[0].gcm_id = gcm_id
 
 			self.response.set_status(200,"Awesome")
 		else:

@@ -10,7 +10,7 @@ from const.constants import GCM_PUSH_MESSAGE_API_KEY
 
 def push(json_data):
     """ Push given json(dict) data and send to google gcm server """
-    url = 'https://android.googleapis.com/gcm/send'
+    url = 'https://gcm-http.googleapis.com/gcm/send'
     myKey = GCM_PUSH_MESSAGE_API_KEY #key for blowhorntest
     #logging.info('Sending push message with API key :' + myKey)
     data = json.dumps(json_data)
@@ -48,7 +48,7 @@ def push_single_message(gcm_id, message):
     push(json_data)
 
 def push_dict(gcm_id, dict_):
-    #logging.info('Pushing message to GCM ID: %s' % gcm_id)
+    logging.info('Pushing message to GCM ID: %s' % gcm_id)
     json_data = {
         #"collapse_key" : "msg", 
         "data" : {

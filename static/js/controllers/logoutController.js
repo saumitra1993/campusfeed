@@ -2,8 +2,9 @@ angular.module("campusfeed").controller("logoutController", function($scope,$loc
 
 $scope.errorBox=false;
 
-var data = appfactory.logout();
-		
-$location.path('/login');
-
+var data = appfactory.logout().then(function(data){
+	$location.path('/login');
+},function(data){
+	$scope.errorBox=true;
+});
 });

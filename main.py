@@ -16,6 +16,7 @@ from service._users.logout import LogoutUser
 from service._users.edit_user_image import EditUserImage
 from service._users.user_feed import UserFeed
 from service._users.notification import Notifications
+from service._users.forgot_password import ForgotPassword
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.channels_handler import ChannelsHandler
@@ -51,12 +52,12 @@ application = webapp2.WSGIApplication([
 	('/imageurl',ImageUrl),
 	('/pic/(.*)',GetPhotu),
 	('/channelimageurl',ChannelImageUrl),
+	('/forgotpassword', ForgotPassword),
 
 	('/pushnotif',UserIdGcmId),
 	('/logout',LogoutUser),
 	('/edituserimage',EditUserImage),
 	('/editchannelimage',EditChannelImage),
-
 
 	('/postimageurl',PostImageUrl),
 	('/channels',AllChannels),
