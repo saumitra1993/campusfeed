@@ -1,5 +1,6 @@
-angular.module("campusfeed").controller("channelController", function($scope,$location,$http,appfactory,$routeParams){
+angular.module("campusfeed").controller("channelController", function($scope,$location,$modal,$http,appfactory,$routeParams){
 $scope.errorBox=false;
+$scope.getNotifications = true;
 $scope.channelDetails=[];
 $scope.channelPosts=[];
 $scope.limit=10;
@@ -64,28 +65,20 @@ $scope.loadMore = function(){
 		$scope.statusText = update;
 	});
 };
-$scope.download = function(img_url){
-	var fileTransfer = new FileTransfer();
-	var uri = encodeURI(img_url);
-	var filename = makeid();
-	fileTransfer.download(
-	    uri,
-	    '/sdcard/'+filename+".jpg",
-	    function(entry) {
-	        console.log("download complete: " + entry.fullPath);
-	    },
-	    function(error) {
-	        console.log("download error source " + error.source);
-	        console.log("download error target " + error.target);
-	        console.log("upload error code" + error.code);
-	    },
-	    false,
-	    {
-	        headers: {
-	        }
-	    }
-);
-};
+$scope.open = function (imgUrl) {
+     $scope.imgUrl = imgUrl; 
+    var modalInstance = $modal.open({
+      animation: $scope.animationsEnabled,
+      controller: 'ModalInstanceCtrl',
+      templateUrl: 'fullImage.html',
+      size:'lg',
+      resolve: {
+        selectedImgUrl: function () {
+          return $scope.imgUrl;
+        }
+      }
+    });
+  };
 $scope.approve = function(post){
 	post.approveText = "Loading...";
 	appfactory.approvePost($scope.channel_id,post.post_id).then(function(data){
@@ -100,7 +93,7 @@ $scope.approve = function(post){
 };
 $scope.follow = function(){
 	$scope.followText = "Loading...";
-	appfactory.followChannel($scope.channel_id).then(function(data){
+	appfactory.followChannel($scope.channel_id, $scope.getNotifications).then(function(data){
 		
 			$scope.type='related';
 			$scope.otherData.num_followers++;

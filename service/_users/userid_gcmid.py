@@ -17,7 +17,8 @@ class UserIdGcmId(webapp2.RequestHandler):
 		logging.info("%s"%user_id)
 		logging.info("%s"%gcm_id)
 		user_query = Users.query(Users.user_id == user_id).fetch()
-
+		dict_ = {}
+		dict_['gcm_response'] = "blah"
 		if len(user_query) == 1:
 			user = user_query[0]
 			logging.info(user)
@@ -34,3 +35,4 @@ class UserIdGcmId(webapp2.RequestHandler):
 			self.response.set_status(200,"Awesome")
 		else:
 			self.response.set_status(400,"User is malicious.Tell him to go fuck himself.")
+		self.response.write(json.dumps(dict_))

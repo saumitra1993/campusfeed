@@ -14,17 +14,15 @@ class MyChannels(BaseHandler, webapp2.RequestHandler):
 	def get(self, user_id):
 		limit = self.request.get('limit')
 		offset = self.request.get('offset')
-		user_id = str(user_id)
+		user_id = int(user_id)
 		logging.info(user_id)
 		dict_ = {}
 		out = []
 		if limit and offset:
 			limit = int(limit)
 			offset= int(offset)
-			user_query = Users.query(Users.user_id == user_id)
-			result = user_query.fetch()
-			if len(result) == 1:
-				user = result[0]
+			user = Users.get_by_id(user_id)
+			if user:
 				if user.type_ == 'admin' or user.type_ == 'superuser':
 					channel_admins_qry = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.isDeleted == 0)
 					if limit!=-1:

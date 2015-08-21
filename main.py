@@ -17,6 +17,7 @@ from service._users.edit_user_image import EditUserImage
 from service._users.user_feed import UserFeed
 from service._users.notification import Notifications
 from service._users.forgot_password import ForgotPassword
+from service._users.reset_password import ResetPassword
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.channels_handler import ChannelsHandler
@@ -53,6 +54,7 @@ application = webapp2.WSGIApplication([
 	('/pic/(.*)',GetPhotu),
 	('/channelimageurl',ChannelImageUrl),
 	('/forgotpassword', ForgotPassword),
+	('/resetpassword', ResetPassword),
 
 	('/pushnotif',UserIdGcmId),
 	('/logout',LogoutUser),
@@ -61,15 +63,15 @@ application = webapp2.WSGIApplication([
 
 	('/postimageurl',PostImageUrl),
 	('/channels',AllChannels),
-	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>',Profile),
-	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/channels',FollowedChannels),
-	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/mychannels',MyChannels),
-	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/pendingchannels', PendingChannels),
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>',Profile),
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/channels',FollowedChannels),
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/mychannels',MyChannels),
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/pendingchannels', PendingChannels),
 	webapp2.Route(r'/users/search', SearchUsers),
 
-	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/feed',UserFeed),
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/feed',UserFeed),
 
-	webapp2.Route(r'/users/<:[0-9a-zA-Z]{5}>/notifications', Notifications),
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/notifications', Notifications),
 
 
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>',ChannelsHandler),

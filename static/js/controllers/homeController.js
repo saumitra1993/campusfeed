@@ -7,6 +7,7 @@ $scope.statusText = "Load more";
 $scope.errorBox=false;
 $scope.anyAval=1;
 $scope.type = 'related';
+$scope.channels =[];
 $scope.approveText = "Approve";
 $scope.tags = ["course","club", "committee", "event"];
 if(appfactory.loggedIn==false){
@@ -15,12 +16,8 @@ if(appfactory.loggedIn==false){
 else{
 	
 	appfactory.followedChannels($scope.limit,$scope.offset).then(function(data){
-		if(data.followed_channels.length>0){
-			$scope.channels = data.followed_channels;
-		}
-		else{
-			$scope.anyAval=0;
-		}
+		
+		$scope.channels = data.followed_channels;
 		$scope.pending_request = 0;
 	},function(status){
 		$scope.errorBox=true;
@@ -44,9 +41,9 @@ $scope.loadMore = function(){
 	$scope.offset = $scope.limit;
 	$scope.limit += 10;
 	$scope.statusText = "Loading...";
-	appfactory.feed($scope.limit, $scope.offset).then(function(data){
-		if(Object.keys(data.channel_posts).length>0){
-			$scope.channelPosts = $scope.channelPosts.concat(data.channel_posts);
+	appfactory.followedChannels($scope.limit,$scope.offset).then(function(data){
+		if(data.followed_channels.length>0){
+			$scope.channels = $scope.channels.concat(data.followed_channels);
 		}
 		else{
 			$scope.moreAval=0;
@@ -83,4 +80,14 @@ function makeid()
 
     return text;
 }
+$scope.filterTag = function(tag) {
+	for (var key in $scope.channels) {
+	   if ($scope.channels.hasOwnProperty(key)) {
+	        if(key == tag){
+	        	return $scope.channels[key];
+	        	break;
+	        }
+	    }
+	}
+};
 });

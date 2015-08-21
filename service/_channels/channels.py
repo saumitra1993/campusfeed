@@ -21,10 +21,11 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 	def post(self):
 
 		user_id = self.request.get('user_id').strip()
+		user_id = int(user_id)
 		isAnonymous = self.request.get('isAnonymous')
 		channel_name = self.request.get('channel_name').strip()
 		descr = self.request.get('description').strip()
-		user_query = Users.query(Users.user_id == user_id).fetch() #query will store entire 'list' of db cols
+		user = Users.get_by_id(user_id)    #query will store entire 'list' of db cols
 		image = self.request.get('channel_img')
 		tag = self.request.get('tag')
 		logging.info(channel_name)
@@ -41,8 +42,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 				self.response.set_status(400,"Image too big")
 				return
 		
-		if len(user_query) == 1:
-			user = user_query[0]
+		if user:
 			#if user.type_ == 'superuser':
 			
 			user_key = user.key
@@ -105,15 +105,55 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 		limit = self.request.get('limit')
 		offset = self.request.get('offset')
 		timestamp = self.request.get('timestamp')
+		requested_tag = self.request.get('tag')
 		_dict = {}
-		if limit and offset:
+		if limit and offset and requested_tag:
 			limit = int(limit)
 			offset= int(offset)
 			user_id = int(self.userid)
 			user = Users.get_by_id(user_id)
 			dict1 = {}
-			for tag in tags:
-				channels_qry = Channels.query(Channels.isDeleted == 0,Channels.pending_bit == 0,Channels.tag == tag).order(-Channels.created_time)
+			timestamp1 = user.last_seen
+			if requested_tag == 'all':
+				for tag in tags:
+					channels_qry = Channels.query(Channels.isDeleted == 0,Channels.pending_bit == 0,Channels.tag == tag).order(-Channels.created_time)
+					if timestamp:
+						lastSeenTime = string_to_date(timestamp) 
+						lastSeenTime = ist_to_utc(lastSeenTime)
+						channels_qry = channels_qry.filter(Channels.created_time >= lastSeenTime)
+					
+					channels = channels_qry.fetch(offset= offset)
+					logging.info(channels)
+					out = []
+					i = 0
+					limit = limit - offset
+					for channel in channels:
+						if i < limit:
+							dict_ = {}
+							is_following = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key,Channel_Followers.isDeleted == 0).count()
+							if is_following == 0:
+								dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
+								dict_['channel_id'] = channel.key.id()
+								dict_['channel_name'] = channel.channel_name
+								dict_['pending_bit'] = 0
+								dict_['channel_tag'] = channel.tag
+								dict_['description'] = channel.description
+								dict_['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).count()
+								
+								if channel.img != '':
+									dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
+								else:
+									dict_['channel_img_url'] = DEFAULT_IMG_URL
+								out.append(dict_)
+								i = i + 1
+						else:
+							break
+
+					out = sorted(out, key=itemgetter('num_followers'), reverse=True)
+					dict1[tag] = out
+				_dict['all_channels'] = dict1
+			elif requested_tag in tags:
+				channels_qry = Channels.query(Channels.isDeleted == 0,Channels.pending_bit == 0,Channels.tag == requested_tag).order(-Channels.created_time)
 				if timestamp:
 					lastSeenTime = string_to_date(timestamp) 
 					lastSeenTime = ist_to_utc(lastSeenTime)
@@ -133,7 +173,10 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 							dict_['channel_id'] = channel.key.id()
 							dict_['channel_name'] = channel.channel_name
 							dict_['pending_bit'] = 0
-							_dict['description'] = channel.description
+							dict_['channel_tag'] = channel.tag
+							dict_['description'] = channel.description
+							dict_['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).count()
+							
 							if channel.img != '':
 								dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 							else:
@@ -144,9 +187,11 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 						break
 
 				out = sorted(out, key=itemgetter('num_followers'), reverse=True)
-				dict1[tag] = out
-			_dict['all_channels'] = dict1
-			self.response.set_status(200, 'Awesome')
+				dict1[requested_tag] = out
+				_dict['all_channels'] = dict1
+				self.response.set_status(200, 'Awesome')
+			else:
+				self.response.set_status(400, 'Tag standards are not followed')
 		else:
 			self.response.set_status(400, 'Limit offset standards are not followed')
 		self.response.write(json.dumps(_dict))

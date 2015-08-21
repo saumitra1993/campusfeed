@@ -1,4 +1,4 @@
-angular.module('campusfeed', ['ngRoute','mobile-angular-ui','mobile-angular-ui.gestures','ImageCropper','ui.bootstrap'])
+angular.module('campusfeed', ['ngRoute','ngSanitize','mobile-angular-ui','mobile-angular-ui.gestures','ImageCropper','ui.bootstrap'])
 .config(function($routeProvider){
   $routeProvider
    .when('/',                                      
@@ -34,6 +34,9 @@ angular.module('campusfeed', ['ngRoute','mobile-angular-ui','mobile-angular-ui.g
    .when('/channels/:type/:channelId',                                      
     {controller:'channelController',
     templateUrl:'html/channel_home.html'})
+   .when('/resetpassword/:forgotId',                                      
+    {controller:'resetPasswordController',
+    templateUrl:'html/resetpassword.html'})
    .otherwise({redirectTo: '/' });
 
 });

@@ -57,7 +57,12 @@
 					  		<td class="col-xs-12"><h5>{{channelDetails.description}}</h5></td>
 					  	</tr>
 					  	<tr style="border:none;" ng-if="type=='unrelated'">
-					  		<td class="col-xs-12"><button class="btn btn-primary btn-block" ng-click="follow() && followText != 'Loading...'" >
+					  		<td class="col-xs-12">
+					  			<div class="form-group">
+              
+					              <input type="checkbox" ng-model='getNotifications' name="checkbox"><span>  Want push notifications on Campusfeed App?</span>
+					            </div>
+					  		<button class="btn btn-primary btn-block" ng-click="follow() && followText != 'Loading...'" >
 	     					{{followText}}
 	    					</button>
 							</td>
@@ -67,13 +72,13 @@
 			</div>
 		</div>
 		<div class="app-content-loading text-center vertical-center" ng-if="pending_request==1">
-          <i class="fa fa-cog fa-spin loading-spinner fa-5x"></i>
+          <i class="fa fa-cog fa-spin loading-spinner fa-2x"></i>
         </div>
         <h4 ng-show="anyAval==0 && is_admin==1" class="center-block">You haven't added any posts yet.<br/> <a ng-href="#/channels/{{channel_id}}/addpost">Let's fix that!</a></h4>
  		<div  ng-repeat="post in channelPosts" ng-class="{'panel panel-default bootcards-media' : post.pending_bit==0, 'panel panel-danger bootcards-media' : post.pending_bit==1}" ng-init="post.showMore=0;post.approveText='Approve'" >
-	        <div class="thumbnail" ng-if="post.post_img_url != ''"><img ng-src="{{post.post_img_url}}" class="center-block img-responsive fixedSize"  /></div>
+	        <div class="thumbnail" ng-if="post.post_img_url != ''"><img ng-src="{{post.post_img_url}}" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  /></div>
 	        <div class="panel-body">
-	          <h5 ng-show="post.text.length>150 && post.showMore==0">{{post.text | cut:true:100:'....'}}<a ng-click="post.showMore=1">Show more</a></h5>
+	          <h5 ng-show="post.text.length>150 && post.showMore==0">{{post.text | cut:true:150:'....'}}<a ng-click="post.showMore=1">Show more</a></h5>
 	          <h5 ng-show="post.text.length<=150 || post.showMore==1">{{post.text}}<a ng-show="post.showMore==1" ng-click="post.showMore=0">Show less</a></h5>
 	        </div>
 	        <div class="panel-footer">
@@ -97,4 +102,39 @@
  	
  </div>
  
+<script type="text/ng-template" id="fullImage.html">
+        <div class="modal-header">
+            <h4 class="modal-title">Click to zoom</h4>
+        </div>
+        <div class="modal-body">
+            <img class="image center-block"  ng-src="{{selectedImgUrl}}" / >
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="cancel()">Close</button>
+        </div>
+        <script>
+        	$('.image').on('click', function () {
+        		console.log("Hello");
+			    if (typeof this.toggleZoom === "undefined") this.toggleZoom = false;
+			    this.toggleZoom = !this.toggleZoom;
+			    resizeImg(this);
+			});
 
+			function resizeImg(img) {
+			    var scale = (img.toggleZoom) ? 150 / 100 : 100 / 150;
+			    console.log(scale);
+			    var pos = $(img).offset();
+			    var clickX = event.pageX - pos.left;
+			    var clickY = event.pageY - pos.top;
+			    var container = $(img).parent().get(0);
+
+			    $(img).css({
+			        width: img.width * scale,
+			        height: img.height * scale
+			    });
+
+			    container.scrollLeft = ($(container).width() / -2) + clickX * scale;
+			    container.scrollTop = ($(container).height() / -2) + clickY * scale;
+			}
+        </script>
+    </script>

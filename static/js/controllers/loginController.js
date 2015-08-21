@@ -1,4 +1,4 @@
-angular.module("campusfeed").controller("loginController", function($scope,$location, SharedState, $http,appfactory,$routeParams){
+angular.module("campusfeed").controller("loginController", function($scope,$location,$modal, SharedState, $http,appfactory,$routeParams){
 $scope.statusText = "Login";
 $scope.errorBox2=false;
 $scope.picture='';
@@ -70,7 +70,18 @@ $scope.submit = function(){
             $scope.progress = update.progress;
         });
 };
-
+$scope.open = function () {
+    var modalInstance = $modal.open({
+      animation: $scope.animationsEnabled,
+      controller: 'ForgotPasswordCtrl',
+      templateUrl: 'forgotpassword.html',
+      resolve: {
+        selectedImgUrl: function () {
+          return $scope.imgUrl;
+        }
+      }
+    });
+  };
 function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});

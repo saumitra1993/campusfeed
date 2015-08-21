@@ -15,12 +15,8 @@ if(appfactory.loggedIn==false){
 }
 else{
 	appfactory.allChannels($scope.limit,$scope.offset).then(function(data){
-		if(data.all_channels.length>0){
-			$scope.channels=data.all_channels;
-		}
-		else{
-			$scope.anyAval=0;
-		}
+		
+		$scope.channels=data.all_channels;
 		$scope.pending_request = 0;
 	},function(status){
 		$scope.errorBox=true;
@@ -54,5 +50,14 @@ $scope.loadMore = function(){
 		$scope.statusText = update;
 	});
 };
-
+$scope.filterTag = function(tag) {
+	for (var key in $scope.channels) {
+	   if ($scope.channels.hasOwnProperty(key)) {
+	        if(key == tag){
+	        	return $scope.channels[key];
+	        	break;
+	        }
+	    }
+	}
+};
 });

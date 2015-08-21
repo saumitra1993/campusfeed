@@ -115,7 +115,7 @@ factory.followedChannels = function(limit,offset){
     });*/
     $.ajax({
         type: "GET",
-        url: ip+'users/'+factory.user_id+"/channels?limit="+limit+"&offset="+offset,
+        url: ip+'users/'+factory.user_id+"/channels?limit="+limit+"&offset="+offset+"&tag=all",
         async:true,
         dataType: "json",
         beforeSend: function(){
@@ -345,14 +345,18 @@ factory.approvePost = function(channel_id, post_id){
    return defer8.promise;
 };
 
-factory.followChannel=function(channel_id){
+factory.followChannel=function(channel_id, getNotifications){
     var defer9=$q.defer();
-    
+    if(getNotifications == true){
+        getNotifications = 1;
+    }else{
+        getNotifications = 0;
+    }
     $.ajax({
         type: "POST",
         async:true,
         url: ip+'users/'+factory.user_id+"/channels",
-        data: JSON.stringify({"channel_id":channel_id}),
+        data: JSON.stringify({"channel_id":channel_id,'get_notification':getNotifications}),
         contentType: "application/json; charset=utf-8",
         beforeSend: function(){
             defer9.notify('Loading...');
@@ -383,7 +387,7 @@ factory.allChannels = function(limit,offset){
     $.ajax({
         type: "GET",
         async:true,
-        url:ip+"channels?limit="+limit+"&offset="+offset,
+        url:ip+"channels?limit="+limit+"&offset="+offset+"&tag=all",
         
         dataType: "json",
         beforeSend: function(){
@@ -546,6 +550,68 @@ factory.logout = function(){
         timeout: 15000
     });
     return defer15.promise;
+};
+
+factory.forgotpassword = function(email_id){
+    var defer16=$q.defer();
+     $.ajax({
+        type: "POST",
+        url: ip+'forgotpassword',
+        data: JSON.stringify({"email_id":email_id}),
+        contentType: "application/json",
+        dataType: "json",
+        async:true,
+        beforeSend: function(){
+            defer16.notify('Loading...');
+        },
+        success: function(data, textStatus, xhr){
+            defer16.resolve(data);
+        },
+        error: function(data, textStatus, xhr){
+            defer16.reject(xhr.status);
+        },
+        timeout: 15000
+    });
+     return defer16.promise;
+};
+
+factory.checkForgotId = function(forgotId){
+    var defer17=$q.defer();
+     $.ajax({
+        type: "GET",
+        url: ip+'resetpassword?forgotId='+forgotId,
+        contentType: "application/json",
+        dataType: "json",
+        async:true,
+        success: function(data, textStatus, xhr){
+            defer17.resolve(textStatus);
+        },
+        error: function(data, textStatus, xhr){
+            defer17.reject(textStatus);
+        },
+        timeout: 15000
+    });
+     return defer17.promise;
+};
+factory.resetPassword = function(forgotId,password){
+    var defer18=$q.defer();
+     $.ajax({
+        type: "POST",
+        url: ip+'resetpassword',
+        data: JSON.stringify({"forgotId":forgotId,"password":password}),
+        contentType: "application/json",
+        dataType: "json",
+        async:true,
+        
+        success: function(data, textStatus, xhr){
+            defer18.resolve(textStatus);
+        },
+        error: function(data, textStatus, xhr){
+            defer18.reject(xhr.status);
+        },
+        timeout: 15000
+    });
+     return defer18.promise;
 };
 
 return factory;

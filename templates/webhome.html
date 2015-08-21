@@ -40,6 +40,7 @@
         <script src="js/bootstrap.min.js"></script>
         <script src="js/angular.min.js"></script>
         <script src="js/angular-route.min.js"></script>
+        <script src="js/angular-sanitize.min.js"></script>
         <script src="js/mobile-angular-ui.min.js"></script>
         <script src="js/image-crop.js"></script>
         <script src="js/mobile-angular-ui.gestures.min.js"></script>
@@ -56,10 +57,11 @@
       box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
     }
     .fixedSize {
-        width:400px;
-        height:400px;
-        overflow:hidden;
-        vertical-align:top;
+        display: block;
+        max-width:400px;
+        max-height:400px;
+        width: auto;
+        height: auto;
     }
     </style>
     <!-- 
@@ -123,7 +125,7 @@
                                     </li>
                                     <li >
                                         <a  href="#/followedchannels/addpost">
-                                            Add a post<span>Post on channels you own</span>
+                                            Add a post<span>Post on your channels</span>
                                         </a>
                                     </li>
                                     <li>
@@ -186,6 +188,9 @@
         <script type="text/javascript" src="js/controllers/addAdminController.js"></script>
         <script type="text/javascript" src="js/controllers/allChannelsController.js"></script>
         <script type="text/javascript" src="js/controllers/sidebarController.js"></script>
+        <script type="text/javascript" src="js/controllers/fullImageController.js"></script>
+        <script type="text/javascript" src="js/controllers/forgotPasswordController.js"></script>
+        <script type="text/javascript" src="js/controllers/resetPasswordController.js"></script>
         <script type="text/javascript" src="js/directives/textFilter.js"></script>
         <script type="text/javascript" src="js/directives/picture.js"></script>
         <script type="text/javascript" src="js/directives/webfile.js"></script>

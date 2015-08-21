@@ -26,10 +26,12 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 	def post(self,channel_id):
 
 		isAnonymous = self.request.get('isAnonymous').strip() #fetching True/False
-		user_id = self.request.get('user_id').strip()
+		user_id = self.request.get('user_id')
+		user_id = int(user_id)
 		post_by = self.request.get('post_by').strip()
 		text = self.request.get('text').strip()
 		image = self.request.get('post_img')
+		_dict = {}
 		if image!='':
 			image = images.Image(image)
 			# Transform the image
@@ -39,9 +41,8 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 			if size > 1000000:
 				self.response.set_status(400,"Image too big")
 				return
-		query = Users.query(Users.user_id == user_id).fetch()
-		if len(query) == 1:
-			user = query[0]
+		user = Users.get_by_id(user_id)
+		if user:
 			user_ptr = user.key
 			first_name = user.first_name
 			last_name = user.last_name
@@ -72,8 +73,6 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				
 				created_time = date_to_string(utc_to_ist(post_items.created_time))
 
-				#TODO isAnonymous to be checked
-				_dict = {}
 				
 				if isAnonymous == 'True':
 					_dict['full_name'] = 'Anonymous'
@@ -97,6 +96,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					_dict['post_img_url'] = ''
 
 				_dict['created_time'] = created_time
+				_dict['channel_name'] = channel.channel_name
 				user.last_seen = datetime.now()
 				user.put()
 

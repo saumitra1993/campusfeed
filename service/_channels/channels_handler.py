@@ -13,22 +13,27 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 		
 	# 	Request URL: /channels/:channel_id GET
 	# Response : status, description, created_time, admins: array of (full_name)
+	@LoginRequired
 	def get(self, channel_id):
 		channel = Channels.get_by_id(int(channel_id))
 		dict_ = {}
-		if channel:
+		user_id = int(self.userid)
+		user = Users.get_by_id(user_id)
+		if channel and user:
 			channel_admins = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).fetch()
 			if len(channel_admins) > 0:
 				dict_['description'] = channel.description
+				dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
 				dict_['channel_name'] = channel.channel_name
 				dict_['created_time'] = date_to_string(utc_to_ist(channel.created_time))
+				dict_['is_following'] = Channel_Followers.query(Channel_Followers.user_ptr == user.key, Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
 				out = []
 				for channel_admin in channel_admins:
 					_dict = {}
 					if channel_admin.isAnonymous == 'True': #for admins who don't want to reveal their names.
 						_dict['full_name'] = 'Anonymous'
 					else:
-						admin = Users.get_by_id(channel_admin.user_ptr.id())
+						admin = channel_admin.user_ptr.get()
 						_dict['full_name'] = admin.first_name + ' ' + admin.last_name
 					
 					out.append(_dict)

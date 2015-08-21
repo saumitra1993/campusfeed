@@ -126,5 +126,5 @@ class DBUserGCMId(ndb.Model):
 class DBUserForgotPassword(ndb.Model):
 
 	user_ptr = ndb.KeyProperty(kind=Users)
-	fid = ndb.StringProperty(indexed=False)
+	fid = ndb.StringProperty(indexed=True)
 	creation_time = ndb.DateTimeProperty(auto_now_add=True)

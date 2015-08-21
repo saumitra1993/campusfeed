@@ -2,25 +2,25 @@
 <div class="col-md-offset-2 col-md-8 shadow" style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;">
 
   <tabset justified="true">
-    <tab ng-repeat="tag in tags" ng-init="req_channel.channel_tag=tag">
+    <tab ng-repeat="tag in tags" ng-init="req_channel={};req_channel[tag]">
     	<tab-heading class="text-capitalize">{{tag}}s</tab-heading>
     	<p ng-show="errorBox==true" class="text-danger">Network error.</p>
     	<div class="app-content-loading text-center vertical-center" ng-if="pending_request==1">
 	      <i class="fa fa-cog fa-spin loading-spinner fa-2x"></i>
 	    </div>
-		<table class="table">
+		<table class="table" >
 		  <tbody style="border-bottom:1px solid #e6e6e6;">
-		  	<tr style="cursor:pointer;" ng-repeat="channel in filtered_channels = (channels | filter:req_channel)" ng-click="goToChannel(channel)">
+		  	<tr style="cursor:pointer;"  ng-repeat="channel in filtered_channels = filterTag(tag)"  ng-click="goToChannel(channel)">
 		  		<td class="col-xs-2"><img ng-src="{{channel.channel_img_url}}" class="img-responsive img-rounded" ></td>
 		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{channel.channel_name}}</b></h4>
 				<p ng-if="channel.new_post_count > 0"><span class="badge">{{channel.new_post_count}} new posts</span></p>
-		  		</td>
-		  		<td ng-if="type=='unrelated'"><p><i class="fa fa-reply-all"></i> 
+				<p ng-if="type=='unrelated'"><i class="fa fa-reply-all"></i> 
 				<ng-pluralize count="channel.num_followers"
                 when="{'0': 'Nobody is following',
                        '1': '1 person following',
                        'other': '{} people following'}">
-  				</ng-pluralize></p></td>
+  				</ng-pluralize></p>
+		  		</td>
 		  	</tr>
 		  	<tr ng-if="filtered_channels.length == 0">
 		  		<td><h4 ng-show="type=='unrelated'" class="center-block vertical-center" style="text-align:center;">There are no channels here yet!<br/></h4>
