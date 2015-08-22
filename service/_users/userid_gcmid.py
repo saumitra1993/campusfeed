@@ -31,7 +31,7 @@ class UserIdGcmId(webapp2.RequestHandler):
 				db.put()
 			else:
 				q[0].gcm_id = gcm_id
-
+				q[0].put()
 			self.response.set_status(200,"Awesome")
 		else:
 			self.response.set_status(400,"User is malicious.Tell him to go fuck himself.")

@@ -18,6 +18,7 @@ from service._users.user_feed import UserFeed
 from service._users.notification import Notifications
 from service._users.forgot_password import ForgotPassword
 from service._users.reset_password import ResetPassword
+from service._users.feedback import Feedback
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.channels_handler import ChannelsHandler
@@ -55,6 +56,7 @@ application = webapp2.WSGIApplication([
 	('/channelimageurl',ChannelImageUrl),
 	('/forgotpassword', ForgotPassword),
 	('/resetpassword', ResetPassword),
+	('/feedback',Feedback),
 
 	('/pushnotif',UserIdGcmId),
 	('/logout',LogoutUser),

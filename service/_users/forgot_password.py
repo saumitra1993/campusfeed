@@ -34,5 +34,5 @@ class ForgotPassword(BaseHandler, webapp2.RequestHandler):
 			self.response.set_status(401,'Fail')
 		self.response.write(json.dumps({"tp":"kaddu"}))
 
-	def id_generator(size=10, chars=string.ascii_uppercase + string.digits):
-		return ''.join(random.choice(chars) for _ in range(10))
+	def id_generator(size=20, chars=string.ascii_uppercase + string.digits):
+		return ''.join(random.choice(chars) for _ in range(20))

@@ -114,8 +114,9 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				for user in notify_these_users:
 					user_ptr = user.user_ptr
 					user_gcm_id = DBUserGCMId.query(DBUserGCMId.user_ptr == user_ptr).fetch()
-					gcm_id = user_gcm_id[0].gcm_id
-					push_dict(gcm_id, _dict)
+					if len(user_gcm_id) == 1:
+						gcm_id = user_gcm_id[0].gcm_id
+						push_dict(gcm_id, _dict)
 
 				
 					
