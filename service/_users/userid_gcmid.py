@@ -13,14 +13,14 @@ class UserIdGcmId(webapp2.RequestHandler):
 	def post(self):
 		data = json.loads(self.request.body)
 		user_id = data.get("user_id").strip()
+		user_id = int(user_id)
 		gcm_id = data.get("gcm_id").strip()
 		logging.info("%s"%user_id)
 		logging.info("%s"%gcm_id)
-		user_query = Users.query(Users.user_id == user_id).fetch()
+		user = Users.get_by_id(user_id)
 		dict_ = {}
 		dict_['gcm_response'] = "blah"
-		if len(user_query) == 1:
-			user = user_query[0]
+		if user:
 			logging.info(user)
 			user_ptr = user.key
 			q = DBUserGCMId.query(DBUserGCMId.user_ptr == user_ptr).fetch()

@@ -26,6 +26,11 @@ $scope.submit = function(){
 	formData.append("text", $scope.text);
 	formData.append("post_by", $scope.post_by);
     if($scope.picture!=""){
+        image = new Image();
+        image.src = $scope.picture;
+        var quality =  60;
+        output_format = 'jpg'; 
+        $scope.picture = jic.compress(image,quality,output_format).src;
         formData.append("post_img", dataURItoBlob($scope.picture));
     }
     if($scope.isAnonymous==true){
@@ -42,7 +47,7 @@ $scope.submit = function(){
             $scope.content="You own the floor. Your post is live and can be seen under "+$scope.channelname+" in My Channels panel.";
         }
         else{
-            $scope.title="Your post, coming soon.";
+            $scope.title="Your post is live.";
             $scope.content="Your post is currently under review by the Channel Admin. You can see your post in Followed Channel panel.";
         }
         $('#post_modal').modal({

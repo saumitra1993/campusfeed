@@ -10,6 +10,12 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Channel_Followers
+  properties:
+  - name: channel_ptr
+  - name: getNotification
+  - name: user_ptr
+
 - kind: Channels
   properties:
   - name: created_time

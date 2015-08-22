@@ -8,8 +8,15 @@ $scope.moreAval=1;
 $scope.following=1;
 $scope.anyAval=1;
 $scope.pending_request = 1;
+$scope.action = $routeParams.action;
 $scope.statusText = 'Load more';
 $scope.type = 'mine';
+if($scope.action == 'addpost'){
+	$scope.title = "Add a post";
+}
+else{
+	$scope.title = "Channels you own";
+}
 if(appfactory.loggedIn==false){
 	$location.path('/login');
 }
@@ -31,7 +38,12 @@ else{
 
 $scope.goToChannel=function(channel){
 	appfactory.active_channel=channel;
-	$location.path('/channels/'+$scope.type+'/'+channel.channel_id);
+	if($scope.action == 'addpost'){
+		$location.path('/channels/'+channel.channel_id+'/addpost');
+	}
+	else{
+		$location.path('/channels/'+$scope.type+'/'+channel.channel_id);
+	}
 };
 
 $scope.loadMore = function(){

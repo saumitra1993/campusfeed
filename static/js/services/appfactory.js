@@ -1,7 +1,7 @@
 angular.module("campusfeed").factory('appfactory',function($q,$rootScope,SharedState){
 
 var factory={};
-var ip='http://localhost:9080/';
+var ip='http://campusfeed-1018.appspot.com/';
 var user_id= window.localStorage.getItem("user_id");
 SharedState.initialize($rootScope, "loggedIn", false);
 if(user_id){

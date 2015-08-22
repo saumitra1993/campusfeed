@@ -33,14 +33,19 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 		image = self.request.get('post_img')
 		_dict = {}
 		if image!='':
-			image = images.Image(image)
-			# Transform the image
-			image.resize(width=400, height=400)
-			image = image.execute_transforms(output_encoding=images.JPEG)
+			
 			size = len(image)
-			if size > 1000000:
-				self.response.set_status(400,"Image too big")
-				return
+			logging.info(size)
+			if size > 900000:
+				image = images.Image(image)
+				# Transform the image
+				image = image.execute_transforms(output_encoding=images.JPEG)
+				image.resize(width=800)
+				size = len(image)
+				logging.info("After resize %s"%size)
+				if size > 900000:
+					self.response.set_status(400,"Image too big")
+					return
 		user = Users.get_by_id(user_id)
 		if user:
 			user_ptr = user.key
@@ -54,8 +59,8 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 			if channel:
 				channel_ptr = channel.key
 				db = Posts()
-				admin_query = Channel_Admins.query(Channel_Admins.channel_ptr == channel_ptr, Channel_Admins.user_ptr == user_ptr).fetch()    #  if the person posting is admin, pending bit should be 0
-				if len(admin_query) == 1:
+				admin_query = Channel_Admins.query(Channel_Admins.channel_ptr == channel_ptr, Channel_Admins.user_ptr == user_ptr, Channel_Admins.isDeleted == 0).count()    #  if the person posting is admin, pending bit should be 0
+				if admin_query == 1:
 					db.pending_bit = 0
 				db.text = text
 				if image != '':
@@ -69,6 +74,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				db.post_by = post_by
 				k = db.put()
 				post_items = k.get()
+				logging.info(post_items)
 				text = post_items.text
 				
 				created_time = date_to_string(utc_to_ist(post_items.created_time))
@@ -101,7 +107,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				user.put()
 
 				#-----------------------Send Notifs-------------------------------
-				result = Channel_Followers.query(Channel_Followers.getNotification == 1, Channel_Followers.channel_ptr == channel_ptr)
+				result = Channel_Followers.query(Channel_Followers.getNotification == 1, Channel_Followers.channel_ptr == channel_ptr, Channel_Followers.user_ptr != user_ptr)
 				notify_these_users = result.fetch()
 
 				

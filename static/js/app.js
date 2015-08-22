@@ -19,10 +19,10 @@ angular.module('campusfeed', ['ngRoute','ngSanitize','mobile-angular-ui','mobile
    .when('/channels/:channelId/addadmin',                                      
     {controller:'addAdminController',
     templateUrl:'html/addadmin.html'})
-   .when('/mychannels',                                      
+   .when('/mychannels/:action',                                      
     {controller:'myChannelsController',
     templateUrl:'html/channel_listing.html'})
-   .when('/followedchannels/:action',                                      
+   .when('/followedchannels',                                      
     {controller:'followedChannelsController',
     templateUrl:'html/channel_listing.html'})
    .when('/discoverchannels',                                      

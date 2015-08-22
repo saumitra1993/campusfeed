@@ -9,13 +9,9 @@ $scope.statusText = "Load more";
 $scope.type = 'related';
 $scope.pending_request = 1;
 $scope.anyAval=1;
-$scope.action = $routeParams.action;
-if($scope.action == 'addpost'){
-	$scope.title = "Add a post";
-}
-else{
-	$scope.title = "Channels you follow";
-}
+
+$scope.title = "Channels you follow";
+
 if(appfactory.loggedIn==false){
 	$location.path('/login');
 }
