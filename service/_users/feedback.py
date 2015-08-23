@@ -15,9 +15,23 @@ from const.constants import MOBILE_USER_SESSION_DURATION_DAYS
 
 class Feedback(BaseHandler, webapp2.RequestHandler):
 	def post(self):
-		name = self.request.get('name')
-		email = self.request.get('email')
-		message = self.request.get('comment')
+		token = self.request.headers.get('token')
+		if token:
+			data = json.loads(self.request.body)
+			user_id = data.get('user_id')
+			message = data.get('comment')
+			user_id = int(user_id)
+			user = Users.get_by_id(user_id)
+			if user:
+				email = user.email_id
+				name = user.first_name + ' ' + user.last_name
+			else:
+				self.response.set_status(400,'Invalid user')
+				return
+		else:
+			name = self.request.get('name')
+			email = self.request.get('email')
+			message = self.request.get('comment')
 		logging.info(message)
 		body = "Hello superusers! The message sent from user having mail id "+email+" and name "+name+" is--"+message
 		send_email("Message from user","support@campusfeedapp.com",body)

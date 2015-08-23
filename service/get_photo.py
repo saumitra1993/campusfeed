@@ -10,16 +10,20 @@ import logging
 
 class GetPhotu(webapp2.RequestHandler):
 	def get(self, img_id):
+		full = self.request.get('full')
 		entity_key = ndb.Key(urlsafe=img_id)
 		entity = entity_key.get()
 		if entity.img != '':
 			self.response.headers['Content-Type'] = 'image/jpeg'
 			try:
-				channel = entity.channel_name
-				img = images.Image(entity.img)
-				img.resize(width=80, height=80)
-				thumbnail = img.execute_transforms(output_encoding=images.JPEG)
-				self.response.out.write(thumbnail)
+				if full == '':
+					channel = entity.channel_name
+					img = images.Image(entity.img)
+					img.resize(width=80, height=80)
+					thumbnail = img.execute_transforms(output_encoding=images.JPEG)
+					self.response.out.write(thumbnail)
+				else:
+					self.response.out.write(entity.img)
 			except:
 				try:
 					user = entity.first_name

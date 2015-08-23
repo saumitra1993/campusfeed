@@ -80,34 +80,21 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				created_time = date_to_string(utc_to_ist(post_items.created_time))
 
 				
-				if isAnonymous == 'True':
-					_dict['full_name'] = 'Anonymous'
-					_dict['img_url'] = DEFAULT_ANON_IMG_URL
-				else:
-					if post_by == 'user':
-						_dict['full_name'] = first_name + ' ' + last_name
-						_dict['branch'] = branch
-						_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(user_img_url)
-					else:
-						_dict['full_name'] = channel.channel_name
-						_dict['img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
-				_dict['post_by'] = post_by
 				
-				_dict['post_id'] = k.id()
+				
 				_dict['text'] = text
-				_dict['pending_bit'] = post_items.pending_bit
-				if image != '':
-					_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(k.urlsafe())
-				else:
-					_dict['post_img_url'] = ''
-
-				_dict['created_time'] = created_time
 				_dict['channel_name'] = channel.channel_name
+				_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
+				_dict['channel_id'] = channel.key.id()
+				if channel.img != '':
+					dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
+				else:
+					dict_['channel_img_url'] = DEFAULT_IMG_URL
 				user.last_seen = datetime.now()
 				user.put()
 
 				#-----------------------Send Notifs-------------------------------
-				result = Channel_Followers.query(Channel_Followers.getNotification == 1, Channel_Followers.channel_ptr == channel_ptr, Channel_Followers.user_ptr != user_ptr)
+				result = Channel_Followers.query(Channel_Followers.getNotification == 1, Channel_Followers.channel_ptr == channel_ptr, Channel_Followers.user_ptr != user_ptr, Channel_Followers.isDeleted == 0)
 				notify_these_users = result.fetch()
 
 				

@@ -27,6 +27,10 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 				dict_['channel_name'] = channel.channel_name
 				dict_['created_time'] = date_to_string(utc_to_ist(channel.created_time))
 				dict_['is_following'] = Channel_Followers.query(Channel_Followers.user_ptr == user.key, Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
+				if channel.img != '':
+					dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())+"?full=true"
+				else:
+					dict_['channel_img_url'] = DEFAULT_IMG_URL+"?full=true"
 				out = []
 				for channel_admin in channel_admins:
 					_dict = {}

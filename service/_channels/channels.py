@@ -1,6 +1,7 @@
 import webapp2
 import json
 import logging
+import requests
 from datetime import datetime, timedelta
 from google.appengine.api import blobstore
 from service._users.sessions import BaseHandler, LoginRequired
@@ -17,7 +18,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 	# Request URL - /channels POST
 	# Request params - user_id, channel_name, channel_img_url, description, isAnonymous
 	# Response - status
-
+	@LoginRequired
 	def post(self):
 
 		user_id = self.request.get('user_id').strip()
@@ -77,6 +78,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 				#therefore make them follow their channel.
 				#for 'admin', superusers ll approve their channel first and
 				#then make them follow their channel. 
+				token = self.request.headers.get("token")
 				if user.type_ == 'superuser':
 					db2 = Channel_Followers()
 					db2.user_ptr = user_key

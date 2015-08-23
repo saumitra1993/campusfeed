@@ -153,14 +153,18 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 
 	#delete user_id and channel_id from Channel_Followers
 	def delete(self, user_id):
-		channel_id = int(self.request.get('channel_id').strip())
+		logging.info("Here")
+		data = json.loads(self.request.body)
+		channel_id = int(data.get('channel_id').strip())
 		channel_ptr = ndb.Key('Channels', channel_id)
+		user_id = int(user_id)
 		user = Users.get_by_id(user_id)
 		if user:
 			user_ptr = user.key
 			query = Channel_Followers.query(Channel_Followers.user_ptr == user_ptr, Channel_Followers.channel_ptr == channel_ptr).fetch()
 			if len(query) == 1:
 				user_channel = query[0]
+				logging.info(user_channel)
 				key = user_channel.key
 				if key:
 				#   key.delete()    
@@ -172,6 +176,6 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 				else:
 					self.response.set_status(400,'Unable to fetch key.')
 			else:
-				self.response.set_status(401,'Duplicate user_ptr-channel_ptr combo!!!')
+				self.response.set_status(401,'Duplicate or none user_ptr-channel_ptr combo!!!')
 		else:
 			self.response.set_status(401,'Channel Follower cannot be deleted as User can\'t be fetched.')

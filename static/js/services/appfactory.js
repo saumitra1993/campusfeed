@@ -614,5 +614,27 @@ factory.resetPassword = function(forgotId,password){
      return defer18.promise;
 };
 
+factory.unfollowChannel=function(channel_id){
+    var defer19=$q.defer();
+    
+    $.ajax({
+        type: "POST",
+        async:true,
+        url: ip+'users/'+factory.user_id+"/unfollowchannel",
+        data: JSON.stringify({"channel_id":channel_id}),
+        contentType: "application/json; charset=utf-8",
+        
+        success: function(data, textStatus, xhr){
+            defer19.resolve(xhr.status);
+            
+        },
+        error: function(data, textStatus, xhr){
+            defer19.reject(xhr.status);
+           
+        },
+        timeout: 15000
+    });
+    return defer19.promise;
+};
 return factory;
 });

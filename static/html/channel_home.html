@@ -18,13 +18,14 @@
 		  	<tr >
 		  		<td class="col-xs-2"><img ng-src="{{otherData.channel_img_url}}" class="img-responsive img-rounded" ></td>
 		  		
-		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{otherData.channel_name}}</b><div class="btn-group pull-right" ng-show="is_admin==1">
+		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{otherData.channel_name}}</b><div class="btn-group pull-right" >
 		  			<span dropdown on-toggle="toggled(open)">
 				      <a href id="simple-dropdown" dropdown-toggle>
 				        <i class="fa fa-ellipsis-v fa-lg"></i>
 				      </a>
 				      <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
-				        <li><a ng-href="#/channels/{{channel_id}}/addadmin">Add admin</a></li>
+				        <li ng-show="is_admin==1"><a ng-href="#/channels/{{channel_id}}/addadmin">Add admin</a></li>
+				        <li ng-show="is_admin==0"><a ng-click="unfollow()">Unfollow this channel</a></li>
 				      </ul>
 				    </span>
 		            

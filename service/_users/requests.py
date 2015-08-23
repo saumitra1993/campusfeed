@@ -15,10 +15,9 @@ class PendingChannels(BaseHandler,webapp2.RequestHandler):
 			if limit and offset:
 				limit = int(limit)
 				offset = int(offset)
-				user_query = Users.query(Users.user_id == user_id)
-				result = user_query.fetch()
-				if len(result) == 1:
-					user = result[0]
+				user_id = int(user_id)
+				user = Users.get_by_id(user_id)
+				if user:
 					if user.type_ == 'superuser':
 						pending_channels_qry = Channels.query(Channels.pending_bit == 1)
 						if limit!=-1:

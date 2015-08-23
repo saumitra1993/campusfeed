@@ -21,6 +21,7 @@ from service._users.reset_password import ResetPassword
 from service._users.feedback import Feedback
 
 from service._channels.followed_channels import FollowedChannels
+from service._channels.delete_channel_follower import DeleteChannelFollower
 from service._channels.channels_handler import ChannelsHandler
 from service._channels.image_url_channel import ChannelImageUrl
 from service._channels.channels import AllChannels
@@ -67,6 +68,7 @@ application = webapp2.WSGIApplication([
 	('/channels',AllChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>',Profile),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/channels',FollowedChannels),
+	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/unfollowchannel',DeleteChannelFollower),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/mychannels',MyChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/pendingchannels', PendingChannels),
 	webapp2.Route(r'/users/search', SearchUsers),

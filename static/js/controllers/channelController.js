@@ -106,6 +106,21 @@ $scope.follow = function(){
 			$scope.followText = update;
 		});
 };
+$scope.unfollow = function(){
+	appfactory.unfollowChannel($scope.channel_id).then(function(data){
+		
+			$scope.type='unrelated';
+			$scope.otherData.num_followers--;
+			appfactory.channelDetails($scope.channel_id).then(function(data){
+				$scope.channelDetails=data;
+			},function(status){
+				$scope.errorBox=true;
+			});
+		},
+		function(status) {
+			$scope.errorBox=true;
+		});
+};
 function makeid()
 {
     var text = "";
