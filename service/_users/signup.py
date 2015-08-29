@@ -2,6 +2,7 @@ import webapp2
 import json
 import logging
 from datetime import datetime
+from handlers.mail import send_email
 from google.appengine.api import blobstore
 from service._users.sessions import BaseHandler
 from db.database import Users, Channel_Admins, Channels, Channel_Followers
@@ -40,6 +41,7 @@ class Signup(webapp2.RequestHandler):
 		user_already_exists = result.fetch()
 
 		if user_already_exists:
+			logging.info("user_already_exists")
 			self.response.set_status(400,"User Already Exists")
 		elif len(user_already_exists) == 0:
 			new_password = get_password_hash(password)
@@ -57,4 +59,8 @@ class Signup(webapp2.RequestHandler):
 			else:
 				db.img = ''
 			db.put()
+			subject = "Welcome to Campusfeed!"
+			to = email_id
+			body = "Hi "+first_name+"! Thank you for signing up with Campusfeed. Here's a quick list of things you can do to get started- <br /><br /> 1) Discover Channels about various clubs, committees, events and courses in your college. <br /> 2) Follow channels you care about. <br /> 3) Opt for instant notifications on Campusfeed mobile app for channels of critical importance. <br /> 4) Have something important to say? Create a channel and build a cult following.<br /> 5) Provide feedback to finetune the feature set. Your feedback means the world to us! You can use the Feedback option in the mobile app or the web version to get in touch with us. <br /> 6) Spread the word.  <br /> <br />  I hope you have a great time using Campusfeed. <br />P.S. Campusfeed is in the state of active testing and development. Please report any unexpected behaviour or bugs you come across so that we fix it as soon as possible. <br /><br /> Thanks and warm regards, <br /> Saumitra from the Campusfeed Team."
+			send_email(subject,to,body)
 			self.response.set_status(200,"Awesome")

@@ -28,6 +28,7 @@ else{
 
 $scope.goToChannel=function(channel){
 	appfactory.active_channel=channel;
+	window.localStorage.setItem("active_channel", JSON.stringify(channel));
 	$location.path('/channels/'+$scope.type+'/'+channel.channel_id);
 };
 

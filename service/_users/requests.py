@@ -40,7 +40,6 @@ class PendingChannels(BaseHandler,webapp2.RequestHandler):
 							out.append(_dict)
 						dict_['pending_channels'] = out
 						self.response.set_status(200, 'Awesome')
-						self.session['last-seen'] = datetime.now()
 					else:
 						self.response.set_status(401, 'User is malicious. Ask him to go fuck himself.')
 				else:

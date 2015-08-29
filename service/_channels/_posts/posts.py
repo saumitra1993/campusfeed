@@ -36,16 +36,17 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 			
 			size = len(image)
 			logging.info(size)
+			
+			image = images.Image(image)
+			# Transform the image
+			image.resize(width=800, height=800)
+			image = image.execute_transforms(output_encoding=images.JPEG)
+			
+			size = len(image)
+			logging.info("After resize %s"%size)
 			if size > 900000:
-				image = images.Image(image)
-				# Transform the image
-				image = image.execute_transforms(output_encoding=images.JPEG)
-				image.resize(width=800)
-				size = len(image)
-				logging.info("After resize %s"%size)
-				if size > 900000:
-					self.response.set_status(400,"Image too big")
-					return
+				self.response.set_status(400,"Image too big")
+				return
 		user = Users.get_by_id(user_id)
 		if user:
 			user_ptr = user.key
@@ -87,9 +88,9 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
 				_dict['channel_id'] = channel.key.id()
 				if channel.img != '':
-					dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
+					_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 				else:
-					dict_['channel_img_url'] = DEFAULT_IMG_URL
+					_dict['channel_img_url'] = DEFAULT_IMG_URL
 				user.last_seen = datetime.now()
 				user.put()
 

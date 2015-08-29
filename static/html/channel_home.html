@@ -25,7 +25,7 @@
 				      </a>
 				      <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
 				        <li ng-show="is_admin==1"><a ng-href="#/channels/{{channel_id}}/addadmin">Add admin</a></li>
-				        <li ng-show="is_admin==0"><a ng-click="unfollow()">Unfollow this channel</a></li>
+				        <li ng-show="is_admin==0 && type=='related'"><a ng-click="unfollow()">Unfollow this channel</a></li>
 				      </ul>
 				    </span>
 		            

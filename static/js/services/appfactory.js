@@ -1,7 +1,15 @@
 angular.module("campusfeed").factory('appfactory',function($q,$rootScope,SharedState){
 
 var factory={};
-var ip='http://campusfeed-1018.appspot.com/';
+var url = window.location.href;
+console.log(url);
+var n = url.search("www.");
+if(n==-1){
+  var ip='http://campusfeedapp.com/';  
+}
+else{
+    var ip='http://www.campusfeedapp.com/';
+}
 var user_id= window.localStorage.getItem("user_id");
 SharedState.initialize($rootScope, "loggedIn", false);
 if(user_id){
@@ -10,6 +18,10 @@ if(user_id){
     factory.last_name = window.localStorage.getItem("last_name");
     factory.token = window.localStorage.getItem("token");
     factory.isSuperuser=window.localStorage.getItem("isSuperuser");
+    
+    factory.active_channel = window.localStorage.getItem("active_channel");
+    
+    factory.active_channel = JSON.parse(factory.active_channel);
     factory.loggedIn = true;
     SharedState.setOne('loggedIn',true);
     /*cordovaHTTP.setHeader("token", factory.token).then(function() {
@@ -542,6 +554,7 @@ factory.logout = function(){
             factory.last_name = "";
             factory.token="";
             factory.isSuperuser=0;
+            $rootScope.$broadcast('login', {loggedIn:factory.loggedIn});
             defer15.resolve(xhr.status);     
         },
         error: function(data, textStatus, xhr){

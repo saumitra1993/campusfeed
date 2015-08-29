@@ -1,7 +1,6 @@
 import webapp2
 import json
 import logging
-import requests
 from datetime import datetime, timedelta
 from google.appengine.api import blobstore
 from service._users.sessions import BaseHandler, LoginRequired

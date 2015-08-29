@@ -7,6 +7,7 @@ $scope.picture='';
 $scope.creating="post";
 $scope.statusText = "Add Post";
 $scope.is_admin = appfactory.active_channel.is_admin;
+$scope.isAnonymous = false;
 if($scope.is_admin==1){
     $scope.post_by = 'channel';
 }
@@ -42,20 +43,15 @@ $scope.submit = function(){
         isAnonymous = 'False';
     }
     appfactory.addPost(formData,$scope.channel_id,$scope.text,$scope.post_by, isAnonymous,$scope.picture).then(function(data){
-        if(data.pending_bit==0){
-            $scope.title="Mogambo khush hua!";
-            $scope.content="You own the floor. Your post is live and can be seen under "+$scope.channelname+" in My Channels panel.";
-        }
-        else{
-            $scope.title="Your post is live.";
-            $scope.content="Your post is currently under review by the Channel Admin. You can see your post in Followed Channel panel.";
-        }
+        $scope.title="Post added!";
+        $scope.content="You own the floor. Your post is live and can be seen under "+$scope.channelname+" in Channels I own panel.";
+        
         $('#post_modal').modal({
               keyboard: true
             });
         $scope.statusText = "Add Post";
     },function(status){
-        $scope.title="Daal me kuch kaala hai!";
+        $scope.title="Oh snap!";
         $scope.content="Either the channel under which you are posting or you are malicious. Daya will have to break the door to find out.";
         SharedState.setOne('resultpost',true);
         $('#post_modal').modal({

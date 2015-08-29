@@ -33,10 +33,13 @@ class DeleteChannelFollower(BaseHandler, webapp2.RequestHandler):
 					if db.isDeleted == 0:
 						db.isDeleted = 1
 						db.put()
-						self.response.set_status(200,'Awesome.Entry deleted.')
+					self.response.set_status(200,'Awesome.Entry deleted.')
 				else:
 					self.response.set_status(400,'Unable to fetch key.')
 			else:
+				logging.info('Duplicate or none user_ptr-channel_ptr combo!!!')
 				self.response.set_status(401,'Duplicate or none user_ptr-channel_ptr combo!!!')
 		else:
+			logging.info("Channel Follower cannot be deleted as User can\'t be fetched.")
 			self.response.set_status(401,'Channel Follower cannot be deleted as User can\'t be fetched.')
+		self.response.write("Blah")

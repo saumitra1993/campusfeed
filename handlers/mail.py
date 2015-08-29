@@ -25,7 +25,7 @@ def send_email(
     message.sender = sender
     message.to = to
     message.subject = subject
-    message.body = body
+    message.html = body
     if attachments:
         message.attachments = attachments
     message.send()

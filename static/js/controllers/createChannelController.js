@@ -5,6 +5,7 @@ $scope.creating="channel";
 $scope.statusText = "Create Channel";
 $scope.picture="";
 $scope.tag="course";
+$scope.isAnonymous==false;
 if(appfactory.loggedIn==false){
     $location.path('/login');
 }

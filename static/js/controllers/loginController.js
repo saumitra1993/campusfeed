@@ -4,7 +4,7 @@ $scope.errorBox2=false;
 $scope.picture='';
 $scope.creating="user";
 $scope.statusText2 = "Sign Up";
-
+$scope.signup_success = true;
 $scope.login = function(){
 	$scope.errorBox=false;
 	$scope.statusText = "Loading...";
@@ -21,15 +21,17 @@ $scope.login = function(){
 };
 
 $scope.close = function(){
-    $scope.first_name="";
-    $scope.last_name="";
-    $scope.studentid=$scope.email;
-    $scope.branch="";
-    $scope.phone="";
-    $scope.user_id="";
-    $scope.email="";
-    $scope.password="";
-    $scope.picture="";
+    if($scope.signup_success == true){
+        $scope.first_name="";
+        $scope.last_name="";
+        $scope.studentid=$scope.email;
+        $scope.branch="";
+        $scope.phone="";
+        $scope.user_id="";
+        $scope.email="";
+        $scope.password="";
+        $scope.picture="";
+    }
     $('#user_modal').modal('toggle');
 };
 
@@ -59,6 +61,7 @@ $scope.submit = function(){
             });
             $scope.statusText2= "Sign Up";
         },function(status){
+            $scope.signup_success = false;
             $scope.title="Oh shoot!";
             $scope.content="Something's wrong. Can't hurt to try again.";
             $('#user_modal').modal({

@@ -34,6 +34,6 @@ class Feedback(BaseHandler, webapp2.RequestHandler):
 			message = self.request.get('comment')
 		logging.info(message)
 		body = "Hello superusers! The message sent from user having mail id "+email+" and name "+name+" is--"+message
-		send_email("Message from user","support@campusfeedapp.com",body)
+		send_email("Message from user","campusfeedapp123@gmail.com",body)
 		self.response.set_status(200,'Success!')
 		self.response.write("<h2 style='text-align:center;margin-top:20%;'>Thank you so much for the feedback! We will get right back to you with a response! :)</h2>")

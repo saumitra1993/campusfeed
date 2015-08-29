@@ -45,10 +45,13 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 					out = []
 					i = 0
 					limit = limit - offset
+					logging.info(tag)
+					logging.info(channels)
 					for channel in channels:
 						if i < limit:
 							dict_ = {}
 							is_following = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key,Channel_Followers.isDeleted == 0).count()
+							logging.info(is_following)
 							if is_following == 1:
 								dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
 								dict_['channel_id'] = channel.key.id()
@@ -67,6 +70,7 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 								else:
 									dict_['channel_img_url'] = DEFAULT_IMG_URL
 								out.append(dict_)
+								logging.info(dict_)
 								i = i + 1
 						else:
 							break
@@ -137,18 +141,23 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 		channel = Channels.get_by_id(channel_id)
 		
 		if user and channel:
-			relationship = Channel_Followers.query(Channel_Followers.user_ptr == user.key, Channel_Followers.channel_ptr == channel.key).fetch()
-			if len(relationship) == 0:
+			new_relationship = Channel_Followers.query(Channel_Followers.user_ptr == user.key, Channel_Followers.channel_ptr == channel.key).fetch()
+			if len(new_relationship) == 0:
 				db = Channel_Followers()
 				db.user_ptr = user.key
 				db.channel_ptr = channel.key
 				db.getNotification = getNotification
 				db.put()
 				self.response.set_status(200,'Awesome')
+			elif len(new_relationship) == 1:
+				rel = new_relationship[0]
+				rel.isDeleted=0;
+				rel.put()
 			else:
 				self.response.set_status(400,'User id and channel id are related.')
 		else:
 			self.response.set_status(401,'User or Channel sucks')
+		self.response.write("Blah")
 
 
 	#delete user_id and channel_id from Channel_Followers

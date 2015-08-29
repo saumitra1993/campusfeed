@@ -58,7 +58,6 @@ class Login(BaseHandler, webapp2.RequestHandler):
 		# password = self.request.get("password").strip()
 		user_id = data.get("user_id")
 		password = data.get("password")
-		logging.info(self.request)
 		logging.info(user_id)
 		result = Users.query().filter(ndb.OR(Users.user_id == user_id,Users.email_id == user_id)).fetch()
 		dict_={}

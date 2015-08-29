@@ -14,6 +14,13 @@ indexes:
   properties:
   - name: channel_ptr
   - name: getNotification
+  - name: isDeleted
+  - name: user_ptr
+
+- kind: Channel_Followers
+  properties:
+  - name: channel_ptr
+  - name: getNotification
   - name: user_ptr
 
 - kind: Channels

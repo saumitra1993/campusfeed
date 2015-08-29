@@ -24,8 +24,9 @@ class LogoutUser(BaseHandler, webapp2.RequestHandler):
             user = Users.get_by_id(user_id)
             user_ptr = user.key
             gcm = DBUserGCMId.query(DBUserGCMId.user_ptr == user_ptr).fetch()
-            key_ = gcm[0].key
-            key_.delete()
+            if len(gcm) == 1:
+                key_ = gcm[0].key
+                key_.delete()
             key = mobile_entry.key
             key.delete()
         self.response.set_status(200, 'Awesome')

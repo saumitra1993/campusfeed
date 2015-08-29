@@ -1,17 +1,17 @@
 import os
 import logging
-production_server = os.environ.get('APPLICATION_ID', '') == 's~campusfeedapp'
-test_server = os.environ.get('APPLICATION_ID', '') == 's~campusfeed-1018'
+test_server = os.environ.get('APPLICATION_ID', '') == 's~campusfeedapp'
+prod_server = os.environ.get('APPLICATION_ID', '') == 's~campusfeed-1018'
 dev_server = os.environ.get('SERVER_SOFTWARE', '').startswith('Dev')
 if dev_server:
 	DEFAULT_ROOT_URL = 'http://localhost:9080/'
 	DEFAULT_ROOT_IMG_URL = 'http://localhost:9080/pic/'
 	GCM_PUSH_MESSAGE_API_KEY = ''
-elif test_server:
-	DEFAULT_ROOT_URL = 'http://campusfeed-1018.appspot.com/'
-	DEFAULT_ROOT_IMG_URL = 'http://campusfeed-1018.appspot.com/pic/'
+elif prod_server:
+	DEFAULT_ROOT_URL = 'http://campusfeedapp.com/'
+	DEFAULT_ROOT_IMG_URL = 'http://campusfeedapp.com/pic/'
 	GCM_PUSH_MESSAGE_API_KEY = "AIzaSyAuUTU-p8sM7SPpMNWYFig0lWcvyokyrRk"
-else:
+elif test_server:
 	DEFAULT_ROOT_URL = 'http://campusfeedapp.com/'
 	DEFAULT_ROOT_IMG_URL = 'http://campusfeedapp.com/pic/'
 	GCM_PUSH_MESSAGE_API_KEY = "AIzaSyCpt6EOj9TStOvDNbOeSqXCx125JEquvCc"
