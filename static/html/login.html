@@ -24,7 +24,7 @@
         
             <!-- LOGIN -->
             <div class="col-md-6 col-sm-6">
-                <p ng-show="errorBox==true" class="text-danger">There was some error with your login. Please try again.</p>
+                <p ng-show="errorBox==true" class="text-danger">{{message}}</p>
                 <!-- login form -->
                 <form name="loginForm" class="sky-form boxed" ng-submit='login() && loginForm.$valid && statusText != "Loading..."'>
                     <header>Login to Campusfeed</header>
@@ -62,7 +62,7 @@
 
             <!-- REGISTER -->
             <div class="col-md-6 col-sm-6">
-                <p ng-show="errorBox2==true" class="text-danger">There was some error. Please try again.</p>
+                <p ng-show="errorBox2==true" class="text-danger">{{message}}</p>
                 <!-- registration form -->
                 <form name="createUserForm" class="sky-form boxed" >
                     <header>Register an account</header>
@@ -121,7 +121,7 @@
 
                         <div class="row">
                             <section class="col col-md-12">
-                                <label>Image of any ID that has college name and your ID number(Click crop button once done cropping): </label>
+                                <label>Your image (optional): </label>
                                   <image-crop
                                      data-width="200"
                                      data-height="200"

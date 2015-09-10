@@ -5,14 +5,18 @@ $scope.picture='';
 $scope.creating="user";
 $scope.statusText2 = "Sign Up";
 $scope.signup_success = true;
+$scope.message = "There was some error. Please try again.";
 $scope.login = function(){
 	$scope.errorBox=false;
 	$scope.statusText = "Loading...";
 	appfactory.login($scope.studentid, $scope.pass).then(function(data){
 			$location.path('/');
 			$scope.statusText = "Login";
-		},function(status){
+		},function(data){
 			$scope.errorBox=true;
+            if(data.message!=""){
+                $scope.message = data.message;
+            }
 			$scope.statusText = "Login";
 		},function(update){
 			$scope.statusText = update;
@@ -60,7 +64,7 @@ $scope.submit = function(){
               keyboard: true
             });
             $scope.statusText2= "Sign Up";
-        },function(status){
+        },function(data){
             $scope.signup_success = false;
             $scope.title="Oh shoot!";
             $scope.content="Something's wrong. Can't hurt to try again.";
@@ -68,6 +72,10 @@ $scope.submit = function(){
               keyboard: true
             });
             $scope.statusText2 = "Sign Up";
+            if(data.message!=""){
+                $scope.message = data.message;
+            }
+            
         },function(update){
             $scope.statusText2 = update.text;
             $scope.progress = update.progress;

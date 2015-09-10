@@ -28,6 +28,8 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 					user = result[0]
 					if_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key).count()
 					if if_admin == 0:
+						user.type_ ='admin'
+						user.put()
 						db = Channel_Admins()
 						db.user_ptr = user.key
 						db.channel_ptr = channel.key

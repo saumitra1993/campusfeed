@@ -75,7 +75,11 @@ factory.login=function(studentid, password){
             defer1.resolve(xhr.status);
         },
         error: function(data, textStatus, xhr){
-            defer1.reject(xhr.status);
+            var tempObj = {};
+            tempObj.status = xhr.status;
+            console.log(xhr.responseText);
+            tempObj.message = xhr.responseText;
+            defer1.reject(tempObj);
             console.log(textStatus);
         },
         timeout: 15000 
@@ -527,10 +531,17 @@ factory.createuser = function(formData,first_name, last_name, branch,email_id,us
         defer14.notify('Loading...');
     },
     success: function(data, textStatus, xhr){
-        defer14.resolve(xhr.status);     
+        var tempObj = {};
+        tempObj.status = xhr.status;
+        console.log(xhr.responseText);
+        tempObj.message = xhr.responseText;
+        defer14.resolve(tempObj);     
     },
     error: function(data, textStatus, xhr){
-        defer14.reject(xhr.status);
+        var tempObj = {};
+        tempObj.status = xhr.status;
+        tempObj.message = xhr.responseText;
+        defer14.reject(tempObj);
     },
     timeout: 15000
   });

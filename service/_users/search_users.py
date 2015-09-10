@@ -23,7 +23,10 @@ class SearchUsers(webapp2.RequestHandler):
 			_dict = {}
 			_dict['user_id'] = matching_user.user_id
 			_dict['name'] = matching_user.first_name + " " + matching_user.last_name
-			_dict['user_img_url'] = DEFAULT_ROOT_IMG_URL + str(matching_user.key.urlsafe())
+			if matching_user.img!='':
+				_dict['user_img_url'] = DEFAULT_ROOT_IMG_URL + str(matching_user.key.urlsafe())
+			else:
+				_dict['user_img_url'] = DEFAULT_IMG_URL
 			out.append(_dict)
 		dict_['results'] = out
 		self.response.set_status(200,'Awesome')

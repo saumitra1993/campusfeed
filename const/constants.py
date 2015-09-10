@@ -24,4 +24,4 @@ DEFAULT_IMG_ID = "lpwhf_cRJVOdru_4zmW3BA=="
 GCM_PUSH_MESSAGE_API_KEY_MOBILE = GCM_PUSH_MESSAGE_API_KEY
 tags = ['course', 'event', 'club', 'committee']
 POST_LIMIT = 5
-ADMIN_SENDER_ID = 'theapogee2011@gmail.com'
+ADMIN_SENDER_ID = 'support@campusfeedapp.com'

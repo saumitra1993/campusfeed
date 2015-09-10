@@ -30,8 +30,6 @@ class EditChannelImage(webapp2.RequestHandler):
 		if channel:
 			if image!='':
 				channel.img = image
-			else:
-				channel.img = ''
 			channel.description = descr
 			channel.channel_name = name
 			channel.put()
