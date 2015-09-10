@@ -1,0 +1,75 @@
+
+      <div class="modal-header">
+        <button class="close">&times;</button>
+        <h4 class="modal-title">Edit Channel</h4>
+      </div>
+      <div class="modal-body">
+        
+      <section>
+        <div class="container">
+
+          <div class="row">
+          
+            <div class="col-md-6 col-sm-6">
+              <p ng-show="errorBox==true" class="text-danger">There was some error with your login. Please try again.</p>
+              <!-- registration form -->
+              <form name="editChannelForm" class="sky-form boxed">
+                  
+                  <fieldset>                              
+                      <section>
+                          <label class="input">
+                              <input required ng-model="name" placeholder="Channel name" type="text">
+                          </label>
+                      </section>
+
+                      <section>
+                          <label class="input">
+                               <textarea rows="3"
+                                   ng-model="descr" class="form-control input-lg"
+                                   placeholder="Description for your channel" required></textarea>
+                          </label>
+                      </section>
+
+                      <!-- <section>
+                        <label class="checkbox"><input type="checkbox" ng-model='isAnonymous' name="checkbox"><i></i>Add anonymously?</label>
+                       </section> -->
+                      
+                      
+                  </fieldset>
+                      
+                  <fieldset>                       
+                      <div class="row">
+                          <section class="col col-md-12">
+                              <label>Image for your channel (Click crop button once done cropping): </label>
+                                <img ng-src="{{img_url}}" />
+                                <cropme
+                                  width="500"
+                                  height="500"
+                                  icon-class=""
+                                  type="png"
+                                  destination-width="200"
+                                  destination-height="200"
+                                  id="cropme1"
+                                  ok-label="Ok"
+                                  cancel-label="Cancel">
+                              </cropme>
+                          </section>
+                      </div>
+                      
+                  </fieldset>
+                  <footer>
+                      <button type="submit" class="button col-sm-12" ng-click="statusText != 'Loading...' && editChannelForm.$valid && submit()">{{statusText}}</button>
+                  </footer>
+              </form>
+              <!-- /registration form -->
+
+              </div>
+            </div>
+          </div>
+        </section>
+      
+      <div class="modal-footer">
+        <button  ng-click="cancel()" class="btn btn-default">Close</button>
+      </div>
+    </div>
+  

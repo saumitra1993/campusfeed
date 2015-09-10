@@ -46,6 +46,19 @@ $scope.getChannelDetails = function(){
 	});
 };
 
+$scope.openedit = function () {
+    var modalInstance = $modal.open({
+      animation: $scope.animationsEnabled,
+      controller: 'EditChannelCtrl',
+      templateUrl: 'editchannel.html',
+      resolve: {
+        channel_id: function () {
+          return $scope.channel_id;
+        }
+      }
+    });
+  };
+
 $scope.loadMore = function(){
 	$scope.statusText = "Loading...";
 	$scope.offset = $scope.limit;

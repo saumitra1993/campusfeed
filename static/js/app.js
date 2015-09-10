@@ -1,4 +1,4 @@
-angular.module('campusfeed', ['ngRoute','ngSanitize','mobile-angular-ui','mobile-angular-ui.gestures','ImageCropper','ui.bootstrap'])
+angular.module('campusfeed', ['ngRoute','ngSanitize', 'cropme','mobile-angular-ui','mobile-angular-ui.gestures','ImageCropper','ui.bootstrap'])
 .config(function($routeProvider){
   $routeProvider
    .when('/',                                      

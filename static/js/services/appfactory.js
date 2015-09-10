@@ -5,10 +5,10 @@ var url = window.location.href;
 console.log(url);
 var n = url.search("www.");
 if(n==-1){
-  var ip='http://campusfeedapp.com/';  
+  var ip='http://localhost:9080/';  
 }
 else{
-    var ip='http://www.campusfeedapp.com/';
+    var ip='http://localhost:9080/';
 }
 var user_id= window.localStorage.getItem("user_id");
 SharedState.initialize($rootScope, "loggedIn", false);
@@ -648,6 +648,30 @@ factory.unfollowChannel=function(channel_id){
         timeout: 15000
     });
     return defer19.promise;
+};
+
+factory.editchannel = function(formData){
+    var defer20=$q.defer();
+  
+  
+  $.ajax({
+    url: ip+"editchannel",
+    data: formData,
+    async:true,
+    processData: false,
+    contentType: false,
+    type: 'POST',
+    
+    success: function(data, textStatus, xhr){
+        defer20.resolve(xhr.status);     
+    },
+    error: function(data, textStatus, xhr){
+        defer20.reject(xhr.status);
+    },
+    timeout: 15000
+  });
+      
+   return defer20.promise;
 };
 return factory;
 });

@@ -31,6 +31,7 @@
         <!-- THEME CSS -->
         <link href="css/essentials.css" rel="stylesheet" type="text/css" />
         <link href="css/layout.css" rel="stylesheet" type="text/css" />
+        <link href="css/cropme.css" rel="stylesheet" type="text/css" />
         <link href="css/header-2.css" rel="stylesheet" type="text/css" />
         <link href="css/bootcards-desktop.min.css" rel="stylesheet" type="text/css" />
         <link href="css/footer-default.css" rel="stylesheet" type="text/css" />
@@ -40,8 +41,11 @@
         <script src="js/bootstrap.min.js"></script>
         <script src="js/angular.min.js"></script>
         <script src="js/angular-route.min.js"></script>
+        <script src="js/angular-touch.min.js"></script>
         <script src="js/angular-sanitize.min.js"></script>
         <script src="js/mobile-angular-ui.min.js"></script>
+        <script src="js/superswipe.js"></script>
+        <script src="js/cropme.js"></script>
         <script src="js/image-crop.js"></script>
         <script src="js/JIC.min.js"></script>
         <script src="js/mobile-angular-ui.gestures.min.js"></script>
@@ -64,6 +68,7 @@
         width: auto;
         height: auto;
     }
+    #cropme-cancel, #cropme-ok { display: none; }
     </style>
     <!-- 
         Available body classes: 
@@ -192,6 +197,7 @@
         <script type="text/javascript" src="js/controllers/fullImageController.js"></script>
         <script type="text/javascript" src="js/controllers/forgotPasswordController.js"></script>
         <script type="text/javascript" src="js/controllers/resetPasswordController.js"></script>
+        <script type="text/javascript" src="js/controllers/editchannelController.js"></script>
         <script type="text/javascript" src="js/directives/textFilter.js"></script>
         <script type="text/javascript" src="js/directives/picture.js"></script>
         <script type="text/javascript" src="js/directives/webfile.js"></script>

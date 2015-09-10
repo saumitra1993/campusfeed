@@ -4,14 +4,16 @@ import random
 import string
 import json
 from db.database import Channels
+from google.appengine.api import images
 
 class EditChannelImage(webapp2.RequestHandler):
 	"""docstring for EditUserImage"""
 	
 	def post(self):
-
 		image = self.request.get('channel_img')
-		channel_id = self.request.get('channel_id').strip()
+		descr = self.request.get('description')
+		name = self.request.get('channel_name')
+		channel_id = int(self.request.get('channel_id').strip())
 
 		if image!='':
 			image = images.Image(image)
@@ -23,15 +25,15 @@ class EditChannelImage(webapp2.RequestHandler):
 				self.response.set_status(400,"Image too big")
 				return
 
-		result = Channels.query(Users.channel_id == channel_id)
-		channel_exists = result.fetch()
+		channel = Channels.get_by_id(channel_id)
 
-		if channel_exists:
-			channel = channel_exists[0]
+		if channel:
 			if image!='':
 				channel.img = image
 			else:
 				channel.img = ''
+			channel.description = descr
+			channel.channel_name = name
 			channel.put()
 			self.response.set_status(200,"Awesome")
 		else:

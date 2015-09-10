@@ -62,7 +62,7 @@ application = webapp2.WSGIApplication([
 	('/pushnotif',UserIdGcmId),
 	('/logout',LogoutUser),
 	('/edituserimage',EditUserImage),
-	('/editchannelimage',EditChannelImage),
+	('/editchannel',EditChannelImage),
 
 	('/postimageurl',PostImageUrl),
 	('/channels',AllChannels),
