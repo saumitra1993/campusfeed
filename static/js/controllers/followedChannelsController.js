@@ -35,7 +35,6 @@ else{
 
 $scope.goToChannel=function(channel){
 	appfactory.active_channel=channel;
-	window.localStorage.setItem("active_channel", JSON.stringify(channel));
 	if($scope.action == 'addpost'){
 		$location.path('/channels/'+channel.channel_id+'/addpost');
 	}

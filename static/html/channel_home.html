@@ -16,9 +16,9 @@
 		<table class="table" >
 		  <tbody style="border-bottom:1px solid #e6e6e6;">
 		  	<tr >
-		  		<td class="col-xs-2"><img ng-src="{{otherData.channel_img_url}}" class="img-responsive img-rounded" ></td>
+		  		<td class="col-xs-2"><img ng-src="{{channelDetails.channel_img_url}}" class="img-responsive img-rounded" ></td>
 		  		
-		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{otherData.channel_name}}</b><div class="btn-group pull-right" >
+		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{channelDetails.channel_name}}</b><div class="btn-group pull-right" >
 		  			<span dropdown on-toggle="toggled(open)">
 				      <a href id="simple-dropdown" dropdown-toggle>
 				        <i class="fa fa-ellipsis-v fa-lg"></i>
@@ -33,7 +33,7 @@
 		            
           		</div></h4>
 				<p><i class="fa fa-reply-all"></i> 
-				<ng-pluralize count="otherData.num_followers"
+				<ng-pluralize count="channelDetails.num_followers"
                 when="{'0': 'Nobody is following',
                        '1': '1 person following',
                        'other': '{} people following'}">
@@ -69,6 +69,12 @@
 	    					</button>
 							</td>
 					  	</tr>
+					  	<tr ng-if="is_admin==1">
+					  		<td class="col-xs-12">
+					  			<h5><a ng-click="followerDetails()">Click</a>  to see followers</h5>
+					  			<h5 ng-show="followers != {}"><span class="text-capitalize" ng-repeat="follower in followers">{{follower.user_full_name}} {{$last ? '' : ($index==followers.length-2) ? 'and' : ','}}  </span></h5>
+						  	</td>
+						</tr>
 					 </tbody>
 				</table>
 			</div>
@@ -76,12 +82,15 @@
 		<div class="app-content-loading text-center vertical-center" ng-if="pending_request==1">
           <i class="fa fa-cog fa-spin loading-spinner fa-2x"></i>
         </div>
-        <h4 ng-show="anyAval==0 && is_admin==1" class="center-block">You haven't added any posts yet.<br/> <a ng-href="#/channels/{{channel_id}}/addpost">Let's fix that!</a></h4>
+        <h4 ng-show="anyAval==0 && is_admin==1" class="center-block">You haven't added any posts yet.<br/> 
+        	<br/> 
+        		<a ng-href="#/channels/{{channel_id}}/addpost">Let's fix that!</a></h4>
+        		<h4 ng-show="loggedIn==false"  class="center-block"><a ng-href="#/login?redirect_to=channels/unrelated/{{channel_id}}">Register/login with Campusfeed to see posts of this channel.</a></h4>
  		<div  ng-repeat="post in channelPosts" ng-class="{'panel panel-default bootcards-media' : post.pending_bit==0, 'panel panel-danger bootcards-media' : post.pending_bit==1}" ng-init="post.showMore=0;post.approveText='Approve'" >
 	        <div class="thumbnail" ng-if="post.post_img_url != ''"><img ng-src="{{post.post_img_url}}" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  /></div>
 	        <div class="panel-body">
-	          <h5 ng-show="post.text.length>150 && post.showMore==0" ng-bind-html="post.text | cut:true:150:'....' | linky:'_blank'"></h5><span ng-show="post.text.length>150 && post.showMore==0"><a ng-click="post.showMore=1">Show more</a></span>
-	          <h5 ng-show="post.text.length<=150 || post.showMore==1" ng-bind-html="post.text | linky:'_blank'"></h5>
+	          <h5 style="white-space: pre-wrap;" ng-show="post.text.length>150 && post.showMore==0" ng-bind-html="post.text | cut:true:150:'....' | linky:'_blank'"></h5><span ng-show="post.text.length>150 && post.showMore==0"><a ng-click="post.showMore=1">Show more</a></span>
+	          <h5  style="white-space: pre-wrap;" ng-show="post.text.length<=150 || post.showMore==1" ng-bind-html="post.text | linky:'_blank'"></h5>
 	          <span><a ng-show="post.text.length>150 && post.showMore==1" ng-click="post.showMore=0">Show less</a></span>
 	        </div>
 	        <div class="panel-footer">

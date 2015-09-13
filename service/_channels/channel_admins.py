@@ -36,10 +36,14 @@ class ChannelAdmins(BaseHandler, webapp2.RequestHandler):
 						if isAnonymous:
 							db.isAnonymous = 'True' #for user who don't want to reveal his name as admin						
 						db.put()
-						db1 = Channel_Followers()
-						db1.user_ptr = user.key
-						db1.channel_ptr = channel.key
-						db1.put()
+						is_following = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key,Channel_Followers.isDeleted == 0).count()
+						logging.info(is_following)
+						if is_following == 0:
+							db1 = Channel_Followers()
+							db1.user_ptr = user.key
+							db1.channel_ptr = channel.key
+							db1.getNotification = 1
+							db1.put()
 					self.response.set_status(200,'Awesome')
 				else:
 					self.response.set_status(401,'Unable to fetch user from Users.')

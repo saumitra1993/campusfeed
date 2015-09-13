@@ -13,20 +13,20 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 		
 	# 	Request URL: /channels/:channel_id GET
 	# Response : status, description, created_time, admins: array of (full_name)
-	@LoginRequired
+
 	def get(self, channel_id):
 		channel = Channels.get_by_id(int(channel_id))
 		dict_ = {}
-		user_id = int(self.userid)
-		user = Users.get_by_id(user_id)
-		if channel and user:
+		if channel:
 			channel_admins = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).fetch()
 			if len(channel_admins) > 0:
 				dict_['description'] = channel.description
 				dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
 				dict_['channel_name'] = channel.channel_name
 				dict_['created_time'] = date_to_string(utc_to_ist(channel.created_time))
-				dict_['is_following'] = Channel_Followers.query(Channel_Followers.user_ptr == user.key, Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
+				
+				
+				dict_['pending_bit'] = 0
 				if channel.img != '':
 					dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())+"?full=true"
 				else:
@@ -42,9 +42,26 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 					
 					out.append(_dict)
 				dict_['admins'] = out
-				self.response.set_status(200, 'Awesome')
 			else:
 				self.response.set_status(400, 'No admins of the channel! Weird!')
+				return
+			try:
+				user_id = int(self.userid)
+				user = Users.get_by_id(user_id)
+			
+				if user:
+					dict_['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).count()
+					dict_['is_following'] = Channel_Followers.query(Channel_Followers.user_ptr == user.key, Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
+					self.response.set_status(200, 'Awesome')
+				else:
+					self.response.set_status(400, 'No admins of the channel! Weird!')
+					return
+			except:
+
+				dict_['is_admin'] = 0
+				dict_['is_following'] = 0
+				self.response.set_status(200, 'Awesome')
+				
 		else:
 			self.response.set_status(404, 'Channel not found')
 

@@ -5,10 +5,10 @@ var url = window.location.href;
 console.log(url);
 var n = url.search("www.");
 if(n==-1){
-  var ip='http://localhost:9080/';  
+  var ip='http://campusfeedapp.com/';  
 }
 else{
-    var ip='http://localhost:9080/';
+    var ip='http://www.campusfeedapp.com/';
 }
 var user_id= window.localStorage.getItem("user_id");
 SharedState.initialize($rootScope, "loggedIn", false);
@@ -19,9 +19,6 @@ if(user_id){
     factory.token = window.localStorage.getItem("token");
     factory.isSuperuser=window.localStorage.getItem("isSuperuser");
     
-    factory.active_channel = window.localStorage.getItem("active_channel");
-    
-    factory.active_channel = JSON.parse(factory.active_channel);
     factory.loggedIn = true;
     SharedState.setOne('loggedIn',true);
     /*cordovaHTTP.setHeader("token", factory.token).then(function() {
@@ -77,10 +74,9 @@ factory.login=function(studentid, password){
         error: function(data, textStatus, xhr){
             var tempObj = {};
             tempObj.status = xhr.status;
-            console.log(xhr.responseText);
-            tempObj.message = xhr.responseText;
+            console.log(data.statusText);
+            tempObj.message = data.statusText;
             defer1.reject(tempObj);
-            console.log(textStatus);
         },
         timeout: 15000 
     });
@@ -533,14 +529,14 @@ factory.createuser = function(formData,first_name, last_name, branch,email_id,us
     success: function(data, textStatus, xhr){
         var tempObj = {};
         tempObj.status = xhr.status;
-        console.log(xhr.responseText);
-        tempObj.message = xhr.responseText;
+        
+        tempObj.message = xhr.statusText;
         defer14.resolve(tempObj);     
     },
     error: function(data, textStatus, xhr){
         var tempObj = {};
         tempObj.status = xhr.status;
-        tempObj.message = xhr.responseText;
+        tempObj.message = data.statusText;
         defer14.reject(tempObj);
     },
     timeout: 15000
@@ -683,6 +679,25 @@ factory.editchannel = function(formData){
   });
       
    return defer20.promise;
+};
+
+factory.getFollowers = function(channelId){
+    var defer21=$q.defer();
+     $.ajax({
+        type: "GET",
+        url: ip+'channels/'+channelId+"/followers",
+        contentType: "application/json",
+        dataType: "json",
+        async:true,
+        success: function(data, textStatus, xhr){
+            defer21.resolve(data);
+        },
+        error: function(data, textStatus, xhr){
+            defer21.reject(textStatus);
+        },
+        timeout: 15000
+    });
+     return defer21.promise;
 };
 return factory;
 });

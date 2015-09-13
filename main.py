@@ -2,6 +2,7 @@ import webapp2
 import logging
 from handlers.home import Home
 from handlers.webhome import WebHome
+from handlers.guest_channels_handler import GuestHandler
 
 from service.get_photo import GetPhotu
 
@@ -19,6 +20,7 @@ from service._users.notification import Notifications
 from service._users.forgot_password import ForgotPassword
 from service._users.reset_password import ResetPassword
 from service._users.feedback import Feedback
+from service._users.superuserfollow import SuperuserFollow
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.delete_channel_follower import DeleteChannelFollower
@@ -66,6 +68,7 @@ application = webapp2.WSGIApplication([
 
 	('/postimageurl',PostImageUrl),
 	('/channels',AllChannels),
+	('/superuserfollow', SuperuserFollow),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>',Profile),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/channels',FollowedChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/unfollowchannel',DeleteChannelFollower),
@@ -77,7 +80,7 @@ application = webapp2.WSGIApplication([
 
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/notifications', Notifications),
 
-
+	webapp2.Route(r'/guest',GuestHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>',ChannelsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/followers',ChannelFollowers),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/admins',ChannelAdmins),

@@ -58,9 +58,18 @@ class Signup(webapp2.RequestHandler):
 				db.img = image
 			else:
 				db.img = ''
-			db.put()
+			k = db.put()
+			channel = Channels.get_by_id(5747531812175872)
+			db1 = Channel_Followers()
+			db1.user_ptr = k
+			db1.channel_ptr = channel.key
+			db1.getNotification = 1
+			db1.put()
 			subject = "Welcome to Campusfeed!"
 			to = email_id
 			body = "Hi "+first_name+"! Thank you for signing up with Campusfeed. Here's a quick list of things you can do to get started- <br /><br /> 1) Discover Channels about various clubs, committees, events and courses in your college. <br /> 2) Follow channels you care about. <br /> 3) Opt for instant notifications on Campusfeed mobile app for channels of critical importance. <br /> 4) Have something important to say? Create a channel and build a cult following.<br /> 5) Provide feedback to finetune the feature set. Your feedback means the world to us! You can use the Feedback option in the mobile app or the web version to get in touch with us. <br /> 6) Spread the word.  <br /> <br />  I hope you have a great time using Campusfeed. <br />P.S. Campusfeed is in the state of active testing and development. Please report any unexpected behaviour or bugs you come across so that we fix it as soon as possible. <br /><br /> Thanks and warm regards, <br /> Saumitra from the Campusfeed Team."
 			send_email(subject,to,body)
 			self.response.set_status(200,"Awesome")
+			dict_ = {}
+			dict_['signup_response'] = "blah"
+			self.response.write(json.dumps(dict_))
