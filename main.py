@@ -2,10 +2,12 @@ import webapp2
 import logging
 from handlers.home import Home
 from handlers.webhome import WebHome
-from handlers.guest_channels_handler import GuestHandler
+from handlers.contest import GuestHandler
+from handlers.lock import LockHandler
+
+from tasks.gcm_push import PushMsg
 
 from service.get_photo import GetPhotu
-
 from service._users.login import Login
 from service._users.signup import Signup
 from service._users.image_url import ImageUrl
@@ -21,6 +23,8 @@ from service._users.forgot_password import ForgotPassword
 from service._users.reset_password import ResetPassword
 from service._users.feedback import Feedback
 from service._users.superuserfollow import SuperuserFollow
+from service._users.check_key import CheckKey
+from service._users.channeltoken import ChannelToken
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.delete_channel_follower import DeleteChannelFollower
@@ -41,6 +45,14 @@ from service._channels._posts.approve_post import OnePost
 config = {}
 config['webapp2_extras.sessions'] = {
 	'secret_key': 'qwertyuioppoiuytrewqqwertyuiopsdfkjbsdjf',
+	'session_max_age': None,
+	'cookie_args': {
+        'max_age':     2592000,
+        'domain':      None,
+        'path':        '/',
+        'secure':      None,
+        'httponly':    False,
+    },
 	'backends': {'datastore': 'webapp2_extras.appengine.sessions_ndb.DatastoreSessionFactory',
                  'memcache': 'webapp2_extras.appengine.sessions_memcache.MemcacheSessionFactory',
                  'securecookie': 'webapp2_extras.sessions.SecureCookieSessionFactory'}
@@ -65,10 +77,13 @@ application = webapp2.WSGIApplication([
 	('/logout',LogoutUser),
 	('/edituserimage',EditUserImage),
 	('/editchannel',EditChannelImage),
+	('/checkkey',CheckKey),
 
 	('/postimageurl',PostImageUrl),
 	('/channels',AllChannels),
 	('/superuserfollow', SuperuserFollow),
+
+	('/tasks/pushmsg', PushMsg),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>',Profile),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/channels',FollowedChannels),
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/unfollowchannel',DeleteChannelFollower),
@@ -80,7 +95,9 @@ application = webapp2.WSGIApplication([
 
 	webapp2.Route(r'/users/<:[0-9a-zA-Z]{16}>/notifications', Notifications),
 
-	webapp2.Route(r'/guest',GuestHandler),
+	webapp2.Route(r'/key',GuestHandler),
+	webapp2.Route(r'/lock',LockHandler),
+	webapp2.Route('/channeltoken', ChannelToken),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>',ChannelsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/followers',ChannelFollowers),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/admins',ChannelAdmins),

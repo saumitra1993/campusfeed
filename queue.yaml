@@ -1,0 +1,3 @@
+queue:
+- name: PUSH-MESSAGE
+  rate: 5/s

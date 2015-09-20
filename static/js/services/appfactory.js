@@ -5,7 +5,7 @@ var url = window.location.href;
 console.log(url);
 var n = url.search("www.");
 if(n==-1){
-  var ip='http://campusfeedapp.com/';  
+  var ip='http://localhost:9080/';  
 }
 else{
     var ip='http://www.campusfeedapp.com/';

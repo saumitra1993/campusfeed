@@ -7,4 +7,4 @@ import logging
 class GuestHandler(webapp2.RequestHandler):
 		def get(self):
 			 
-			self.response.write(open('templates/guest_channel.html').read())
+			self.response.write(open('templates/key.html').read())

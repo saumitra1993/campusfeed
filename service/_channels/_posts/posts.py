@@ -4,6 +4,8 @@ import logging
 from datetime import datetime, timedelta
 from service._users.sessions import BaseHandler, LoginRequired
 from handlers.push import push_dict
+from google.appengine.api import taskqueue
+from google.appengine.api.taskqueue import TaskRetryOptions
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL
 from db.database import Users, Channels, Posts, Channel_Admins, Views, Channel_Followers, DBUserGCMId
@@ -75,7 +77,6 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				db.post_by = post_by
 				k = db.put()
 				post_items = k.get()
-				logging.info(post_items)
 				text = post_items.text
 				
 				created_time = date_to_string(utc_to_ist(post_items.created_time))
@@ -83,7 +84,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				
 				
 				
-				_dict['text'] = text
+				_dict['text'] =  (text[:75] + '..') if len(text) > 75 else text
 				_dict['channel_name'] = channel.channel_name
 				_dict['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
 				_dict['channel_id'] = channel.key.id()
@@ -94,18 +95,25 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				user.last_seen = datetime.now()
 				user.put()
 
+				retry_limit = 0
+				eta = None
 				#-----------------------Send Notifs-------------------------------
-				result = Channel_Followers.query(Channel_Followers.getNotification == 1, Channel_Followers.channel_ptr == channel_ptr, Channel_Followers.user_ptr != user_ptr, Channel_Followers.isDeleted == 0)
-				notify_these_users = result.fetch()
-
-				
-				for user in notify_these_users:
-					user_ptr = user.user_ptr
-					user_gcm_id = DBUserGCMId.query(DBUserGCMId.user_ptr == user_ptr).fetch()
-					if len(user_gcm_id) == 1:
-						gcm_id = user_gcm_id[0].gcm_id
-						push_dict(gcm_id, _dict)
-
+				taskqueue.add(
+					url = '/tasks/pushmsg',
+					params = {
+						'message' : _dict,
+						'channel_id' : channel.key.id(),
+						'user_id':user_ptr.id(),
+					},
+					name = str(k.id()),
+					queue_name = "PUSH-MESSAGE",
+					retry_options = TaskRetryOptions(
+						task_retry_limit=retry_limit,
+						min_backoff_seconds = 120,
+						max_backoff_seconds = 120,
+					),
+					eta = eta
+				)
 				
 					
 				#-----------------------------------------------------------

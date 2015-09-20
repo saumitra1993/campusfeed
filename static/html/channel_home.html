@@ -89,9 +89,9 @@
  		<div  ng-repeat="post in channelPosts" ng-class="{'panel panel-default bootcards-media' : post.pending_bit==0, 'panel panel-danger bootcards-media' : post.pending_bit==1}" ng-init="post.showMore=0;post.approveText='Approve'" >
 	        <div class="thumbnail" ng-if="post.post_img_url != ''"><img ng-src="{{post.post_img_url}}" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  /></div>
 	        <div class="panel-body">
-	          <h5 style="white-space: pre-wrap;" ng-show="post.text.length>150 && post.showMore==0" ng-bind-html="post.text | cut:true:150:'....' | linky:'_blank'"></h5><span ng-show="post.text.length>150 && post.showMore==0"><a ng-click="post.showMore=1">Show more</a></span>
-	          <h5  style="white-space: pre-wrap;" ng-show="post.text.length<=150 || post.showMore==1" ng-bind-html="post.text | linky:'_blank'"></h5>
-	          <span><a ng-show="post.text.length>150 && post.showMore==1" ng-click="post.showMore=0">Show less</a></span>
+	          <h5 style="white-space: pre-wrap;" ng-show="post.text.length>300 && post.showMore==0" ng-bind-html="post.text | cut:true:300:'....' | linky:'_blank'"></h5><span ng-show="post.text.length>300 && post.showMore==0"><a ng-click="post.showMore=1">Show more</a></span>
+	          <h5  style="white-space: pre-wrap;" ng-show="post.text.length<=300 || post.showMore==1" ng-bind-html="post.text | linky:'_blank'"></h5>
+	          <span><a ng-show="post.text.length>300 && post.showMore==1" ng-click="post.showMore=0">Show less</a></span>
 	        </div>
 	        <div class="panel-footer">
 			    <div class="btn-group btn-group-justified">
@@ -126,7 +126,6 @@
         </div>
         <script>
         	$('.image').on('click', function () {
-        		console.log("Hello");
 			    if (typeof this.toggleZoom === "undefined") this.toggleZoom = false;
 			    this.toggleZoom = !this.toggleZoom;
 			    resizeImg(this);

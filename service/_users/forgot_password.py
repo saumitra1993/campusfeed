@@ -27,7 +27,7 @@ class ForgotPassword(BaseHandler, webapp2.RequestHandler):
 			forgotten.fid = hashed_id
 			forgotten.user_ptr = user.key
 			forgotten.put()
-			body = "Hello "+user.first_name+"! Greetings from Campusfeed team. So you forgot your password. No problem. Here is the link to reset it. http://campusfeed-1018.appspot.com/web#resetpassword/"+forgot_id
+			body = "Hello "+user.first_name+"! Greetings from Campusfeed team. So you forgot your password. No problem. Here is the link to reset it. http://campusfeedapp.com/web#resetpassword/"+forgot_id
 			send_email("Link to reset password of your Campusfeed account",email,body)
 			self.response.set_status(200,'Success!')
 		else:

@@ -13,7 +13,7 @@
 		  	<tr style="cursor:pointer;"  ng-repeat="channel in filtered_channels = filterTag(tag)"  ng-click="goToChannel(channel)">
 		  		<td class="col-xs-2"><img ng-src="{{channel.channel_img_url}}" class="img-responsive img-rounded" ></td>
 		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{channel.channel_name}}</b></h4>
-				<p ng-if="channel.new_post_count > 0"><span class="badge">{{channel.new_post_count}} new posts</span></p>
+				<p ng-if="channel.new_post_count > 0"><span class="badge">{{channel.new_post_count}} new post/(s)</span></p>
 				<p ng-if="type=='unrelated'"><i class="fa fa-reply-all"></i> 
 				<ng-pluralize count="channel.num_followers"
                 when="{'0': 'Nobody is following',
