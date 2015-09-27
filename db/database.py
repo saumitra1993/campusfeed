@@ -149,6 +149,7 @@ class ThreadDiscussions(ndb.Model):
 	user_ptr = ndb.KeyProperty(kind=Users)
 	text = ndb.TextProperty()
 	added_time = ndb.DateTimeProperty(auto_now_add=True)
+	isDeleted = ndb.IntegerProperty(default=0)
 
 class ThreadViews(ndb.Model):
 

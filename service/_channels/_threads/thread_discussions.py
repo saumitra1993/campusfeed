@@ -8,53 +8,58 @@ from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_I
 from db.database import *
 from google.appengine.ext import ndb
 
-class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
+class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 	"""docstring for Threads"""
-	# Request URL - /channels/:channel_id/threads POST
+	# Request URL - /channels/:channel_id/threads/:thread_id/discussions POST
 	# Request Params - channel_id(generated), topic
 	# Response - status
 	# if curated_bit is not set, status = 200
 	
 	@LoginRequired
-	def post(self,channel_id):
+	def post(self,channel_id, thread_id):
 
 		user_id = self.userid
 		user_id = int(user_id)
-		topic = self.request.get('topic').strip()
+		text = self.request.get('text').strip()
 		_dict = {}
 		
 		user = Users.get_by_id(user_id)
 		if user:
 			user_ptr = user.key
+			thread_id = int(thread_id)
+			thread = Threads.get_by_id(thread_id)
 			channel_id = int(channel_id)
 			channel = Channels.get_by_id(channel_id)
-			if channel:
+			if thread and channel:
+				thread_ptr = thread.key
 				channel_ptr = channel.key
 				is_following = Channel_Followers.query(Channel_Followers.channel_ptr == channel_ptr, Channel_Followers.user_ptr == user_ptr, Channel_Followers.isDeleted == 0).count()
 				if is_following == 1:				
-					db = Threads()
+					db = ThreadDiscussions()
 					
-					db.topic = topic
-					db.channel_ptr = channel_ptr
-					db.started_by_user_ptr = user_ptr
+					db.text = text
+					db.thread_ptr = thread_ptr
+					db.user_ptr = user_ptr
 					k = db.put()
 					self.response.set_status(200, 'Awesome')
 				else:
-					self.response.set_status(401, 'Invalid channel')
+					logging.error('Not allowed')
+					self.response.set_status(401, 'Not allowed')
 				#-----------------------------------------------------------	
 			else:
+				logging.error('Invalid channel')
 				self.response.set_status(401, 'Invalid channel')
 		else:
 			self.response.set_status(401, 'Invalid user')
 
 		self.response.write(json.dumps(_dict))
 
-	# 	Request URL: /channels/:channel_id/threads GET
+	# 	Request URL: /channels/:channel_id/threads/:thread_id/discussions  GET
 	# Response: Dictionary of status, posts: array of (post_id(generated),text, img_url, time, user_full_name, user_img_url, user_branch )
 
 	# Query params - limit, offset, timestamp
 	@LoginRequired
-	def get(self, channel_id):
+	def get(self, channel_id, thread_id):
 		limit = self.request.get('limit')
 		offset = self.request.get('offset')
 		timestamp = self.request.get('timestamp')
@@ -62,46 +67,51 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 		if limit and offset:
 			limit = int(limit)
 			offset= int(offset)
-			channel = Channels.get_by_id(int(channel_id))
+			thread = Threads.get_by_id(int(thread_id))
 
 			if channel:
 
 				user = Users.get_by_id(user_id)
 				
-				threads_query = Threads.query(ndb.AND(Threads.channel_ptr == channel.key, Threads.isDeleted == 0))
+				thread_discussions_query = ThreadDiscussions.query(ndb.AND(ThreadDiscussions.thread_ptr == thread.key, ThreadDiscussions.isDeleted == 0))
 				
 				if timestamp:
 					lastSeenTime = string_to_date(timestamp) 
 					lastSeenTime = ist_to_utc(lastSeenTime)
-					threads_query = threads_query.filter(Threads.created_time >= lastSeenTime)
+					thread_discussions_query = posts_query.filter(Threads.added_time >= lastSeenTime)
 
 				if limit != -1:
-					threads = threads_query.order(-Threads.created_time).fetch(limit,offset=offset)
+					threadDiscussions = thread_discussions_query.order(-ThreadDiscussions.added_time).fetch(limit,offset=offset)
 				else:
-					threads = threads_query.order(-Threads.created_time).fetch(offset=offset)
+					threadDiscussions = thread_discussions_query.order(-ThreadDiscussions.added_time).fetch(offset=offset)
 
 				out = []
 				dict_={}
-				for thread in threads:
-					posting_user = thread.started_by_user_ptr.get()
-					num_views_count = ThreadViews.query(ThreadViews.thread_ptr == thread.key).count()
+				for comment in threadDiscussions:
+					posting_user = comment.user_ptr.get()
+
 					_dict = {}
-					_dict['thread_id'] = thread.key.id()
-					_dict['topic'] = thread.topic
+					_dict['comment_id'] = comment.key.id()
+					_dict['text'] = comment.text
 			
 					_dict['full_name'] = posting_user.first_name + ' ' + posting_user.last_name
 					_dict['branch'] = posting_user.branch
 				
-					_dict['created_time'] = date_to_string(utc_to_ist(thread.created_time))					
+					_dict['added_time'] = date_to_string(utc_to_ist(comment.added_time))					
 	
-					_dict['num_views'] = num_views_count					
-
 					out.append(_dict)
 
-				dict_['threads'] = out
+				dict_['threadDiscussions'] = out
 				# user.last_seen = datetime.now()
 				# user.put()
 
+				has_viewed_query = ThreadViews.query(ThreadViews.thread_ptr == thread.key,ThreadViews.user_ptr == user.key).fetch()
+
+				if len(has_viewed_query) == 0:
+					db1 = ThreadViews()
+					db1.thread_ptr = thread.key
+					db1.user_ptr = user.key
+					db1.put()
 				
 				self.response.set_status(200, 'Awesome')
 			else:
