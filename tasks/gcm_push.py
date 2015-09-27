@@ -21,10 +21,11 @@ class PushMsg(webapp2.RequestHandler):
 	def post(self):
 		channel_id = int(self.request.get('channel_id'))
 		user_id = int(self.request.get('user_id'))
-		message = self.request.get('message')
+		message = json.loads(self.request.get('message'))
+		logging.info(message)
 		channel = Channels.get_by_id(channel_id)
 		user = Users.get_by_id(user_id)
-		logging.info("Task channel_id and user_id %s %s"%channel_id%user_id)
+		logging.info("Task channel_id and user_id %s %s"%(channel_id, user_id))
 		if channel and user:
 			channel_ptr = channel.key
 			user_ptr = user.key

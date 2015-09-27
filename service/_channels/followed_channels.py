@@ -29,17 +29,24 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 			limit = int(limit)
 			offset= int(offset)
 			user_id = int(self.userid)
+			logging.info(user_id)
 			user = Users.get_by_id(user_id)
 			dict1 = {}
-			timestamp1 = user.last_seen
 			for tag in tags:
 				dict1[tag] = []
 
 			if requested_tag == 'all':
 				followed_channels_query = Channel_Followers.query(Channel_Followers.isDeleted == 0,Channel_Followers.user_ptr == user.key).fetch()
+				num_followed_channels = len(followed_channels_query)
 				for followed_channel in followed_channels_query:
 					channel = followed_channel.channel_ptr.get()
 					if channel.pending_bit == 0:
+						timestamp1 = followed_channel.last_seen
+						if timestamp1 is None:
+							followed_channel.last_seen = datetime.now()
+							followed_channel.put()
+							timestamp1 = datetime.now()
+
 						dict_ = {}
 						dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
 						dict_['channel_id'] = channel.key.id()
@@ -63,47 +70,49 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 					dict1[tag] = sorted(dict1[tag], key=itemgetter('num_followers'), reverse=True)
 
 				_dict['followed_channels'] = dict1
-			elif requested_tag in tags:
-				channels_qry = Channels.query(Channels.isDeleted == 0,Channels.pending_bit == 0,Channels.tag == requested_tag).order(-Channels.created_time)
-				if timestamp:
-					lastSeenTime = string_to_date(timestamp) 
-					lastSeenTime = ist_to_utc(lastSeenTime)
-					channels_qry = channels_qry.filter(Channels.created_time >= lastSeenTime)
+				num_channels = Channels.query(Channels.pending_bit == 0, Channels.created_time > user.last_seen).count()
+				_dict['num_undiscovered_channels'] = num_channels
+			# elif requested_tag in tags:
+			# 	channels_qry = Channels.query(Channels.isDeleted == 0,Channels.pending_bit == 0,Channels.tag == requested_tag).order(-Channels.created_time)
+			# 	if timestamp:
+			# 		lastSeenTime = string_to_date(timestamp) 
+			# 		lastSeenTime = ist_to_utc(lastSeenTime)
+			# 		channels_qry = channels_qry.filter(Channels.created_time >= lastSeenTime)
 				
-				channels = channels_qry.fetch(offset= offset)
+			# 	channels = channels_qry.fetch(offset= offset)
 				
-				out = []
-				i = 0
-				limit = limit - offset
-				for channel in channels:
-					if i < limit:
-						dict_ = {}
-						is_following = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key,Channel_Followers.isDeleted == 0).count()
-						if is_following == 1:
-							dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
-							dict_['channel_id'] = channel.key.id()
-							dict_['channel_name'] = channel.channel_name
-							dict_['pending_bit'] = 0
-							dict_['channel_tag'] = channel.tag
-							dict_['description'] = channel.description
-							dict_['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).count()
-							posts_query = Posts.query(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0, Posts.isDeleted == 0))
+			# 	out = []
+			# 	i = 0
+			# 	limit = limit - offset
+			# 	for channel in channels:
+			# 		if i < limit:
+			# 			dict_ = {}
+			# 			is_following = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key,Channel_Followers.isDeleted == 0).count()
+			# 			if is_following == 1:
+			# 				dict_['num_followers'] = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.isDeleted == 0).count()
+			# 				dict_['channel_id'] = channel.key.id()
+			# 				dict_['channel_name'] = channel.channel_name
+			# 				dict_['pending_bit'] = 0
+			# 				dict_['channel_tag'] = channel.tag
+			# 				dict_['description'] = channel.description
+			# 				dict_['is_admin'] = Channel_Admins.query(Channel_Admins.user_ptr == user.key, Channel_Admins.channel_ptr == channel.key, Channel_Admins.isDeleted == 0).count()
+			# 				posts_query = Posts.query(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0, Posts.isDeleted == 0))
 						
-							posts_query = posts_query.filter(Posts.created_time >= timestamp1)
-							post_count = posts_query.count()
-							dict_['new_post_count'] = post_count
-							if channel.img != '':
-								dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
-							else:
-								dict_['channel_img_url'] = DEFAULT_IMG_URL
-							out.append(dict_)
-							i = i + 1
-					else:
-						break
+			# 				posts_query = posts_query.filter(Posts.created_time >= timestamp1)
+			# 				post_count = posts_query.count()
+			# 				dict_['new_post_count'] = post_count
+			# 				if channel.img != '':
+			# 					dict_['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
+			# 				else:
+			# 					dict_['channel_img_url'] = DEFAULT_IMG_URL
+			# 				out.append(dict_)
+			# 				i = i + 1
+					# else:
+					# 	break
 
-				out = sorted(out, key=itemgetter('num_followers'), reverse=True)
-				dict1[requested_tag] = out
-				_dict['followed_channels'] = dict1
+				# out = sorted(out, key=itemgetter('num_followers'), reverse=True)
+				# dict1[requested_tag] = out
+				# _dict['followed_channels'] = dict1
 				self.response.set_status(200, 'Awesome')
 			else:
 				self.response.set_status(400, 'Tag standards are not followed')
@@ -134,7 +143,7 @@ class FollowedChannels(BaseHandler, webapp2.RequestHandler):
 				db.getNotification = getNotification
 				db.put()
 				self.response.set_status(200,'Awesome')
-			elif len(new_relationship) == 1:
+			elif len(new_relationship) == 1 and new_relationship[0].isDeleted == 1:
 				rel = new_relationship[0]
 				rel.isDeleted=0;
 				rel.put()

@@ -43,6 +43,11 @@ indexes:
   - name: created_time
     direction: desc
 
+- kind: Channels
+  properties:
+  - name: pending_bit
+  - name: created_time
+
 - kind: Posts
   properties:
   - name: channel_ptr

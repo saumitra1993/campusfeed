@@ -101,7 +101,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				taskqueue.add(
 					url = '/tasks/pushmsg',
 					params = {
-						'message' : _dict,
+						'message' : json.dumps(_dict),
 						'channel_id' : channel.key.id(),
 						'user_id':user_ptr.id(),
 					},
@@ -115,6 +115,10 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					eta = eta
 				)
 				
+				user_channel = Channel_Followers.query(Channel_Followers.channel_ptr == channel_ptr, Channel_Followers.user_ptr == user_ptr).fetch()
+				if len(user_channel) == 1:
+					user_channel[0].last_seen = datetime.now()
+					user_channel[0].put()
 					
 				#-----------------------------------------------------------
 				
@@ -136,21 +140,32 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 		offset = self.request.get('offset')
 		timestamp = self.request.get('timestamp')
 		dict_ = {}
+		logging.info("Yo girl you are mine")
 		if limit and offset:
 			limit = int(limit)
 			offset= int(offset)
 			channel = Channels.get_by_id(int(channel_id))
+
 			if channel:
+
+				
 				user_id = int(self.userid)
-				user = Users.get_by_id(user_id)
+				logging.info(user_id)
+				if user_id == -1:
+					user = Users()
+					user.type_ = 'user'
+					logging.info("love")
+				else:
+					user = Users.get_by_id(user_id)			
+
 		#		posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1)))
 				if user.type_ == 'admin' or user.type_ == 'superuser':
 					is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key).fetch()
 					posts_query = Posts.query(Posts.channel_ptr == channel.key, Posts.isDeleted == 0)
 					
 				if user.type_ == 'user':
-					posts_query = Posts.query(ndb.OR(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0, Posts.isDeleted == 0), ndb.AND(Posts.channel_ptr == channel.key, Posts.user_ptr == user.key, Posts.pending_bit == 1, Posts.isDeleted == 0)))
-				
+					posts_query = Posts.query(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0, Posts.isDeleted == 0))
+					logging.info("Yo girl you are mine 1")
 				if timestamp:
 					lastSeenTime = string_to_date(timestamp) 
 					lastSeenTime = ist_to_utc(lastSeenTime)
@@ -165,7 +180,12 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				dict_={}
 				for post in posts:
 					posting_user = Users.get_by_id(post.user_ptr.id())
-					has_viewed_query = Views.query(Views.post_ptr == post.key,Views.user_ptr == user.key).fetch()
+					if user_id != -1:
+						has_viewed_query = Views.query(Views.post_ptr == post.key,Views.user_ptr == user.key).fetch()
+					else:
+						logging.info("Yo girl you are mine 2")
+						has_viewed_query = ['a']   #any random thing with one element
+
 					num_views_count = Views.query(Views.post_ptr == post.key).count()
 					_dict = {}
 					_dict['post_id'] = post.key.id()
@@ -201,12 +221,20 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					out.append(_dict)
 
 				dict_['posts'] = out
-				user.last_seen = datetime.now()
-				user.put()
-				self.response.set_status(200, 'Awesome')
+				# user.last_seen = datetime.now()
+				# user.put()
+
+				try:
+					user_channel = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key, Channel_Followers.user_ptr == user.key).fetch()
+					if len(user_channel) == 1:
+						user_channel[0].last_seen = datetime.now()
+						user_channel[0].put()
+				finally:
+					self.response.set_status(200, 'Awesome')
 			else:
 				self.response.set_status(404, 'Channel not found')
 		else:
+			logging.info("Yo girl you are mine too")
 			self.response.set_status(400, 'Limit offset standards not followed')
 
 		self.response.write(json.dumps(dict_))

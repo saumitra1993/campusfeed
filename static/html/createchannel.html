@@ -13,7 +13,7 @@
                     <fieldset>                              
                         <section>
                             <label class="input">
-                                <input required ng-model="name" placeholder="Enter a suitable name for your channel" type="text">
+                                <input required ng-model="name" placeholder="Enter a suitable name for your channel" type="text" maxlength="25">
                             </label>
                         </section>
 
@@ -21,7 +21,7 @@
                             <label class="input">
                                  <textarea rows="3"
                                      ng-model="descr" class="form-control input-lg"
-                                     placeholder="Description for your channel" required></textarea>
+                                     placeholder="Description for your channel" maxlength="100" required></textarea>
                             </label>
                         </section>
 

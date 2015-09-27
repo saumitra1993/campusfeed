@@ -84,6 +84,9 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 					db2.channel_ptr = channel_key
 					db2.put()
 				logging.info('...Inserted into DB user with key... %s ' % k1)
+
+				user.last_seen = datetime.now()
+				user.put()
 			else:
 				self.response.set_status(400,'Channel name already exists')
 			
@@ -152,6 +155,9 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 
 					out = sorted(out, key=itemgetter('num_followers'), reverse=True)
 					dict1[tag] = out
+
+				user.last_seen = datetime.now()
+				user.put()
 				_dict['all_channels'] = dict1
 			elif requested_tag in tags:
 				channels_qry = Channels.query(Channels.isDeleted == 0,Channels.pending_bit == 0,Channels.tag == requested_tag).order(-Channels.created_time)
@@ -186,6 +192,7 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 							i = i + 1
 					else:
 						break
+
 
 				out = sorted(out, key=itemgetter('num_followers'), reverse=True)
 				dict1[requested_tag] = out

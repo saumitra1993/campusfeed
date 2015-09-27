@@ -699,5 +699,25 @@ factory.getFollowers = function(channelId){
     });
      return defer21.promise;
 };
+
+factory.getChannelId = function(){
+    var defer22=$q.defer();
+     $.ajax({
+        type: "GET",
+        url: ip+'channelid?user_id='+factory.user_id,
+        contentType: "application/json",
+        dataType: "json",
+        async:true,
+        success: function(data, textStatus, xhr){
+            defer22.resolve(data);
+        },
+        error: function(data, textStatus, xhr){
+            defer22.reject(textStatus);
+        },
+        timeout: 15000
+    });
+     return defer22.promise;
+};
+
 return factory;
 });

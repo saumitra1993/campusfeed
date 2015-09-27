@@ -72,7 +72,7 @@ class ChannelsHandler(BaseHandler, webapp2.RequestHandler):
 
 		userID = int(self.userid)
 		user = Users.get_by_id(userID)
-		
+		logging.info("Hello!")
 		if user.type_ == 'superuser':
 			if channel_id:	
 				db = Channels.get_by_id(int(channel_id))

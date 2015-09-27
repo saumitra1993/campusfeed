@@ -85,7 +85,7 @@
         <h4 ng-show="anyAval==0 && is_admin==1" class="center-block">You haven't added any posts yet.<br/> 
         	<br/> 
         		<a ng-href="#/channels/{{channel_id}}/addpost">Let's fix that!</a></h4>
-        		<h4 ng-show="loggedIn==false"  class="center-block"><a ng-href="#/login?redirect_to=channels/unrelated/{{channel_id}}">Register/login with Campusfeed to see posts of this channel.</a></h4>
+        		<h4 ng-show="loggedIn==false && channelDetails.channel_name != 'Campusfeed Blog'"  class="center-block"><a ng-href="#/login?redirect_to=channels/unrelated/{{channel_id}}">Register/login with Campusfeed to see posts of this channel.</a></h4>
  		<div  ng-repeat="post in channelPosts" ng-class="{'panel panel-default bootcards-media' : post.pending_bit==0, 'panel panel-danger bootcards-media' : post.pending_bit==1}" ng-init="post.showMore=0;post.approveText='Approve'" >
 	        <div class="thumbnail" ng-if="post.post_img_url != ''"><img ng-src="{{post.post_img_url}}" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  /></div>
 	        <div class="panel-body">

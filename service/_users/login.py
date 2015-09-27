@@ -70,6 +70,16 @@ class Login(BaseHandler, webapp2.RequestHandler):
 				dict_['mAuthToken'] = mAuthToken
 				dict_['type'] = result[0].type_
 				dict_['user_id'] = result[0].key.id()
+				if self.userid:
+					try:
+						del self.session['user']
+					except: pass
+					try:
+						del self.session['userid'] 
+					except: pass
+					try:
+						del self.session['name'] 
+					except: pass
 				self.session['name'] = result[0].first_name + " " + result[0].last_name
 				self.session['userid'] = result[0].key.id()
 				self.response.set_status(200, 'Awesome')

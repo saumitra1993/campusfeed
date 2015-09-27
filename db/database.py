@@ -19,7 +19,7 @@ class Users(ndb.Model):
 	password = ndb.StringProperty()
 	user_id = ndb.StringProperty()
 	img = ndb.BlobProperty()
-	last_seen = ndb.DateTimeProperty(auto_now_add = True) # given when the app gets killed/update after every api call
+	last_seen = ndb.DateTimeProperty(auto_now_add = True)  #update after discover channel API call
 
 class Channels(ndb.Model):
 	"""docstring for Channel"""
@@ -92,6 +92,7 @@ class Channel_Followers(ndb.Model):
 	getNotification = ndb.IntegerProperty(
 					choices = [0,1],
 					default = 0)
+	last_seen = ndb.DateTimeProperty()
 
 class DBMobileAuth(ndb.Model):
 	name = ndb.StringProperty(indexed=False)
@@ -107,8 +108,7 @@ class Views(ndb.Model):
 	post_ptr = ndb.KeyProperty(kind=Posts)
 	created_time = ndb.DateTimeProperty(auto_now_add=True)
 
-	#self.session['userid'] ... this is badi wali id 
-	#chinmay will always send me 14307(one in the url),since it has never been sent from backend
+	
 
 # class Upvote_Notifications(ndb.Model):
 # 	user_ptr = ndb.KeyProperty(kind=Users)
@@ -128,3 +128,30 @@ class DBUserForgotPassword(ndb.Model):
 	user_ptr = ndb.KeyProperty(kind=Users)
 	fid = ndb.StringProperty(indexed=True)
 	creation_time = ndb.DateTimeProperty(auto_now_add=True)
+
+class DBUserChannelId(ndb.Model):
+
+	user_ptr = ndb.KeyProperty(kind=Users)
+	channel_id = ndb.StringProperty(indexed=True)
+	tries = ndb.IntegerProperty(default=0)
+
+class Threads(ndb.Model):
+
+	channel_ptr = ndb.KeyProperty(kind=Channels)
+	started_by_user_ptr = ndb.KeyProperty(kind=Users)
+	created_time = ndb.DateTimeProperty(auto_now_add=True)
+	topic = ndb.StringProperty(indexed=True)
+	isDeleted = ndb.IntegerProperty(default=0)
+
+class ThreadDiscussions(ndb.Model):
+
+	thread_ptr = ndb.KeyProperty(kind=Threads)
+	user_ptr = ndb.KeyProperty(kind=Users)
+	text = ndb.TextProperty()
+	added_time = ndb.DateTimeProperty(auto_now_add=True)
+
+class ThreadViews(ndb.Model):
+
+	thread_ptr = ndb.KeyProperty(kind=Threads)
+	user_ptr = ndb.KeyProperty(kind=Users)
+	created_time = ndb.DateTimeProperty(auto_now_add=True)

@@ -6,6 +6,7 @@ $scope.creating="user";
 $scope.statusText2 = "Sign Up";
 $scope.signup_success = true;
 var searchObject = $location.search();
+$scope.branch = "Choose your department";
 console.log(searchObject);
 $scope.redirect_to = searchObject.redirect_to;
 console.log($scope.redirect_to);
@@ -38,7 +39,7 @@ $scope.close = function(){
         $scope.first_name="";
         $scope.last_name="";
         $scope.studentid=$scope.email;
-        $scope.branch="";
+        $scope.branch = "Choose your department";
         $scope.phone="";
         $scope.user_id="";
         $scope.email="";
@@ -50,45 +51,57 @@ $scope.close = function(){
 
 $scope.submit = function(){
      $scope.statusText2 = "Loading...";
-    var formData = new FormData();
+     if($scope.branch != "Choose your department"){
+        var formData = new FormData();
     
-    $scope.first_name = toTitleCase($scope.first_name);
-    $scope.last_name = toTitleCase($scope.last_name);
-    $scope.branch = $scope.branch.toUpperCase();
-    formData.append("first_name", $scope.first_name);
-    formData.append("last_name", $scope.last_name);
-    formData.append("branch", $scope.branch);
-    formData.append("email_id", $scope.email);
-    formData.append("user_id", $scope.user_id);
-    formData.append("phone", $scope.phone);
-    formData.append("password", $scope.password);
-    if($scope.picture!=""){
-        formData.append("user_img", dataURItoBlob($scope.picture));
-    }
-    appfactory.createuser(formData,$scope.first_name,$scope.last_name,$scope.branch,$scope.email,$scope.user_id,$scope.phone,$scope.password,$scope.picture).then(function(data){
-        
-            $scope.title="Welcome!";
-            $scope.content="Hi "+$scope.first_name+"! Login to start with Campusfeed.";
-            $('#user_modal').modal({
-              keyboard: true
-            });
-            $scope.statusText2= "Sign Up";
-        },function(data){
-            $scope.signup_success = false;
-            $scope.title="Oh shoot!";
-            $scope.content="Something's wrong. Can't hurt to try again.";
-            $('#user_modal').modal({
-              keyboard: true
-            });
-            $scope.statusText2 = "Sign Up";
-            if(data.message!=""){
-                $scope.message = data.message;
-            }
+        $scope.first_name = toTitleCase($scope.first_name);
+        $scope.last_name = toTitleCase($scope.last_name);
+        formData.append("first_name", $scope.first_name);
+        formData.append("last_name", $scope.last_name);
+        formData.append("branch", $scope.branch);
+        formData.append("email_id", $scope.email);
+        formData.append("user_id", $scope.user_id);
+        formData.append("phone", $scope.phone);
+        formData.append("password", $scope.password);
+        if($scope.picture!=""){
+            formData.append("user_img", dataURItoBlob($scope.picture));
+        }
+        appfactory.createuser(formData,$scope.first_name,$scope.last_name,$scope.branch,$scope.email,$scope.user_id,$scope.phone,$scope.password,$scope.picture).then(function(data){
             
-        },function(update){
-            $scope.statusText2 = update.text;
-            $scope.progress = update.progress;
+                $scope.title="Welcome!";
+                $scope.content="Hi "+$scope.first_name+"! Login to start with Campusfeed.";
+                $('#user_modal').modal({
+                  keyboard: true
+                });
+                $scope.statusText2= "Sign Up";
+            },function(data){
+                $scope.signup_success = false;
+                $scope.title="Oh shoot!";
+                $scope.content="Something's wrong. Can't hurt to try again.";
+                $('#user_modal').modal({
+                  keyboard: true
+                });
+                $scope.statusText2 = "Sign Up";
+                if(data.message!=""){
+                    $scope.message = data.message;
+                }
+                
+            },function(update){
+                $scope.statusText2 = update.text;
+                $scope.progress = update.progress;
+            });
+    }
+    else{
+        $scope.signup_success = false;
+        $scope.title="Oh shoot!";
+        $scope.content="Fill out your branch.";
+        $('#user_modal').modal({
+          keyboard: true
         });
+        $scope.statusText2 = "Sign Up";
+        
+    }
+    
 };
 $scope.open = function () {
     var modalInstance = $modal.open({

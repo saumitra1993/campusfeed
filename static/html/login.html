@@ -77,7 +77,7 @@
                         <section>
                             <label class="input">
                                 <i class="icon-append fa fa-hand-o-up"></i>
-                                <input required ng-model="user_id" type="text" placeholder="Your college ID">
+                                <input required ng-model="user_id" type="text" placeholder="Your college ID (eg. 14098)">
                             </label>
                         </section>
 
@@ -106,7 +106,23 @@
                         <div class="row">
                             <section class="col col-md-6">
                                 <label class="input">
-                                    <input required ng-model="branch" type="text" placeholder="Department">
+                                    <select ng-model="branch" class="form-control" required>
+                                        <option selected="selected" disabled>Choose your department</option>
+                                        <option value="Applied Mechanics">Applied Mechanics</option>
+                                        <option value="Applied Physics">Applied Physics</option>
+                                        <option value="Architecture and Planning">Architecture and Planning</option>
+                                        <option value="Applied Chemistry">Applied Chemistry</option>
+                                        <option value="Chemical Engineering">Chemical Engineering</option>
+                                        <option value="Civil Engineering">Civil Engineering</option>
+                                        <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                                        <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+                                        <option value="Humanities and Social Sciences">Humanities and Social Sciences</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                        <option value="Metallurgical and Materials Engineering">Metallurgical and Materials Engineering</option>
+                                        <option value="Mining Engineering">Mining Engineering</option>
+                                        <option value="Other">Other</option>
+                                      </select>
                                 </label>
                             </section>
                             <section class="col col-md-6">
