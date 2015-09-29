@@ -11,6 +11,41 @@
 
 </style>
 
+<div style="height:100%;background-color:#fff;border:2px solid #f96015;overflow:auto;" class="col-xs-7 col-sm-3 col-md-5 sidebar sidebar-right sidebar-animate shadow">
+	<h3 style="margin-top:20px;margin-left:5px;">{{channelDetails.channel_name}} discussion threads</h3>
+	<p ng-show="errorBox2==true" class="text-danger">Network error.</p>
+  	<table class="table">
+	  	<tbody style="border-bottom:1px solid #e6e6e6;">
+	  		<tr><a ng-click="threadTopicBox=!threadTopicBox"><i style="font-size: 20px;" class="fa fa-plus-circle fa-2x"></i><span> Add a new thread</span></a></tr>
+	  		<tr ng-if="threadTopicBox == 1">
+	  			<td>
+		  		<div class="form-group has-success has-feedback" style="margin-top:3%;">
+	          
+		          <label class="col-xs-10"><input type="text"  ng-model='topic' class="form-control" placeholder="Add topic of the thread" />
+		          </label>
+		           <button  ng-click="addThread(topic) && addThreadText != 'Loading...'" class="btn btn-primary col-xs-2">{{addThreadText}}</button>
+		        </div>
+	    		</td>
+	    	</tr>
+		  	<tr ng-repeat="thread in threads" style="cursor:pointer;"  ng-click="gotoThread(thread)">
+		  		
+		  		<td class="col-xs-10"><h4 style="margin-bottom:1%;" class="text-capitalize"><b>{{thread.topic}}</b></h4>
+				<p style="margin-bottom:1%;"><i class="li li-user-follow"></i> 
+				  started by {{thread.full_name}} on {{thread.created_time}}</p>
+				<p style="margin-bottom:1%;"><i class="fa fa-eye fa-lg seen" ></i> <ng-pluralize count="thread.num_views"
+                when="{'0': 'No views yet',
+                       '1': '1 view',
+                       'other': '{} views'}">
+  				</ng-pluralize></p>
+		  		</td>
+		  	</tr>
+	  	</tbody>
+	</table>
+	<button class="btn btn-primary btn-block" ng-click="loadMoreThreads() && statusText2 != 'Loading...'" ng-show="errorBox==false && pending_request == 0 && threads.length>=10">
+	      {{statusText2}}
+	</button>
+</div>
+
 <div class="col-md-offset-2 col-md-8 shadow" style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;"> 
 	
 		<table class="table" >
@@ -39,6 +74,7 @@
                        'other': '{} people following'}">
   				</ng-pluralize></p>
   				<p><a ng-click="getChannelDetails()">Click</a> for more info</p>
+  				<p><button type="button" ng-click="getThreads()" data-toggle="sidebar" data-target=".sidebar">{{discussionText}}</button></p>
 		  		</td>
 		  	</tr>
 		  </tbody>
@@ -108,7 +144,7 @@
 			    </div>
 			</div>
 		</div>
-		<button class="btn btn-primary btn-block" ng-click="loadMore() && statusText != 'Loading...'" ng-show="anyAval==1 && moreAval==1 && errorBox==false && pending_request == 0">
+		<button class="btn btn-primary btn-block" ng-click="loadMorePosts() && statusText != 'Loading...'" ng-show="anyAval==1 && moreAval==1 && errorBox==false && pending_request == 0">
 	      {{statusText}}
 	    </button>
  	

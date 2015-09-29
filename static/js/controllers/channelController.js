@@ -10,7 +10,7 @@ $scope.channel_pending_bit = 0;
 $scope.moreAval=1;
 $scope.channel_id = $routeParams.channelId;
 $scope.type=$routeParams.type;
-
+$scope.threads = [];
 $scope.loggedIn = appfactory.loggedIn;
 $scope.statusText = "Load more";
 $scope.pending_request = 1;
@@ -19,6 +19,12 @@ $scope.followText = 'Follow';
 $scope.showDetails=0;
 $scope.anyAval=1;
 $scope.followers = {};
+$scope.sidebar = 0;
+$scope.discussionText = "Discussions";
+$scope.statusText2 = "Load more";
+$scope.threadTopicBox = 0;
+$scope.addThreadText = "Add";
+$scope.errorBox2 = false;
 appfactory.channelPosts($scope.channel_id, $scope.limit, $scope.offset).then(function(data){
 	if(data.posts.length>0){
 		$scope.channelPosts=data.posts;
@@ -75,7 +81,7 @@ $scope.openedit = function () {
     });
   };
 
-$scope.loadMore = function(){
+$scope.loadMorePosts = function(){
 	$scope.statusText = "Loading...";
 	$scope.offset = $scope.limit;
 	$scope.limit += 10;
@@ -156,6 +162,37 @@ $scope.unfollow = function(){
 		function(status) {
 			$scope.errorBox=true;
 		});
+};
+
+$scope.addThread = function(topic){
+	$scope.addThreadText = "Loading...";
+	appfactory.addThread($scope.channel_id, topic).then(function(data){
+		$scope.addThreadText = "Add";
+		$scope.topic = "";
+		$scope.threadTopicBox = 0;
+		$scope.threads.push(data.thread);
+	},
+	function(status) {
+		$scope.addThreadText = "Add";
+		$scope.errorBox2=true;
+	});
+};
+
+$scope.getThreads = function(){
+	if($scope.sidebar == 0){
+		$scope.sidebar = 1;
+		$scope.discussionsText = "Click to collapse";
+		appfactory.getThreads($scope.channel_id,$scope.limit,$scope.offset).then(function(data){
+			$scope.threads = data.threads;
+			$scope.discussionText = "Discussions";
+		},function(status){
+			$scope.errorBox2=true;
+			$scope.discussionText = "Discussions";
+		});
+	}
+	else{
+		$scope.sidebar = 0;
+	}
 };
 function makeid()
 {

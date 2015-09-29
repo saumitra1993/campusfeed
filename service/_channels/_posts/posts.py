@@ -140,7 +140,6 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 		offset = self.request.get('offset')
 		timestamp = self.request.get('timestamp')
 		dict_ = {}
-		logging.info("Yo girl you are mine")
 		if limit and offset:
 			limit = int(limit)
 			offset= int(offset)
@@ -154,7 +153,6 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				if user_id == -1:
 					user = Users()
 					user.type_ = 'user'
-					logging.info("love")
 				else:
 					user = Users.get_by_id(user_id)			
 
@@ -165,7 +163,6 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					
 				if user.type_ == 'user':
 					posts_query = Posts.query(ndb.AND(Posts.channel_ptr == channel.key, Posts.pending_bit == 0, Posts.isDeleted == 0))
-					logging.info("Yo girl you are mine 1")
 				if timestamp:
 					lastSeenTime = string_to_date(timestamp) 
 					lastSeenTime = ist_to_utc(lastSeenTime)
@@ -183,7 +180,6 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					if user_id != -1:
 						has_viewed_query = Views.query(Views.post_ptr == post.key,Views.user_ptr == user.key).fetch()
 					else:
-						logging.info("Yo girl you are mine 2")
 						has_viewed_query = ['a']   #any random thing with one element
 
 					num_views_count = Views.query(Views.post_ptr == post.key).count()
@@ -234,7 +230,6 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 			else:
 				self.response.set_status(404, 'Channel not found')
 		else:
-			logging.info("Yo girl you are mine too")
 			self.response.set_status(400, 'Limit offset standards not followed')
 
 		self.response.write(json.dumps(dict_))

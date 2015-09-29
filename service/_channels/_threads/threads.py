@@ -20,8 +20,10 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 
 		user_id = self.userid
 		user_id = int(user_id)
-		topic = self.request.get('topic').strip()
-		_dict = {}
+		data = json.loads(self.request.body)
+		topic = data.get('topic').strip()
+		logging.info(topic)
+		dict_ = {}
 		
 		user = Users.get_by_id(user_id)
 		if user:
@@ -38,6 +40,22 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 					db.channel_ptr = channel_ptr
 					db.started_by_user_ptr = user_ptr
 					k = db.put()
+					thread = k.get()
+					posting_user = thread.started_by_user_ptr.get()
+					num_views_count = ThreadViews.query(ThreadViews.thread_ptr == thread.key).count()
+					_dict = {}
+					_dict['thread_id'] = thread.key.id()
+					_dict['topic'] = thread.topic
+			
+					_dict['full_name'] = posting_user.first_name + ' ' + posting_user.last_name
+					_dict['branch'] = posting_user.branch
+				
+					_dict['created_time'] = date_to_string(utc_to_ist(thread.created_time))					
+	
+					_dict['num_views'] = num_views_count
+
+					dict_['thread'] = _dict
+
 					self.response.set_status(200, 'Awesome')
 				else:
 					self.response.set_status(401, 'Invalid channel')
@@ -47,7 +65,7 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 		else:
 			self.response.set_status(401, 'Invalid user')
 
-		self.response.write(json.dumps(_dict))
+		self.response.write(json.dumps(dict_))
 
 	# 	Request URL: /channels/:channel_id/threads GET
 	# Response: Dictionary of status, posts: array of (post_id(generated),text, img_url, time, user_full_name, user_img_url, user_branch )
@@ -66,8 +84,6 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 
 			if channel:
 
-				user = Users.get_by_id(user_id)
-				
 				threads_query = Threads.query(ndb.AND(Threads.channel_ptr == channel.key, Threads.isDeleted == 0))
 				
 				if timestamp:

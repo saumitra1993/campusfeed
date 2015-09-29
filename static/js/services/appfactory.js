@@ -719,5 +719,46 @@ factory.getChannelId = function(){
      return defer22.promise;
 };
 
+factory.getThreads = function(channel_id,limit,offset){
+    var defer23=$q.defer();
+     $.ajax({
+        type: "GET",
+        url: ip+'channels/'+channel_id+"/threads?limit="+limit+"&offset="+offset,
+        contentType: "application/json",
+        dataType: "json",
+        async:true,
+        success: function(data, textStatus, xhr){
+            defer23.resolve(data);
+        },
+        error: function(data, textStatus, xhr){
+            defer23.reject(textStatus);
+        },
+        timeout: 15000
+    });
+     return defer23.promise;
+};
+
+factory.addThread = function(channel_id,topic){
+    console.log(topic);
+    var defer24=$q.defer();
+    $.ajax({
+        url: ip+"channels/"+channel_id+"/threads",
+        data: JSON.stringify({"topic":topic}),
+        contentType: "application/json",
+        dataType: "json",
+        type: 'POST',
+
+        success: function(data, textStatus, xhr){
+            defer24.resolve(data);     
+        },
+        error: function(data, textStatus, xhr){
+            defer24.reject(xhr.status);
+        },
+        timeout: 15000
+    });
+      
+   return defer24.promise;
+};
+
 return factory;
 });

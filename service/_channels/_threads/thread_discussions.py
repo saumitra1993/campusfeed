@@ -20,7 +20,8 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 
 		user_id = self.userid
 		user_id = int(user_id)
-		text = self.request.get('text').strip()
+		data = json.loads(self.request.body)
+		text = data.get('text').strip()
 		_dict = {}
 		
 		user = Users.get_by_id(user_id)
@@ -64,12 +65,14 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 		offset = self.request.get('offset')
 		timestamp = self.request.get('timestamp')
 		dict_ = {}
+		user_id = self.userid
+		user_id = int(user_id)
 		if limit and offset:
 			limit = int(limit)
 			offset= int(offset)
 			thread = Threads.get_by_id(int(thread_id))
 
-			if channel:
+			if thread:
 
 				user = Users.get_by_id(user_id)
 				
