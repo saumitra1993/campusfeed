@@ -24,7 +24,11 @@ $scope.discussionText = "Discussions";
 $scope.statusText2 = "Load more";
 $scope.threadTopicBox = 0;
 $scope.addThreadText = "Add";
+$scope.addCommentText = "Add";
 $scope.errorBox2 = false;
+$scope.threadInSidebar = 1;
+$scope.thread_id = -1;	//used when sending a comment 
+$scope.comments = [];
 appfactory.channelPosts($scope.channel_id, $scope.limit, $scope.offset).then(function(data){
 	if(data.posts.length>0){
 		$scope.channelPosts=data.posts;
@@ -41,6 +45,7 @@ appfactory.channelPosts($scope.channel_id, $scope.limit, $scope.offset).then(fun
 
 appfactory.channelDetails($scope.channel_id).then(function(data){
 	$scope.channelDetails=data;
+	$scope.sidebarHead = $scope.channelDetails.channel_name+" discussion threads";
 	$scope.channel_pending_bit = data.pending_bit;
 	$scope.is_admin = data.is_admin;
 	if($scope.channelDetails.is_following != 1){
@@ -194,6 +199,64 @@ $scope.getThreads = function(){
 		$scope.sidebar = 0;
 	}
 };
+
+$scope.gotoThread = function(thread){
+	$scope.sidebarHead = thread.topic+" thread comments";
+	$scope.threadInSidebar = 0;
+	$scope.thread_id = thread.thread_id;
+	appfactory.getComments($scope.channel_id,thread.thread_id,$scope.limit,$scope.offset).then(function(data){
+		$scope.comments = data.threadDiscussions;
+		$scope.threadInSidebar = 0;
+	},function(status){
+		$scope.errorBox2=true;
+	});
+};
+
+$scope.loadMoreThreads = function(){
+	$scope.statusText2 = "Loading...";
+	$scope.offset = $scope.limit;
+	$scope.limit += 10;
+	appfactory.getThreads($scope.channel_id,$scope.limit,$scope.offset).then(function(data){
+		$scope.threads = data.threads;
+		$scope.statusText2 = "Load more";
+	},function(status){
+		$scope.errorBox2=true;
+		$scope.statusText2 = "Load more";
+	});
+};
+
+$scope.loadMoreThreadComments = function(){
+	$scope.statusText2 = "Loading...";
+	$scope.offset = $scope.limit;
+	$scope.limit += 10;
+	appfactory.getComments($scope.channel_id,thread.thread_id,$scope.limit,$scope.offset).then(function(data){
+		$scope.comments = data.threadDiscussions;
+		$scope.statusText2 = "Load more";
+	},function(status){
+		$scope.errorBox2=true;
+		$scope.statusText2 = "Load more";
+	});
+};
+
+$scope.backToThreads = function(){
+	$scope.comments = [];
+	$scope.threadInSidebar = 1;
+	$scope.sidebarHead = $scope.channelDetails.channel_name+" discussion threads";
+};
+
+$scope.addComment = function(comment){
+	$scope.addCommentText = "Loading...";
+	appfactory.addComment($scope.channel_id, $scope.thread_id, comment).then(function(data){
+		$scope.addCommentText = "Add";
+		$scope.comment = "";
+		$scope.comments.push(data.comment);
+	},
+	function(status) {
+		$scope.addThreadText = "Add";
+		$scope.errorBox2=true;
+	});
+};
+
 function makeid()
 {
     var text = "";

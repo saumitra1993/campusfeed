@@ -22,7 +22,7 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 		user_id = int(user_id)
 		data = json.loads(self.request.body)
 		text = data.get('text').strip()
-		_dict = {}
+		dict_ = {}
 		
 		user = Users.get_by_id(user_id)
 		if user:
@@ -42,6 +42,19 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 					db.thread_ptr = thread_ptr
 					db.user_ptr = user_ptr
 					k = db.put()
+					comment = k.get()
+					posting_user = comment.user_ptr.get()
+
+					_dict = {}
+					_dict['comment_id'] = comment.key.id()
+					_dict['text'] = comment.text
+			
+					_dict['full_name'] = posting_user.first_name + ' ' + posting_user.last_name
+					_dict['branch'] = posting_user.branch
+				
+					_dict['added_time'] = date_to_string(utc_to_ist(comment.added_time))
+
+					dict_['comment'] = _dict
 					self.response.set_status(200, 'Awesome')
 				else:
 					logging.error('Not allowed')
@@ -53,7 +66,7 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 		else:
 			self.response.set_status(401, 'Invalid user')
 
-		self.response.write(json.dumps(_dict))
+		self.response.write(json.dumps(dict_))
 
 	# 	Request URL: /channels/:channel_id/threads/:thread_id/discussions  GET
 	# Response: Dictionary of status, posts: array of (post_id(generated),text, img_url, time, user_full_name, user_img_url, user_branch )

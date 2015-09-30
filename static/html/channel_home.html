@@ -12,12 +12,12 @@
 </style>
 
 <div style="height:100%;background-color:#fff;border:2px solid #f96015;overflow:auto;" class="col-xs-7 col-sm-3 col-md-5 sidebar sidebar-right sidebar-animate shadow">
-	<h3 style="margin-top:20px;margin-left:5px;">{{channelDetails.channel_name}} discussion threads</h3>
+	<h3 style="margin-top:20px;margin-left:5px;"><a ng-show="threadInSidebar == 0" ng-click="backToThreads()"><i class="fa fa-arrow-circle-o-left"></i></a>  {{sidebarHead}}</h3>
 	<p ng-show="errorBox2==true" class="text-danger">Network error.</p>
   	<table class="table">
 	  	<tbody style="border-bottom:1px solid #e6e6e6;">
-	  		<tr><a ng-click="threadTopicBox=!threadTopicBox"><i style="font-size: 20px;" class="fa fa-plus-circle fa-2x"></i><span> Add a new thread</span></a></tr>
-	  		<tr ng-if="threadTopicBox == 1">
+	  		<tr ><a ng-show="threadInSidebar == 1" ng-click="threadTopicBox=!threadTopicBox"><i style="font-size: 20px;" class="fa fa-plus-circle fa-2x"></i><span> Add a new thread</span></a></tr>
+	  		<tr ng-if="threadTopicBox == 1 && threadInSidebar == 1">
 	  			<td>
 		  		<div class="form-group has-success has-feedback" style="margin-top:3%;">
 	          
@@ -27,9 +27,9 @@
 		        </div>
 	    		</td>
 	    	</tr>
-		  	<tr ng-repeat="thread in threads" style="cursor:pointer;"  ng-click="gotoThread(thread)">
+		  	<tr ng-repeat="thread in threads"  ng-show="threadInSidebar == 1">
 		  		
-		  		<td class="col-xs-10"><h4 style="margin-bottom:1%;" class="text-capitalize"><b>{{thread.topic}}</b></h4>
+		  		<td class="col-xs-10"><h4 style="margin-bottom:1%;"><a style="color:black;" ng-click="gotoThread(thread)"><b>{{thread.topic}}</b></a></h4>
 				<p style="margin-bottom:1%;"><i class="li li-user-follow"></i> 
 				  started by {{thread.full_name}} on {{thread.created_time}}</p>
 				<p style="margin-bottom:1%;"><i class="fa fa-eye fa-lg seen" ></i> <ng-pluralize count="thread.num_views"
@@ -39,12 +39,28 @@
   				</ng-pluralize></p>
 		  		</td>
 		  	</tr>
+		  	<tr ng-repeat="comment in comments" ng-show="threadInSidebar == 0">
+		  		
+		  		<td class="col-xs-10"><h5 style="margin-bottom:1%;" class="text-capitalize"><b>{{comment.full_name}}</b><span class="pull-right" style="font-weight:normal;">{{comment.added_time}}</span></h5>
+				<p style="margin-bottom:1%;">{{comment.text}}</p>
+		  		</td>
+		  	</tr>
 	  	</tbody>
 	</table>
-	<button class="btn btn-primary btn-block" ng-click="loadMoreThreads() && statusText2 != 'Loading...'" ng-show="errorBox==false && pending_request == 0 && threads.length>=10">
+	<div ng-show="threadInSidebar == 0" style="position:fixed;bottom:8%;width:95%;background-color:#fff;">
+		<label class="col-xs-10"><input type="text"  ng-model='comment' class="form-control" placeholder="Add your comment" />
+      </label>
+       <button  ng-click="addComment(comment) && addCommentText != 'Loading...'" class="btn btn-primary col-xs-2">{{addCommentText}}</button>
+	</div>
+	<button  class="btn btn-primary btn-block" ng-click="loadMoreThreads() && statusText2 != 'Loading...'" ng-show="threadInSidebar == 1 && errorBox2==false && pending_request == 0 && threads.length>=10">
+	      {{statusText2}}
+	</button>
+	
+	<button  class="btn btn-primary btn-block" ng-click="loadMoreThreadComments() && statusText2 != 'Loading...'" ng-show="threadInSidebar == 0 && errorBox2==false && pending_request == 0 && comments.length>=10">
 	      {{statusText2}}
 	</button>
 </div>
+
 
 <div class="col-md-offset-2 col-md-8 shadow" style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;"> 
 	

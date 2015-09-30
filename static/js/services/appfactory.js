@@ -760,5 +760,45 @@ factory.addThread = function(channel_id,topic){
    return defer24.promise;
 };
 
+factory.getComments = function(channel_id,thread_id,limit,offset){
+    var defer25=$q.defer();
+     $.ajax({
+        type: "GET",
+        url: ip+'channels/'+channel_id+"/threads/"+thread_id+"/discussions?limit="+limit+"&offset="+offset,
+        contentType: "application/json",
+        dataType: "json",
+        async:true,
+        success: function(data, textStatus, xhr){
+            defer25.resolve(data);
+        },
+        error: function(data, textStatus, xhr){
+            defer25.reject(textStatus);
+        },
+        timeout: 15000
+    });
+     return defer25.promise;
+};
+
+factory.addComment = function(channel_id,thread_id,comment){
+    var defer25=$q.defer();
+    $.ajax({
+        url: ip+"channels/"+channel_id+"/threads/"+thread_id+"/discussions",
+        data: JSON.stringify({"text":comment}),
+        contentType: "application/json",
+        dataType: "json",
+        type: 'POST',
+
+        success: function(data, textStatus, xhr){
+            defer25.resolve(data);     
+        },
+        error: function(data, textStatus, xhr){
+            defer25.reject(xhr.status);
+        },
+        timeout: 15000
+    });
+      
+   return defer25.promise;
+};
+
 return factory;
 });
