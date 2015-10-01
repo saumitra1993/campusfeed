@@ -156,3 +156,7 @@ class ThreadViews(ndb.Model):
 	thread_ptr = ndb.KeyProperty(kind=Threads)
 	user_ptr = ndb.KeyProperty(kind=Users)
 	created_time = ndb.DateTimeProperty(auto_now_add=True)
+
+class PostFiles(ndb.Model):
+	post_ptr = ndb.KeyProperty(kind=Posts)
+	file_key = ndb.BlobKeyProperty()

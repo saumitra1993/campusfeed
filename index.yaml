@@ -103,6 +103,12 @@ indexes:
   - name: isDeleted
   - name: thread_ptr
   - name: added_time
+
+- kind: ThreadDiscussions
+  properties:
+  - name: isDeleted
+  - name: thread_ptr
+  - name: added_time
     direction: desc
 
 - kind: Threads

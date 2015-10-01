@@ -7,14 +7,14 @@ from handlers.push import push_dict
 from google.appengine.api import taskqueue
 from google.appengine.api.taskqueue import TaskRetryOptions
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
-from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL
-from db.database import Users, Channels, Posts, Channel_Admins, Views, Channel_Followers, DBUserGCMId
-from google.appengine.api import blobstore
+from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL, DEFAULT_ROOT_FILE_URL
+from db.database import Users, Channels, Posts, Channel_Admins, Views, Channel_Followers, DBUserGCMId, PostFiles
+from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
 from google.appengine.ext import ndb
 
-class PostsHandler(BaseHandler,webapp2.RequestHandler):
+class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 	"""docstring for Posts"""
 	# Request URL - /channels/:channel_id/posts POST
 	# Request Params - user_id, channel_id(generated), text, post_img, post_by (user or channel)
@@ -33,6 +33,7 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 		post_by = self.request.get('post_by').strip()
 		text = self.request.get('text').strip()
 		image = self.request.get('post_img')
+
 		_dict = {}
 		if image!='':
 			
@@ -76,6 +77,16 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 				db.isAnonymous = isAnonymous
 				db.post_by = post_by
 				k = db.put()
+				try:
+					files = self.get_uploads('file')
+					for attached_file in files:
+						db1 = PostFiles()
+						db1.post_ptr = k
+						db1.file_key = attached_file.key()
+						db1.put()
+				finally:
+					logging.info("No files")
+
 				post_items = k.get()
 				text = post_items.text
 				
@@ -204,6 +215,19 @@ class PostsHandler(BaseHandler,webapp2.RequestHandler):
 					_dict['created_time'] = date_to_string(utc_to_ist(post.created_time))					
 					_dict['pending_bit'] = post.pending_bit
 					
+					post_files = PostFiles.query(PostFiles.post_ptr == post.key).fetch()
+
+					out2 = []
+					for post in post_files:
+						dict2 = {}
+						file_key = post.file_key
+						blob_info= blobstore.BlobInfo.get(file_key)
+						file_name = blob_info.filename
+						dict2['filename'] = file_name
+						dict2['url'] = DEFAULT_ROOT_FILE_URL + str(file_key)
+						out2.append(dict2)
+
+					_dict['files'] = out2
 
 					if len(has_viewed_query) == 0:
 						_dict['num_views'] = num_views_count + 1   #This user is now viewing it

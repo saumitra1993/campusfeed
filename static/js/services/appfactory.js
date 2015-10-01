@@ -305,27 +305,36 @@ factory.addPost = function(formData,channel_id,text,post_by,isAnonymous,image){
         }, options);
     }
     else{*/
-          $.ajax({
-            url: ip+"channels/"+channel_id+"/posts",
-            data: formData,
-            async:true,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            beforeSend: function(){
-                defer7.notify(update);
-            },
-            success: function(data, textStatus, xhr){
-                defer7.resolve(data);
+    $.ajax({
+        type: "GET",
+        url: ip+'uploadendpoint?channel_id='+channel_id,
+        dataType:"json",
+        success: function(data, textStatus, xhr){
+            $.ajax({
+                url: data.upload_url,
+                data: formData,
+                async:true,
+                processData: false,
+                contentType: false,
+                type: 'POST',
                 
-            },
-            error: function(data, textStatus, xhr){
-                defer7.reject(data);
-                
-            },
-            timeout: 15000
-          });
-    
+                success: function(data, textStatus, xhr){
+                    defer7.resolve(data);
+                    
+                },
+                error: function(data, textStatus, xhr){
+                    defer7.reject(data);
+                    
+                },
+                timeout: 15000
+              });
+        },
+        error: function(data, textStatus, xhr){
+            defer7.reject(xhr.status);
+            
+        },
+        timeout: 15000
+    }); 
  
    return defer7.promise;
    

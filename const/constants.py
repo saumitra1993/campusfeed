@@ -6,14 +6,17 @@ dev_server = os.environ.get('SERVER_SOFTWARE', '').startswith('Dev')
 if dev_server:
 	DEFAULT_ROOT_URL = 'http://localhost:9080/'
 	DEFAULT_ROOT_IMG_URL = 'http://localhost:9080/pic/'
+	DEFAULT_ROOT_FILE_URL = 'http://localhost:9080/files/'
 	GCM_PUSH_MESSAGE_API_KEY = ''
 elif prod_server:
 	DEFAULT_ROOT_URL = 'http://campusfeedapp.com/'
 	DEFAULT_ROOT_IMG_URL = 'http://campusfeedapp.com/pic/'
+	DEFAULT_ROOT_FILE_URL = 'http://campusfeedapp.com/files/'
 	GCM_PUSH_MESSAGE_API_KEY = "AIzaSyAuUTU-p8sM7SPpMNWYFig0lWcvyokyrRk"
 elif test_server:
 	DEFAULT_ROOT_URL = 'http://campusfeedapp.com/'
 	DEFAULT_ROOT_IMG_URL = 'http://campusfeedapp.com/pic/'
+	DEFAULT_ROOT_FILE_URL = 'http://campusfeedapp.com/files/'
 	GCM_PUSH_MESSAGE_API_KEY = "AIzaSyCpt6EOj9TStOvDNbOeSqXCx125JEquvCc"
 
 DEFAULT_IMG_URL = DEFAULT_ROOT_URL + 'images/default.png'

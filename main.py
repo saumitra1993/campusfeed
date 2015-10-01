@@ -43,6 +43,8 @@ from service._channels._threads.thread_discussions import ThreadDiscussionsHandl
 
 from service._channels._posts.image_url_post import PostImageUrl
 from service._channels._posts.posts import PostsHandler
+from service._channels._posts.files import GetFile
+from service._channels._posts.file_upload_endpoint import PostUploadURL
 from service._channels._posts.view_post import PostViewed
 from service._channels._posts.approve_post import OnePost
 
@@ -72,6 +74,7 @@ application = webapp2.WSGIApplication([
 	('/signup',Signup),
 	('/imageurl',ImageUrl),
 	('/pic/(.*)',GetPhotu),
+	('/files/(.*)',GetFile),
 	('/channelimageurl',ChannelImageUrl),
 	('/forgotpassword', ForgotPassword),
 	('/resetpassword', ResetPassword),
@@ -86,6 +89,7 @@ application = webapp2.WSGIApplication([
 	('/postimageurl',PostImageUrl),
 	('/channels',AllChannels),
 	('/superuserfollow', SuperuserFollow),
+	('/uploadendpoint', PostUploadURL),
 	('/channelid', ChannelId),
 
 	('/tasks/pushmsg', PushMsg),

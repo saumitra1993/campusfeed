@@ -4,7 +4,7 @@
 
     <div class="row">
      <div class="col-md-offset-2 col-md-8 shadow" style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;">
-      <form name="addPostForm" role="form" style="margin-top:5%;">
+      <form name="addPostForm" id="addPostForm" role="form" style="margin-top:5%;">
         <fieldset>
           
           <p ng-show="errorBox==true" class="text-danger">Network error. Please try again.</p>
@@ -19,6 +19,11 @@
             <div class="form-group has-success has-feedback">
               <label>Add an image (if you wish):</label>
               <input type="file" fileread="picture" accept="image/*" />
+            </div>
+
+            <div class="form-group has-success has-feedback">
+              <label>Attach files (if you wish):</label>
+              <input type="file" name="file" multiple/>
             </div>
 
             <!-- <div class="form-group">

@@ -201,7 +201,7 @@ $scope.getThreads = function(){
 };
 
 $scope.gotoThread = function(thread){
-	$scope.sidebarHead = thread.topic+" thread comments";
+	$scope.sidebarHead = "Thread comments";
 	$scope.threadInSidebar = 0;
 	$scope.thread_id = thread.thread_id;
 	appfactory.getComments($scope.channel_id,thread.thread_id,$scope.limit,$scope.offset).then(function(data){

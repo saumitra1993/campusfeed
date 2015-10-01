@@ -21,7 +21,7 @@ $scope.navigate = function(){
 
 $scope.submit = function(){
     $scope.statusText = "Loading...";
-	var formData = new FormData();
+	var formData = new FormData($("#addPostForm")[0]);
     var isAnonymous;
     console.log($scope.post_by);
 	formData.append("text", $scope.text);
