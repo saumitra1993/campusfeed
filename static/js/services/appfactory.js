@@ -326,7 +326,7 @@ factory.addPost = function(formData,channel_id,text,post_by,isAnonymous,image){
                     defer7.reject(data);
                     
                 },
-                timeout: 15000
+                timeout: 25000
               });
         },
         error: function(data, textStatus, xhr){

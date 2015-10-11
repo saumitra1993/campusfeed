@@ -126,7 +126,6 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 						channels_qry = channels_qry.filter(Channels.created_time >= lastSeenTime)
 					
 					channels = channels_qry.fetch(offset= offset)
-					logging.info(channels)
 					out = []
 					i = 0
 					limit = limit - offset

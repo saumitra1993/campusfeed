@@ -22,12 +22,43 @@ $scope.navigate = function(){
 $scope.submit = function(){
     $scope.statusText = "Loading...";
 	var formData = new FormData($("#addPostForm")[0]);
-    console.log(formData);
     var isAnonymous;
-    console.log($scope.post_by);
 	formData.append("text", $scope.text);
 	formData.append("post_by", $scope.post_by);
-    if($scope.picture!=""){
+    var files = $('#files')[0].files; 
+    var arr;
+    var fileTypes = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+    for (var i = 0, f; f = files[i]; i++) {
+
+        var reader = new FileReader();
+        reader.file = f;
+        
+            
+        reader.onload = function (e) {
+            file = this.file;
+            fname = file.name;
+            console.log(fname);
+            var extens = fname.split('.').pop().toLowerCase();
+            isSuccess = fileTypes.indexOf(extens) > -1;
+            if(isSuccess){
+                
+                image = new Image();
+                image.src = e.target.result;
+                var quality =  80;
+                output_format = 'jpg'; 
+                arr = jic.compress(image,quality,output_format).src;
+               formData.append("file", dataURItoBlob(arr), fname);
+            }
+            else{
+                formData.append("file", dataURItoBlob(e.target.result), fname); 
+            }    
+        };
+       
+        
+        reader.readAsDataURL(f);
+
+    }
+    /*if($scope.picture!=""){
         console.log($scope.picture);
         image = new Image();
         image.src = $scope.picture;
@@ -35,7 +66,7 @@ $scope.submit = function(){
         output_format = 'jpg'; 
         $scope.picture = jic.compress(image,quality,output_format).src;
         formData.append("post_img", dataURItoBlob($scope.picture));
-    }
+    }*/
     if($scope.isAnonymous==true){
     	formData.append("isAnonymous", 'True');
         isAnonymous = 'True';

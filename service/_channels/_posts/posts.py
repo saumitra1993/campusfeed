@@ -219,20 +219,22 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 					post_files = PostFiles.query(PostFiles.post_ptr == post.key).fetch()
 
 					out2 = []
+					out3 = []
 					for post_file in post_files:
 						dict2 = {}
 						file_key = post_file.file_key
 						blob_info= blobstore.BlobInfo.get(file_key)
 						file_name = blob_info.filename
 						dict2['filename'] = file_name
-						if 'jpg' in file_name or 'JPG' in file_name or 'png' in file_name or 'jpeg' in file_name:
-							dict2['url'] = get_serving_url(file_key) + "=s800"
+						if 'jpg' in file_name or 'JPG' in file_name or 'png' in file_name or 'jpeg' in file_name or 'gif' in file_name:
+							dict2['url'] = get_serving_url(file_key)
+							out3.append(dict2)
 						else:
 							dict2['url'] = DEFAULT_ROOT_FILE_URL + str(file_key)
-						out2.append(dict2)
+							out2.append(dict2)
 
 					_dict['files'] = out2
-
+					_dict['images'] = out3
 					if len(has_viewed_query) == 0:
 						_dict['num_views'] = num_views_count + 1   #This user is now viewing it
 						db = Views()
