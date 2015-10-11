@@ -13,6 +13,7 @@ from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
 from google.appengine.ext import ndb
+from google.appengine.api.images import get_serving_url
 
 class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 	"""docstring for Posts"""
@@ -32,24 +33,24 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 		user_id = int(user_id)
 		post_by = self.request.get('post_by').strip()
 		text = self.request.get('text').strip()
-		image = self.request.get('post_img')
+		# image = self.get_uploads('post_img')[0]
 
-		_dict = {}
-		if image!='':
+		# _dict = {}
+		# if image!='':
 			
-			size = len(image)
-			logging.info(size)
+		# 	size = len(image)
+		# 	logging.info(size)
 			
-			image = images.Image(image)
-			# Transform the image
-			image.resize(width=800, height=800)
-			image = image.execute_transforms(output_encoding=images.JPEG)
+		# 	image = images.Image(image)
+		# 	# Transform the image
+		# 	image.resize(width=800, height=800)
+		# 	image = image.execute_transforms(output_encoding=images.JPEG)
 			
-			size = len(image)
-			logging.info("After resize %s"%size)
-			if size > 900000:
-				self.response.set_status(400,"Image too big")
-				return
+		# 	size = len(image)
+		# 	logging.info("After resize %s"%size)
+		# 	if size > 900000:
+		# 		self.response.set_status(400,"Image too big")
+		# 		return
 		user = Users.get_by_id(user_id)
 		if user:
 			user_ptr = user.key
@@ -67,10 +68,10 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 				if admin_query == 1:
 					db.pending_bit = 0
 				db.text = text
-				if image != '':
-					db.img = image
-				else:
-					db.img = ''
+				# if image != '':
+				# 	db.img = image
+				# else:
+				# 	db.img = ''
 
 				db.channel_ptr = channel_ptr
 				db.user_ptr = user_ptr
@@ -93,7 +94,7 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 				created_time = date_to_string(utc_to_ist(post_items.created_time))
 
 				
-				
+				_dict = {}
 				
 				_dict['text'] =  (text[:75] + '..') if len(text) > 75 else text
 				_dict['channel_name'] = channel.channel_name
@@ -197,10 +198,10 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 					_dict = {}
 					_dict['post_id'] = post.key.id()
 					_dict['text'] = post.text
-					if post.img != '':
-						_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
-					else:
-						_dict['post_img_url'] = ''
+					# if post.img != '':
+					# 	_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
+					# else:
+					# 	_dict['post_img_url'] = ''
 					if post.isAnonymous == 'True':
 						_dict['full_name'] = 'Anonymous'
 					else:
@@ -218,13 +219,16 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 					post_files = PostFiles.query(PostFiles.post_ptr == post.key).fetch()
 
 					out2 = []
-					for post in post_files:
+					for post_file in post_files:
 						dict2 = {}
-						file_key = post.file_key
+						file_key = post_file.file_key
 						blob_info= blobstore.BlobInfo.get(file_key)
 						file_name = blob_info.filename
 						dict2['filename'] = file_name
-						dict2['url'] = DEFAULT_ROOT_FILE_URL + str(file_key)
+						if 'jpg' in file_name or 'JPG' in file_name or 'png' in file_name or 'jpeg' in file_name:
+							dict2['url'] = get_serving_url(file_key) + "=s800"
+						else:
+							dict2['url'] = DEFAULT_ROOT_FILE_URL + str(file_key)
 						out2.append(dict2)
 
 					_dict['files'] = out2
@@ -239,7 +243,6 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 						_dict['num_views'] = num_views_count					
 
 					out.append(_dict)
-
 				dict_['posts'] = out
 				# user.last_seen = datetime.now()
 				# user.put()

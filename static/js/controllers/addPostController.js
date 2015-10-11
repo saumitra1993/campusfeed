@@ -22,11 +22,13 @@ $scope.navigate = function(){
 $scope.submit = function(){
     $scope.statusText = "Loading...";
 	var formData = new FormData($("#addPostForm")[0]);
+    console.log(formData);
     var isAnonymous;
     console.log($scope.post_by);
 	formData.append("text", $scope.text);
 	formData.append("post_by", $scope.post_by);
     if($scope.picture!=""){
+        console.log($scope.picture);
         image = new Image();
         image.src = $scope.picture;
         var quality =  60;

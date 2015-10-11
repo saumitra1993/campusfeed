@@ -114,7 +114,12 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 					_dict['branch'] = posting_user.branch
 				
 					_dict['added_time'] = date_to_string(utc_to_ist(comment.added_time))					
-	
+					
+					if comment.user_ptr == user.key:
+						_dict['added'] = 1
+					else:
+						_dict['added'] = 0
+
 					out.append(_dict)
 
 				dict_['threadDiscussions'] = out

@@ -3,6 +3,7 @@ import logging
 import json
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.api import images
 
 class GetFile(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, file_key):

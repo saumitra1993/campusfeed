@@ -39,6 +39,8 @@ from service._channels.search_channel import SearchChannels
 from service._channels.edit_channel_image import EditChannelImage
 
 from service._channels._threads.threads import ThreadsHandler
+from service._channels._threads.delete_thread import RemoveThreadHandler
+from service._channels._threads.delete_thread_comment import RemoveCommentHandler
 from service._channels._threads.thread_discussions import ThreadDiscussionsHandler
 
 from service._channels._posts.image_url_post import PostImageUrl
@@ -114,7 +116,9 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts/<:[0-9a-zA-Z]{16}>',OnePost),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/posts',PostsHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/threads/<:[0-9a-zA-Z]{16}>/discussions',ThreadDiscussionsHandler),
+	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/threads/<:[0-9a-zA-Z]{16}>/deletecomment',RemoveCommentHandler),
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/threads',ThreadsHandler),
+	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/deletethread',RemoveThreadHandler),
 	webapp2.Route(r'/channels/search',SearchChannels),
 	webapp2.Route(r'/posts/<:[0-9a-zA-Z]{16}>/views', PostViewed),
 

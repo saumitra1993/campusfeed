@@ -77,7 +77,6 @@ class AllChannels(BaseHandler,webapp2.RequestHandler):
 				#therefore make them follow their channel.
 				#for 'admin', superusers ll approve their channel first and
 				#then make them follow their channel. 
-				token = self.request.headers.get("token")
 				if user.type_ == 'superuser':
 					db2 = Channel_Followers()
 					db2.user_ptr = user_key

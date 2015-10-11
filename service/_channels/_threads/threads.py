@@ -43,6 +43,7 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 					thread = k.get()
 					posting_user = thread.started_by_user_ptr.get()
 					num_views_count = ThreadViews.query(ThreadViews.thread_ptr == thread.key).count()
+					
 					_dict = {}
 					_dict['thread_id'] = thread.key.id()
 					_dict['topic'] = thread.topic
@@ -53,6 +54,7 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 					_dict['created_time'] = date_to_string(utc_to_ist(thread.created_time))					
 	
 					_dict['num_views'] = num_views_count
+					_dict['num_comments'] = 0
 
 					dict_['thread'] = _dict
 
@@ -77,52 +79,67 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 		offset = self.request.get('offset')
 		timestamp = self.request.get('timestamp')
 		dict_ = {}
-		if limit and offset:
-			limit = int(limit)
-			offset= int(offset)
-			channel = Channels.get_by_id(int(channel_id))
+		user_id = self.userid
+		user_id = int(user_id)
+		
+		user = Users.get_by_id(user_id)
+		if user:
+			user_ptr = user.key
+			if limit and offset:
+				limit = int(limit)
+				offset= int(offset)
+				channel = Channels.get_by_id(int(channel_id))
 
-			if channel:
+				if channel:
 
-				threads_query = Threads.query(ndb.AND(Threads.channel_ptr == channel.key, Threads.isDeleted == 0))
+					threads_query = Threads.query(ndb.AND(Threads.channel_ptr == channel.key, Threads.isDeleted == 0))
+					
+					if timestamp:
+						lastSeenTime = string_to_date(timestamp) 
+						lastSeenTime = ist_to_utc(lastSeenTime)
+						threads_query = threads_query.filter(Threads.created_time >= lastSeenTime)
+
+					if limit != -1:
+						threads = threads_query.order(-Threads.created_time).fetch(limit,offset=offset)
+					else:
+						threads = threads_query.order(-Threads.created_time).fetch(offset=offset)
+
+					out = []
+					dict_={}
+					for thread in threads:
+						posting_user = thread.started_by_user_ptr.get()
+						num_views_count = ThreadViews.query(ThreadViews.thread_ptr == thread.key).count()
+						num_comments_count = ThreadDiscussions.query(ThreadDiscussions.thread_ptr == thread.key, ThreadDiscussions.isDeleted == 0).count()				
+
+						_dict = {}
+						_dict['thread_id'] = thread.key.id()
+						_dict['topic'] = thread.topic
 				
-				if timestamp:
-					lastSeenTime = string_to_date(timestamp) 
-					lastSeenTime = ist_to_utc(lastSeenTime)
-					threads_query = threads_query.filter(Threads.created_time >= lastSeenTime)
+						_dict['full_name'] = posting_user.first_name + ' ' + posting_user.last_name
+						_dict['branch'] = posting_user.branch
+					
+						_dict['created_time'] = date_to_string(utc_to_ist(thread.created_time))					
+		
+						_dict['num_views'] = num_views_count	
+						_dict['num_comments'] = num_comments_count
 
-				if limit != -1:
-					threads = threads_query.order(-Threads.created_time).fetch(limit,offset=offset)
+						if thread.started_by_user_ptr == user_ptr:
+							_dict['started'] = 1
+						else:
+							_dict['started'] = 0
+						out.append(_dict)
+
+					dict_['threads'] = out
+					# user.last_seen = datetime.now()
+					# user.put()
+
+					
+					self.response.set_status(200, 'Awesome')
 				else:
-					threads = threads_query.order(-Threads.created_time).fetch(offset=offset)
-
-				out = []
-				dict_={}
-				for thread in threads:
-					posting_user = thread.started_by_user_ptr.get()
-					num_views_count = ThreadViews.query(ThreadViews.thread_ptr == thread.key).count()
-					_dict = {}
-					_dict['thread_id'] = thread.key.id()
-					_dict['topic'] = thread.topic
-			
-					_dict['full_name'] = posting_user.first_name + ' ' + posting_user.last_name
-					_dict['branch'] = posting_user.branch
-				
-					_dict['created_time'] = date_to_string(utc_to_ist(thread.created_time))					
-	
-					_dict['num_views'] = num_views_count					
-
-					out.append(_dict)
-
-				dict_['threads'] = out
-				# user.last_seen = datetime.now()
-				# user.put()
-
-				
-				self.response.set_status(200, 'Awesome')
+					self.response.set_status(404, 'Channel not found')
 			else:
-				self.response.set_status(404, 'Channel not found')
+				self.response.set_status(400, 'Limit offset standards not followed')
 		else:
-			self.response.set_status(400, 'Limit offset standards not followed')
+			self.response.set_status(400, 'Invalid user')
 
 		self.response.write(json.dumps(dict_))
