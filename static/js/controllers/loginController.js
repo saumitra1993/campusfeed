@@ -1,4 +1,4 @@
-angular.module("campusfeed").controller("loginController", function($scope,$location,$modal, SharedState, $http,appfactory,$routeParams){
+angular.module("campusfeed").controller("loginController", function($scope,$location,$uibModal, SharedState, $http,appfactory,$routeParams){
 $scope.statusText = "Login";
 $scope.errorBox2=false;
 $scope.picture='';
@@ -104,7 +104,7 @@ $scope.submit = function(){
     
 };
 $scope.open = function () {
-    var modalInstance = $modal.open({
+    var modalInstance = $uibModal.open({
       animation: $scope.animationsEnabled,
       controller: 'ForgotPasswordCtrl',
       templateUrl: 'forgotpassword.html',

@@ -70,8 +70,8 @@
 		  		<td class="col-xs-2"><img ng-src="{{channelDetails.channel_img_url}}" class="img-responsive img-rounded" ></td>
 		  		
 		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{channelDetails.channel_name}}</b><div class="btn-group pull-right" >
-		  			<span dropdown on-toggle="toggled(open)">
-				      <a href id="simple-dropdown" dropdown-toggle>
+		  			<span uib-dropdown on-toggle="toggled(open)">
+				      <a href id="simple-dropdown" uib-dropdown-toggle>
 				        <i class="fa fa-ellipsis-v fa-lg"></i>
 				      </a>
 				      <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
@@ -139,11 +139,28 @@
         		<a ng-href="#/channels/{{channel_id}}/addpost">Let's fix that!</a></h4>
         		<h4 ng-show="loggedIn==false && channelDetails.channel_name != 'Campusfeed Blog'"  class="center-block"><a ng-href="#/login?redirect_to=channels/unrelated/{{channel_id}}">Register/login with Campusfeed to see posts of this channel.</a></h4>
  		<div  ng-repeat="post in channelPosts" ng-class="{'panel panel-default bootcards-media' : post.pending_bit==0, 'panel panel-danger bootcards-media' : post.pending_bit==1}" ng-init="post.showMore=0;post.approveText='Approve'" >
-	        <div class="thumbnail" ng-if="post.post_img_url != ''"><img ng-src="{{post.post_img_url}}" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  /></div>
+
+	        <div >
+				<uib-carousel>
+			      <uib-slide ng-repeat="image in post.images" >
+			        <img ng-src="{{image}}=s800" style="margin:auto;" ng-click="open(image)" style="cursor:pointer;">
+			        <div class="carousel-caption">
+			          
+			        </div>
+			      </uib-slide>
+			    </uib-carousel>
+
+	        	<!-- <img ng-src="{{post.post_img_url}}" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  /> -->
+
+	        </div>
 	        <div class="panel-body">
 	          <h5 style="white-space: pre-wrap;" ng-show="post.text.length>300 && post.showMore==0" ng-bind-html="post.text | cut:true:300:'....' | linky:'_blank'"></h5><span ng-show="post.text.length>300 && post.showMore==0"><a ng-click="post.showMore=1">Show more</a></span>
 	          <h5  style="white-space: pre-wrap;" ng-show="post.text.length<=300 || post.showMore==1" ng-bind-html="post.text | linky:'_blank'"></h5>
 	          <span><a ng-show="post.text.length>300 && post.showMore==1" ng-click="post.showMore=0">Show less</a></span>
+	          <div class="col-md-3 alert alert-warning" ng-repeat="file in post.files" style="background-color:#ececec;">
+	          	<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+	          	<span><a target="_blank" href="{{file.url}}">{{file.filename}}</a></span>
+	          </div>
 	        </div>
 	        <div class="panel-footer">
 			    <div class="btn-group btn-group-justified">

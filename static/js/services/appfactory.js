@@ -8,7 +8,7 @@ if(n==-1){
   var ip='http://localhost:9080/';  
 }
 else{
-    var ip='http://www.campusfeedapp.com/';
+    var ip='http://www.campusfeedapp.appspot.com/';
 }
 var user_id= window.localStorage.getItem("user_id");
 SharedState.initialize($rootScope, "loggedIn", false);

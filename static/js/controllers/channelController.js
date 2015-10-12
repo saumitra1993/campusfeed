@@ -1,4 +1,4 @@
-angular.module("campusfeed").controller("channelController", function($scope,$location,$modal,$http,appfactory,$routeParams){
+angular.module("campusfeed").controller("channelController", function($scope,$location,$uibModal,$http,appfactory,$routeParams){
 $scope.errorBox=false;
 $scope.getNotifications = true;
 $scope.channelDetails=[];
@@ -74,7 +74,7 @@ $scope.followerDetails = function(){
 };
 
 $scope.openedit = function () {
-    var modalInstance = $modal.open({
+    var modalInstance = $uibModal.open({
       animation: $scope.animationsEnabled,
       controller: 'EditChannelCtrl',
       templateUrl: 'editchannel.html',
@@ -107,7 +107,7 @@ $scope.loadMorePosts = function(){
 };
 $scope.open = function (imgUrl) {
      $scope.imgUrl = imgUrl; 
-    var modalInstance = $modal.open({
+    var modalInstance = $uibModal.open({
       animation: $scope.animationsEnabled,
       controller: 'ModalInstanceCtrl',
       templateUrl: 'fullImage.html',
