@@ -198,10 +198,10 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 					_dict = {}
 					_dict['post_id'] = post.key.id()
 					_dict['text'] = post.text
-					# if post.img != '':
-					# 	_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
-					# else:
-					# 	_dict['post_img_url'] = ''
+					if post.img != '':
+						_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
+					else:
+						_dict['post_img_url'] = ''
 					if post.isAnonymous == 'True':
 						_dict['full_name'] = 'Anonymous'
 					else:

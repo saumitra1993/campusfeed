@@ -19,7 +19,7 @@ class GetPhotu(webapp2.RequestHandler):
 				if full == '':
 					channel = entity.channel_name
 					img = images.Image(entity.img)
-					img.resize(width=80, height=80)
+					img.resize(width=100, height=100)
 					thumbnail = img.execute_transforms(output_encoding=images.JPEG)
 					self.response.out.write(thumbnail)
 				else:
@@ -28,7 +28,7 @@ class GetPhotu(webapp2.RequestHandler):
 				try:
 					user = entity.first_name
 					img = images.Image(entity.img)
-					img.resize(width=80, height=80)
+					img.resize(width=100, height=100)
 					thumbnail = img.execute_transforms(output_encoding=images.JPEG)
 					self.response.out.write(thumbnail)
 				except:

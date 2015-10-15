@@ -8,7 +8,7 @@ if(n==-1){
   var ip='http://localhost:9080/';  
 }
 else{
-    var ip='http://www.campusfeedapp.appspot.com/';
+    var ip='http://www.campusfeedapp-1097.appspot.com/';
 }
 var user_id= window.localStorage.getItem("user_id");
 SharedState.initialize($rootScope, "loggedIn", false);
@@ -807,6 +807,48 @@ factory.addComment = function(channel_id,thread_id,comment){
     });
       
    return defer25.promise;
+};
+
+factory.deleteComment = function(channel_id,thread_id,comment_id){
+    var defer26=$q.defer();
+    $.ajax({
+        url: ip+"channels/"+channel_id+"/threads/"+thread_id+"deletecomment",
+        data: JSON.stringify({"comment_id":comment_id}),
+        contentType: "application/json",
+        dataType: "json",
+        type: 'POST',
+
+        success: function(data, textStatus, xhr){
+            defer26.resolve(data);     
+        },
+        error: function(data, textStatus, xhr){
+            defer26.reject(xhr.status);
+        },
+        timeout: 15000
+    });
+      
+   return defer26.promise;
+};
+
+factory.deleteThread = function(channel_id,thread_id){
+    var defer27=$q.defer();
+    $.ajax({
+        url: ip+"channels/"+channel_id+"/deletethread",
+        data: JSON.stringify({"thread_id":thread_id}),
+        contentType: "application/json",
+        dataType: "json",
+        type: 'POST',
+
+        success: function(data, textStatus, xhr){
+            defer27.resolve(data);     
+        },
+        error: function(data, textStatus, xhr){
+            defer27.reject(xhr.status);
+        },
+        timeout: 15000
+    });
+      
+   return defer27.promise;
 };
 
 return factory;

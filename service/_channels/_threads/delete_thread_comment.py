@@ -21,7 +21,7 @@ class RemoveCommentHandler(BaseHandler,webapp2.RequestHandler):
 		user_id = self.userid
 		user_id = int(user_id)
 		data = json.loads(self.request.body)
-		comment_id = data.get('comment_id').strip()
+		comment_id = data.get('comment_id')
 		dict_ = {}
 		
 		user = Users.get_by_id(user_id)

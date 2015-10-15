@@ -9,6 +9,8 @@
   box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
 
+
+
 </style>
 
 <div style="height:100%;background-color:#fff;border:2px solid #f96015;overflow:auto;" class="col-xs-7 col-sm-3 col-md-5 sidebar sidebar-right sidebar-animate shadow">
@@ -27,6 +29,9 @@
 		        </div>
 	    		</td>
 	    	</tr>
+			<tr><a ng-click="loadMoreThreads() && statusText2 != 'Loading...'" ng-show="threadInSidebar == 1 && errorBox2==false && threads.length>=10">
+	      		{{statusText2}}
+			</a></tr>
 		  	<tr ng-repeat="thread in threads"  ng-show="threadInSidebar == 1">
 		  		
 		  		<td class="col-xs-10"><h4 style="margin-bottom:1%;"><a style="color:black;" ng-click="gotoThread(thread)"><b>{{thread.topic}}</b></a></h4>
@@ -38,38 +43,56 @@
                        'other': '{} views'}">
   				</ng-pluralize></p>
 		  		</td>
+		  		<td><span  title="Delete this thread" style="float:right;cursor:pointer;" ng-if="thread.started == 1" class="glyphicon glyphicon-trash" ng-click="deleteThread(thread)" aria-hidden="true"></span></td>
 		  	</tr>
-		  	<tr ng-repeat="comment in comments" ng-show="threadInSidebar == 0">
+		  	<tr>
+		  		<a ng-click="loadMoreThreadComments() && statusText2 != 'Loading...'" ng-show="threadInSidebar == 0 && errorBox2==false && comments.length>=10">
+	      			{{statusText2}}
+				</a>
+			</tr>
+		  	<tr ng-repeat="comment in comments" ng-show="threadInSidebar == 0" >
 		  		
 		  		<td class="col-xs-10"><h5 style="margin-bottom:1%;" class="text-capitalize"><b>{{comment.full_name}}</b><span class="pull-right" style="font-weight:normal;">{{comment.added_time}}</span></h5>
-				<p style="margin-bottom:1%;">{{comment.text}}</p>
+				<p style="margin-bottom:1%;">{{comment.text}}<span title="Delete this comment" style="float:right;cursor:pointer;" ng-if="comment.added == 1" class="glyphicon glyphicon-trash pull-right" aria-hidden="true"></span></p>
 		  		</td>
 		  	</tr>
+		  	<!-- <tr ng-show="threadInSidebar == 0">
+		  		<div ng-show="threadInSidebar == 0">
+		  		<label class="col-xs-10"><input type="text"  ng-model='comment' class="form-control" placeholder="Add your comment" />
+		  				      </label>
+		  				       <button  ng-click="addComment(comment) && addCommentText != 'Loading...'" class="btn btn-primary col-xs-2">{{addCommentText}}</button>
+		  				    </div>
+		  	</tr> -->
 	  	</tbody>
 	</table>
-	<div ng-show="threadInSidebar == 0" style="position:fixed;bottom:8%;width:95%;background-color:#fff;">
-		<label class="col-xs-10"><input type="text"  ng-model='comment' class="form-control" placeholder="Add your comment" />
-      </label>
-       <button  ng-click="addComment(comment) && addCommentText != 'Loading...'" class="btn btn-primary col-xs-2">{{addCommentText}}</button>
-	</div>
-	<button  class="btn btn-primary btn-block" ng-click="loadMoreThreads() && statusText2 != 'Loading...'" ng-show="threadInSidebar == 1 && errorBox2==false && pending_request == 0 && threads.length>=10">
-	      {{statusText2}}
-	</button>
+	<table>
+		<tbody>
+			<tr>
+		  		<div ng-show="threadInSidebar == 0">
+		  		<label class="col-xs-10"><input type="text"  ng-model='comment' class="form-control" placeholder="Add your comment" />
+			      </label>
+			       <button  ng-click="addComment(comment) && addCommentText != 'Loading...'" class="btn btn-primary col-xs-2">{{addCommentText}}</button>
+			    </div>
+		  	</tr>
+		</tbody>
+	</table>
+	<!-- <div  style="bottom:8%;width:95%;background-color:#fff;">
+		
+	</div> -->
 	
-	<button  class="btn btn-primary btn-block" ng-click="loadMoreThreadComments() && statusText2 != 'Loading...'" ng-show="threadInSidebar == 0 && errorBox2==false && pending_request == 0 && comments.length>=10">
-	      {{statusText2}}
-	</button>
+	
+	
 </div>
 
-
-<div class="col-md-offset-2 col-md-8 shadow" style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;"> 
+<div>
+<div class="col-md-offset-2 col-md-8 shadow" style="background-color:#fff;"> 
 	
-		<table class="table" >
+		<table class="table" style="margin-top:1%;">
 		  <tbody style="border-bottom:1px solid #e6e6e6;">
 		  	<tr >
-		  		<td class="col-xs-2"><img ng-src="{{channelDetails.channel_img_url}}" class="img-responsive img-rounded" ></td>
+		  		<td class="col-xs-2" style="border:none;"><img ng-src="{{channelDetails.channel_img_url}}" class="img-responsive img-rounded" ></td>
 		  		
-		  		<td class="col-xs-10"><h4 class="text-capitalize"><b>{{channelDetails.channel_name}}</b><div class="btn-group pull-right" >
+		  		<td class="col-xs-10" style="border:none;"><h4 class="text-capitalize"><b>{{channelDetails.channel_name}}</b><div class="btn-group pull-right" >
 		  			<span uib-dropdown on-toggle="toggled(open)">
 				      <a href id="simple-dropdown" uib-dropdown-toggle>
 				        <i class="fa fa-ellipsis-v fa-lg"></i>
@@ -162,7 +185,7 @@
 	          	<span><a target="_blank" href="{{file.url}}">{{file.filename}}</a></span>
 	          </div>
 	        </div>
-	        <div class="panel-footer">
+	        <div class="panel-footer" style="background-color:#fff;">
 			    <div class="btn-group btn-group-justified">
 			      <div class="btn-group">
 			      	<div class="pull-left" style="color:#898888;">{{post.created_time}}</div>
@@ -182,6 +205,7 @@
 	    </button>
  	
  </div>
+</div>
  
 <script type="text/ng-template" id="fullImage.html">
         <div class="modal-header">

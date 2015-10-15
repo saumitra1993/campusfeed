@@ -189,6 +189,7 @@ $scope.getThreads = function(){
 		$scope.discussionsText = "Click to collapse";
 		appfactory.getThreads($scope.channel_id,$scope.limit,$scope.offset).then(function(data){
 			$scope.threads = data.threads;
+			$scope.threads.reverse();
 			$scope.discussionText = "Discussions";
 		},function(status){
 			$scope.errorBox2=true;
@@ -204,8 +205,11 @@ $scope.gotoThread = function(thread){
 	$scope.sidebarHead = "Thread comments";
 	$scope.threadInSidebar = 0;
 	$scope.thread_id = thread.thread_id;
+	$scope.limit = 10;
+	$scope.offset=0;
 	appfactory.getComments($scope.channel_id,thread.thread_id,$scope.limit,$scope.offset).then(function(data){
 		$scope.comments = data.threadDiscussions;
+		$scope.comments.reverse();
 		$scope.threadInSidebar = 0;
 	},function(status){
 		$scope.errorBox2=true;
@@ -217,7 +221,10 @@ $scope.loadMoreThreads = function(){
 	$scope.offset = $scope.limit;
 	$scope.limit += 10;
 	appfactory.getThreads($scope.channel_id,$scope.limit,$scope.offset).then(function(data){
-		$scope.threads = data.threads;
+		var threads = data.threads;
+		for(var j=0;j<threads.length;j++){
+			$scope.threads.unshift(threads[j]);
+		}
 		$scope.statusText2 = "Load more";
 	},function(status){
 		$scope.errorBox2=true;
@@ -229,8 +236,11 @@ $scope.loadMoreThreadComments = function(){
 	$scope.statusText2 = "Loading...";
 	$scope.offset = $scope.limit;
 	$scope.limit += 10;
-	appfactory.getComments($scope.channel_id,thread.thread_id,$scope.limit,$scope.offset).then(function(data){
-		$scope.comments = data.threadDiscussions;
+	appfactory.getComments($scope.channel_id,$scope.thread_id,$scope.limit,$scope.offset).then(function(data){
+		var comments = data.threadDiscussions;
+		for(var j=0;j<comments.length;j++){
+			$scope.comments.unshift(comments[j]);
+		}
 		$scope.statusText2 = "Load more";
 	},function(status){
 		$scope.errorBox2=true;
@@ -242,6 +252,8 @@ $scope.backToThreads = function(){
 	$scope.comments = [];
 	$scope.threadInSidebar = 1;
 	$scope.sidebarHead = $scope.channelDetails.channel_name+" discussion threads";
+	$scope.limit = 10;
+	$scope.offset=0;
 };
 
 $scope.addComment = function(comment){
@@ -253,6 +265,24 @@ $scope.addComment = function(comment){
 	},
 	function(status) {
 		$scope.addThreadText = "Add";
+		$scope.errorBox2=true;
+	});
+};
+
+$scope.deleteThread = function(thread){
+	appfactory.deleteThread($scope.channel_id, thread.thread_id).then(function(data){
+		var index = $scope.threads.indexOf(thread);
+		$scope.threads.splice(index, 1);
+	},function(status){
+		$scope.errorBox2=true;
+	});
+};
+
+$scope.deleteComment = function(comment){
+	appfactory.deleteComment($scope.channel_id,$scope.thread_id,comment.comment_id).then(function(data){
+		var index = $scope.comments.indexOf(comment);
+		$scope.comments.splice(index, 1);
+	},function(status){
 		$scope.errorBox2=true;
 	});
 };

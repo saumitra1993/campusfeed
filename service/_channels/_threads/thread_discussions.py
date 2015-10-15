@@ -54,7 +54,10 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 				
 					_dict['added_time'] = date_to_string(utc_to_ist(comment.added_time))
 
+					_dict['added'] = 1
+
 					dict_['comment'] = _dict
+
 					self.response.set_status(200, 'Awesome')
 				else:
 					logging.error('Not allowed')
@@ -97,9 +100,9 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 					thread_discussions_query = posts_query.filter(Threads.added_time >= lastSeenTime)
 
 				if limit != -1:
-					threadDiscussions = thread_discussions_query.order(ThreadDiscussions.added_time).fetch(limit,offset=offset)
+					threadDiscussions = thread_discussions_query.order(-ThreadDiscussions.added_time).fetch(limit,offset=offset)
 				else:
-					threadDiscussions = thread_discussions_query.order(ThreadDiscussions.added_time).fetch(offset=offset)
+					threadDiscussions = thread_discussions_query.order(-ThreadDiscussions.added_time).fetch(offset=offset)
 
 				out = []
 				dict_={}

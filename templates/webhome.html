@@ -76,6 +76,9 @@
         color:white;
     }
     #cropme-cancel, #cropme-ok { display: none; }
+    body {
+        background-color: #fff;
+    }
     </style>
     <!-- 
         Available body classes: 
@@ -87,14 +90,14 @@
         Background Image - add to body: 
             data-background="assets/images/boxed_background/1.jpg"
     -->
-    <body class="smoothscroll">
+    <body class="smoothscroll" >
 
         <div id="wrapper">
 
             <div id="header" ng-controller="navController"><!-- class="sticky" for sticky menu -->
 
                 <!-- Top Nav -->
-                <header id="topNav">
+                <header id="topNav" style="background:#">
                     <div class="container">
                         <a class="logo" href="http://campusfeedapp.com">
                             <img src="images/logo-dark.png" height="50" alt="" />

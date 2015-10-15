@@ -55,6 +55,7 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 	
 					_dict['num_views'] = num_views_count
 					_dict['num_comments'] = 0
+					_dict['started'] = 1
 
 					dict_['thread'] = _dict
 
