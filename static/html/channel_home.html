@@ -13,25 +13,23 @@
 
 </style>
 
-<div style="height:100%;background-color:#fff;border:2px solid #f96015;overflow:auto;" class="col-xs-7 col-sm-3 col-md-5 sidebar sidebar-right sidebar-animate shadow">
+<div style="height:100%;background-color:#fff;border:2px solid #f96015;overflow:auto;top:0px;" class="col-xs-7 col-sm-3 col-md-5 sidebar sidebar-right sidebar-animate shadow">
 	<h3 style="margin-top:20px;margin-left:5px;"><a ng-show="threadInSidebar == 0" ng-click="backToThreads()"><i class="fa fa-arrow-circle-o-left"></i></a>  {{sidebarHead}}</h3>
 	<p ng-show="errorBox2==true" class="text-danger">Network error.</p>
   	<table class="table">
 	  	<tbody style="border-bottom:1px solid #e6e6e6;">
 	  		<tr ><a ng-show="threadInSidebar == 1" ng-click="threadTopicBox=!threadTopicBox"><i style="font-size: 20px;" class="fa fa-plus-circle fa-2x"></i><span> Add a new thread</span></a></tr>
 	  		<tr ng-if="threadTopicBox == 1 && threadInSidebar == 1">
-	  			<td>
+	  			<td colspan="2" style="padding-left:0px;padding-right:0px;">
 		  		<div class="form-group has-success has-feedback" style="margin-top:3%;">
 	          
-		          <label class="col-xs-10"><input type="text"  ng-model='topic' class="form-control" placeholder="Add topic of the thread"  maxlength="50" />
+		          <label class="col-xs-10" style="padding-left:5px;"><input type="text"  ng-model='topic' class="form-control" placeholder="Add topic of the thread"  maxlength="50" />
 		          </label>
 		           <button  ng-click="addThread(topic) && addThreadText != 'Loading...'" class="btn btn-primary col-xs-2">{{addThreadText}}</button>
 		        </div>
 	    		</td>
 	    	</tr>
-			<tr><a ng-click="loadMoreThreads() && statusText2 != 'Loading...'" ng-show="threadInSidebar == 1 && errorBox2==false && threads.length>=10">
-	      		{{statusText2}}
-			</a></tr>
+			
 		  	<tr ng-repeat="thread in threads"  ng-show="threadInSidebar == 1">
 		  		
 		  		<td class="col-xs-10"><h4 style="margin-bottom:1%;"><a style="color:black;" ng-click="gotoThread(thread)"><b>{{thread.topic}}</b></a></h4>
@@ -43,8 +41,15 @@
                        'other': '{} views'}">
   				</ng-pluralize></p>
 		  		</td>
-		  		<td><span  title="Delete this thread" style="float:right;cursor:pointer;" ng-if="thread.started == 1" class="glyphicon glyphicon-trash" ng-click="deleteThread(thread)" aria-hidden="true"></span></td>
+		  		<td><span title="Delete this thread" style="float:right;cursor:pointer;" ng-if="thread.started == 1" class="glyphicon glyphicon-trash" ng-click="deleteThread(thread)" aria-hidden="true"></span></td>
 		  	</tr>
+		  	<tr ng-if="threadInSidebar == 1 && errorBox2==false && threads.length>=10">
+				<td colspan="2" ng-if="threadInSidebar == 1 && errorBox2==false && threads.length>=10">
+					<a ng-click="loadMoreThreads() && statusText2 != 'Loading...'" >
+	      				{{statusText2}}
+					</a>
+				</td>
+			</tr>
 		  	<tr>
 		  		<a ng-click="loadMoreThreadComments() && statusText2 != 'Loading...'" ng-show="threadInSidebar == 0 && errorBox2==false && comments.length>=10">
 	      			{{statusText2}}
@@ -52,8 +57,9 @@
 			</tr>
 		  	<tr ng-repeat="comment in comments" ng-show="threadInSidebar == 0" >
 		  		
-		  		<td class="col-xs-10"><h5 style="margin-bottom:1%;" class="text-capitalize"><b>{{comment.full_name}}</b><span class="pull-right" style="font-weight:normal;">{{comment.added_time}}</span></h5>
-				<p style="margin-bottom:1%;">{{comment.text}}<span title="Delete this comment" style="float:right;cursor:pointer;" ng-if="comment.added == 1" class="glyphicon glyphicon-trash pull-right" aria-hidden="true"></span></p>
+		  		<td class="col-xs-10">
+		  			<h5 style="margin-bottom:1%;" class="text-capitalize"><b>{{comment.full_name}}</b><span class="pull-right" style="font-weight:normal;">{{comment.added_time}}</span></h5>
+					<span style="margin-bottom:1%;" ng-bind-html="comment.text | linky:'_blank'"></span><span title="Delete this comment" style="float:right;cursor:pointer;" ng-if="comment.added == 1" class="glyphicon glyphicon-trash pull-right" aria-hidden="true"></span>
 		  		</td>
 		  	</tr>
 		  	<!-- <tr ng-show="threadInSidebar == 0">
@@ -65,17 +71,13 @@
 		  	</tr> -->
 	  	</tbody>
 	</table>
-	<table>
-		<tbody>
-			<tr>
-		  		<div ng-show="threadInSidebar == 0">
-		  		<label class="col-xs-10"><input type="text"  ng-model='comment' class="form-control" placeholder="Add your comment" />
-			      </label>
-			       <button  ng-click="addComment(comment) && addCommentText != 'Loading...'" class="btn btn-primary col-xs-2">{{addCommentText}}</button>
-			    </div>
-		  	</tr>
-		</tbody>
-	</table>
+	
+	<form style="padding-left:0px;padding-right:0px;" ng-show="threadInSidebar == 0" ng-submit="addComment(comment) && addCommentText != 'Loading...'">
+		<label class="col-xs-10" style="padding-left:5px;"><input type="text" style="font-weight:400;"  ng-model='comment' class="form-control" placeholder="Add your comment" />
+	    </label>
+		<button  class="btn btn-primary col-xs-2">{{addCommentText}}</button>
+	</form>
+		  	
 	<!-- <div  style="bottom:8%;width:95%;background-color:#fff;">
 		
 	</div> -->

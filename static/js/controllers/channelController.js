@@ -175,7 +175,7 @@ $scope.addThread = function(topic){
 		$scope.addThreadText = "Add";
 		$scope.topic = "";
 		$scope.threadTopicBox = 0;
-		$scope.threads.push(data.thread);
+		$scope.threads.unshift(data.thread);
 	},
 	function(status) {
 		$scope.addThreadText = "Add";
@@ -189,7 +189,6 @@ $scope.getThreads = function(){
 		$scope.discussionsText = "Click to collapse";
 		appfactory.getThreads($scope.channel_id,$scope.limit,$scope.offset).then(function(data){
 			$scope.threads = data.threads;
-			$scope.threads.reverse();
 			$scope.discussionText = "Discussions";
 		},function(status){
 			$scope.errorBox2=true;
@@ -223,7 +222,7 @@ $scope.loadMoreThreads = function(){
 	appfactory.getThreads($scope.channel_id,$scope.limit,$scope.offset).then(function(data){
 		var threads = data.threads;
 		for(var j=0;j<threads.length;j++){
-			$scope.threads.unshift(threads[j]);
+			$scope.threads.push(threads[j]);
 		}
 		$scope.statusText2 = "Load more";
 	},function(status){

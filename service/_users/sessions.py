@@ -90,9 +90,7 @@ class LoginRequired(object):
 				logging.info("Came here")
 				id1 = int(ar[2])
 				channel = Channels.get_by_id(id1)
-				logging.info(channel)
-				if channel.channel_name == "Campusfeed Blog":
-					logging.info("yoyo")
+				if channel.channel_name == "Campusfeed Blog" or channel.channel_name == "AXIS'15":
 					obj.session['userid'] = -1
 					r = self.f(obj, *args, **kwargs)
 					return r 
