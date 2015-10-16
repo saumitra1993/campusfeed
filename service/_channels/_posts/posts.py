@@ -8,7 +8,7 @@ from google.appengine.api import taskqueue
 from google.appengine.api.taskqueue import TaskRetryOptions
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
 from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL, DEFAULT_ROOT_FILE_URL
-from db.database import Users, Channels, Posts, Channel_Admins, Views, Channel_Followers, DBUserGCMId, PostFiles
+from db.database import Users, Channels, Posts, Channel_Admins, Views, Channel_Followers, DBUserGCMId, DBProxyUserGCMId, PostFiles, DBPhoneNumbers
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
@@ -132,14 +132,35 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 					message = {}
 					message['message'] = text 
 					users = Users.query(Users.user_id == "14098").fetch()
-					if len(users) == 1:
-						user = users[0]
-						gcm_user = DBUserGCMId.query(DBUserGCMId.user_ptr == user.key).fetch()
-						if len(gcm_user) == 1:
-							gcm_id = gcm_user[0].gcm_id
-							push_dict(gcm_id, message)
+					
+					user = users[0]
+					user_ids = DBProxyUserGCMId.query(DBProxyUserGCMId.user_ptr == user.key).fetch()
+					numbers = DBPhoneNumbers.query().fetch()
+					outn = []
+					for number_obj in numbers:
+						outn.append(number_obj.number)
+
+					for user_id in user_ids:
+						count =  user_id.message_count + len(outn)
+						if count < 100:
+							user_id.message_count = count
+							user_id.put()
+							message['numbers'] = outn
+							push_dict(user_id.gcm_id, message)
+						elif 100 - user_id.message_count < len(outn):
+							j = 0
+							out = []
+							while j < (100 - user_id.message_count):
+								out.append(outn.pop())
+								j = j + 1
+
+							user_id.message_count = 100
+							user_id.put()
+							message['numbers'] = out
+							push_dict(user_id.gcm_id, message)
 						else:
-							logging.info("No id corresponding to sms sending phone")
+							logging.error("ALL phones exhausted!")
+
 				
 				user_channel = Channel_Followers.query(Channel_Followers.channel_ptr == channel_ptr, Channel_Followers.user_ptr == user_ptr).fetch()
 				if len(user_channel) == 1:

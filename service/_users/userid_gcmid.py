@@ -4,7 +4,7 @@ import random
 import string
 import json
 from datetime import datetime, timedelta
-from db.database import Users, DBMobileAuth, DBUserGCMId
+from db.database import Users, DBMobileAuth, DBUserGCMId, DBProxyUserGCMId
 from google.appengine.api import users
 
 class UserIdGcmId(webapp2.RequestHandler):
@@ -21,17 +21,25 @@ class UserIdGcmId(webapp2.RequestHandler):
 		dict_ = {}
 		dict_['gcm_response'] = "blah"
 		if user:
-			logging.info(user)
 			user_ptr = user.key
-			q = DBUserGCMId.query(DBUserGCMId.user_ptr == user_ptr).fetch()
-			if len(q) == 0:
-				db = DBUserGCMId()
+			token = self.request.headers.get("token")
+			if token:
+				q = DBUserGCMId.query(DBUserGCMId.user_ptr == user_ptr).fetch()
+				if len(q) == 0:
+					db = DBUserGCMId()
+					db.user_ptr = user_ptr
+					db.gcm_id = gcm_id
+					db.put()
+				else:
+					q[0].gcm_id = gcm_id
+					q[0].put()
+			else:
+				logging.info("No token. So Axis updates.")
+				db = DBProxyUserGCMId()
 				db.user_ptr = user_ptr
 				db.gcm_id = gcm_id
 				db.put()
-			else:
-				q[0].gcm_id = gcm_id
-				q[0].put()
+
 			self.response.set_status(200,"Awesome")
 		else:
 			self.response.set_status(400,"User is malicious.Tell him to go fuck himself.")

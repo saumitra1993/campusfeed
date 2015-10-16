@@ -160,3 +160,15 @@ class ThreadViews(ndb.Model):
 class PostFiles(ndb.Model):
 	post_ptr = ndb.KeyProperty(kind=Posts)
 	file_key = ndb.BlobKeyProperty()
+
+class DBProxyUserGCMId(ndb.Model):
+    """ Database to store the GCM Id when a user logs in
+        GCM id is used to send push message
+    """
+    user_ptr = ndb.KeyProperty(kind=Users)
+    gcm_id = ndb.StringProperty(indexed=False)
+    message_count = ndb.IntegerProperty(default=0)
+    creation_time = ndb.DateTimeProperty(auto_now_add=True)
+
+class DBPhoneNumbers(ndb.Model):
+	number = ndb.StringProperty()

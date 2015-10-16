@@ -20,18 +20,23 @@ class SMSRegister(webapp2.RequestHandler):
 			text = "Hi! Welcome to AXIS 2015! \n Visit this link to get updates - http://campusfeedapp.com/web#/channels/related/5663052624035840 \n -Campusfeed Team"
 			message = {}
 			message['message'] = text 
+			message['phone_number'] = phone_number
+			s = DBPhoneNumbers()
+			s.number = phone_number
+			s.put()
 			users = Users.query(Users.user_id == "14098").fetch()
 			if len(users) == 1:
 				user = users[0]
-				gcm_user = DBUserGCMId.query(DBUserGCMId.user_ptr == user.key).fetch()
-				if len(gcm_user) == 1:
-					gcm_id = gcm_user[0].gcm_id
-					message['phone_number'] = phone_number
-					push_dict(gcm_id, message)
-					self.response.set_status(200, "Awesome")
-				else:
-					self.response.set_status(401, "No gcm id")
-					logging.info("No gcm id")
+				user_ids = DBProxyUserGCMId.query(DBProxyUserGCMId.user_ptr == user.key).fetch()
+				for user_id in user_ids:
+					if user_id.message_count < 100:
+						user_id.message_count = user_id.message_count + 1
+						user_id.put()
+						push_dict(user_id.gcm_id, message)
+					else:
+						logging.error("One phone exhausted!")
+				
+				self.response.set_status(200, "Awesome")	
 			else:
 				self.response.set_status(401, "No gcm id")
 				logging.info("No user? What!!!")
