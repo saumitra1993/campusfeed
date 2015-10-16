@@ -89,9 +89,10 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 			thread = Threads.get_by_id(int(thread_id))
 
 			if thread:
-
+				channel_id = int(channel_id)
+				channel = Channels.get_by_id(channel_id)
 				user = Users.get_by_id(user_id)
-				
+				is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user.key, Channel_Admins.isDeleted == 0).count()
 				thread_discussions_query = ThreadDiscussions.query(ndb.AND(ThreadDiscussions.thread_ptr == thread.key, ThreadDiscussions.isDeleted == 0))
 				
 				if timestamp:
@@ -118,7 +119,7 @@ class ThreadDiscussionsHandler(BaseHandler,webapp2.RequestHandler):
 				
 					_dict['added_time'] = date_to_string(utc_to_ist(comment.added_time))					
 					
-					if comment.user_ptr == user.key:
+					if comment.user_ptr == user.key or is_admin:
 						_dict['added'] = 1
 					else:
 						_dict['added'] = 0

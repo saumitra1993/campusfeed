@@ -36,13 +36,13 @@ class RemoveThreadHandler(BaseHandler,webapp2.RequestHandler):
 				thread_ptr = thread.key
 				is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel_ptr, Channel_Admins.user_ptr == user_ptr, Channel_Admins.isDeleted == 0).count()
 				
-				if is_admin == 1:				
+				if is_admin == 1 or thread.started_by_user_ptr == user_ptr:				
 					thread.isDeleted = 1
 					thread.put()
 
 					self.response.set_status(200, 'Awesome')
 				else:
-					self.response.set_status(400, 'Not admin')
+					self.response.set_status(400, 'Not admin and not started by this guy')
 					logging.info('Not admin')
 				#-----------------------------------------------------------	
 			else:

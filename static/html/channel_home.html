@@ -55,11 +55,14 @@
 	      			{{statusText2}}
 				</a>
 			</tr>
+			<!-- <tr>
+				<td colspan="2" ng-show="threadInSidebar == 0" style="font-size:18px;font-size:bold;">{{thread_topic}}</td>
+			</tr> -->
 		  	<tr ng-repeat="comment in comments" ng-show="threadInSidebar == 0" >
 		  		
 		  		<td class="col-xs-10">
 		  			<h5 style="margin-bottom:1%;" class="text-capitalize"><b>{{comment.full_name}}</b><span class="pull-right" style="font-weight:normal;">{{comment.added_time}}</span></h5>
-					<span style="margin-bottom:1%;" ng-bind-html="comment.text | linky:'_blank'"></span><span title="Delete this comment" style="float:right;cursor:pointer;" ng-if="comment.added == 1" class="glyphicon glyphicon-trash pull-right" aria-hidden="true"></span>
+					<span style="margin-bottom:1%;" ng-bind-html="comment.text | linky:'_blank'"></span><span title="Delete this comment" style="float:right;cursor:pointer;" ng-if="comment.added == 1" class="glyphicon glyphicon-trash pull-right" ng-click="deleteComment(comment)" aria-hidden="true"></span>
 		  		</td>
 		  	</tr>
 		  	<!-- <tr ng-show="threadInSidebar == 0">
@@ -92,7 +95,7 @@
 		<table class="table" style="margin-top:1%;">
 		  <tbody style="border-bottom:1px solid #e6e6e6;">
 		  	<tr >
-		  		<td class="col-xs-2" style="border:none;"><img ng-src="{{channelDetails.channel_img_url}}" class="img-responsive img-rounded" ></td>
+		  		<td class="col-xs-2" style="border:none;"><img ng-click="open(channelDetails.channel_img_url+'?full=true')" ng-src="{{channelDetails.channel_img_url}}" class="img-responsive img-rounded" ></td>
 		  		
 		  		<td class="col-xs-10" style="border:none;"><h4 class="text-capitalize"><b>{{channelDetails.channel_name}}</b><div class="btn-group pull-right" >
 		  			<span uib-dropdown on-toggle="toggled(open)">
@@ -166,16 +169,16 @@
  		<div  ng-repeat="post in channelPosts" ng-class="{'panel panel-default bootcards-media' : post.pending_bit==0, 'panel panel-danger bootcards-media' : post.pending_bit==1}" ng-init="post.showMore=0;post.approveText='Approve'" >
 
 	        <div >
-				<uib-carousel>
+				<uib-carousel ng-if="post.images.length > 0">
 			      <uib-slide ng-repeat="image in post.images" >
-			        <img ng-src="{{image}}=s800" style="margin:auto;" ng-click="open(image)" style="cursor:pointer;">
+			        <img ng-src="{{image.url}}=s400" style="margin:auto;max-height:400px;" ng-click="open(image.url)" style="cursor:pointer;">
 			        <div class="carousel-caption">
 			          
 			        </div>
 			      </uib-slide>
 			    </uib-carousel>
 
-	        	<!-- <img ng-src="{{post.post_img_url}}" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  /> -->
+	        	<img ng-src="{{post.post_img_url}}" ng-if="post.post_img_url != ''" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  />
 
 	        </div>
 	        <div class="panel-body">

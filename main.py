@@ -26,6 +26,7 @@ from service._users.superuserfollow import SuperuserFollow
 from service._users.check_key import CheckKey
 from service._users.channeltoken import ChannelToken
 from service._users.channelid import ChannelId
+from service._users.sms_register import SMSRegister 
 
 from service._channels.followed_channels import FollowedChannels
 from service._channels.delete_channel_follower import DeleteChannelFollower
@@ -75,6 +76,7 @@ application = webapp2.WSGIApplication([
 	('/login',Login),
 	('/signup',Signup),
 	('/imageurl',ImageUrl),
+	('/register', SMSRegister),
 	('/pic/(.*)',GetPhotu),
 	('/files/(.*)',GetFile),
 	('/channelimageurl',ChannelImageUrl),

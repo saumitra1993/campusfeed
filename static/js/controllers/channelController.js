@@ -29,6 +29,7 @@ $scope.errorBox2 = false;
 $scope.threadInSidebar = 1;
 $scope.thread_id = -1;	//used when sending a comment 
 $scope.comments = [];
+$scope.thread_topic = "";
 appfactory.channelPosts($scope.channel_id, $scope.limit, $scope.offset).then(function(data){
 	if(data.posts.length>0){
 		$scope.channelPosts=data.posts;
@@ -201,7 +202,7 @@ $scope.getThreads = function(){
 };
 
 $scope.gotoThread = function(thread){
-	$scope.sidebarHead = "Thread comments";
+	$scope.sidebarHead = thread.topic;
 	$scope.threadInSidebar = 0;
 	$scope.thread_id = thread.thread_id;
 	$scope.limit = 10;

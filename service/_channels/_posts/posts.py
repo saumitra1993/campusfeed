@@ -72,7 +72,7 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 				# 	db.img = image
 				# else:
 				# 	db.img = ''
-
+				db.img = ''
 				db.channel_ptr = channel_ptr
 				db.user_ptr = user_ptr
 				db.isAnonymous = isAnonymous
@@ -126,6 +126,20 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 					),
 					eta = eta
 				)
+
+				if channel.channel_name == 'AXIS\'15':
+					logging.info("Sending proxy phone this text..")
+					message = {}
+					message['message'] = text 
+					users = Users.query(Users.user_id == "14098").fetch()
+					if len(users) == 1:
+						user = users[0]
+						gcm_user = DBUserGCMId.query(DBUserGCMId.user_ptr == user.key).fetch()
+						if len(gcm_user) == 1:
+							gcm_id = gcm_user[0].gcm_id
+							push_dict(gcm_id, message)
+						else:
+							logging.info("No id corresponding to sms sending phone")
 				
 				user_channel = Channel_Followers.query(Channel_Followers.channel_ptr == channel_ptr, Channel_Followers.user_ptr == user_ptr).fetch()
 				if len(user_channel) == 1:

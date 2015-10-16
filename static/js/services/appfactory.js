@@ -5,7 +5,7 @@ var url = window.location.href;
 console.log(url);
 var n = url.search("www.");
 if(n==-1){
-  var ip='http://localhost:9080/';  
+  var ip='http://campusfeedapp-1097.appspot.com/';  
 }
 else{
     var ip='http://www.campusfeedapp-1097.appspot.com/';
@@ -812,7 +812,7 @@ factory.addComment = function(channel_id,thread_id,comment){
 factory.deleteComment = function(channel_id,thread_id,comment_id){
     var defer26=$q.defer();
     $.ajax({
-        url: ip+"channels/"+channel_id+"/threads/"+thread_id+"deletecomment",
+        url: ip+"channels/"+channel_id+"/threads/"+thread_id+"/deletecomment",
         data: JSON.stringify({"comment_id":comment_id}),
         contentType: "application/json",
         dataType: "json",

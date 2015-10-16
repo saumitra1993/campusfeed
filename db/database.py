@@ -57,7 +57,7 @@ class Posts(ndb.Model):
 	user_ptr = ndb.KeyProperty(kind=Users)
 	channel_ptr = ndb.KeyProperty(kind=Channels)
 	text = ndb.TextProperty()
-	img = ndb.BlobProperty()
+	img = ndb.BlobProperty(default='')
 	created_time = ndb.DateTimeProperty(auto_now_add = True)
 	pending_bit = ndb.IntegerProperty(default=1)
 	isAnonymous = ndb.StringProperty(

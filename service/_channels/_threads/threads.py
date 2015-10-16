@@ -92,7 +92,7 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 				channel = Channels.get_by_id(int(channel_id))
 
 				if channel:
-
+					is_admin = Channel_Admins.query(Channel_Admins.channel_ptr == channel.key, Channel_Admins.user_ptr == user_ptr, Channel_Admins.isDeleted == 0).count()
 					threads_query = Threads.query(ndb.AND(Threads.channel_ptr == channel.key, Threads.isDeleted == 0))
 					
 					if timestamp:
@@ -124,7 +124,7 @@ class ThreadsHandler(BaseHandler,webapp2.RequestHandler):
 						_dict['num_views'] = num_views_count	
 						_dict['num_comments'] = num_comments_count
 
-						if thread.started_by_user_ptr == user_ptr:
+						if thread.started_by_user_ptr == user_ptr or is_admin:
 							_dict['started'] = 1
 						else:
 							_dict['started'] = 0
