@@ -22,6 +22,20 @@ def push(json_data):
     #TODO: if canonical_ids is valid, the gcm registration id needs to be updated in the DB
     logging.info(json.dumps(response,sort_keys=True, indent=2))
 
+def push_old(json_data):
+    """ Push given json(dict) data and send to google gcm server """
+    url = 'https://android.googleapis.com/gcm/send'
+    myKey = GCM_PUSH_MESSAGE_API_KEY #key for blowhorntest
+    #logging.info('Sending push message with API key :' + myKey)
+    data = json.dumps(json_data)
+    headers = {'Content-Type': 'application/json', 'Authorization': 'key=%s' % myKey}
+    req = urllib2.Request(url, data, headers)
+    f = urllib2.urlopen(req)
+    response = json.loads(f.read())
+    #logging.info('Push response below')
+    #TODO: if canonical_ids is valid, the gcm registration id needs to be updated in the DB
+    logging.info(json.dumps(response,sort_keys=True, indent=2))
+
 def push_special(json_data):
     """ Push given json(dict) data and send to google gcm server """
     url = 'https://pushy.me/push?api_key=711b4dcfe7d2afa385d61ffe364cc7675ef9e60dcce51047405bac4b467d5ef1'
@@ -72,8 +86,19 @@ def push_dict(gcm_id, dict_):
             "registration_ids": [gcm_id],
         }
         push_special(json_data)
-    else:
+    elif len(gcm_id) > 22:
         logging.info('Pushing message to GCM ID: %s' % gcm_id)
+        json_data = {
+            #"collapse_key" : "msg", 
+            "data" : {
+                "message" : dict_,
+            },
+            "registration_ids": [gcm_id],
+        }
+        push_old(json_data)
+
+    else:
+        logging.info('Pushing message to pushy ID: %s' % gcm_id)
         json_data = {
             #"collapse_key" : "msg", 
             "data" : {

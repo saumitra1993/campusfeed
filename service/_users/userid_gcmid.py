@@ -19,6 +19,7 @@ class UserIdGcmId(webapp2.RequestHandler):
 		logging.info("%s"%gcm_id)
 		user = Users.get_by_id(user_id)
 		dict_ = {}
+		seen = 0
 		dict_['gcm_response'] = "blah"
 		if user:
 			user_ptr = user.key
@@ -35,10 +36,16 @@ class UserIdGcmId(webapp2.RequestHandler):
 					q[0].put()
 			else:
 				logging.info("No token. So Axis updates.")
-				db = DBProxyUserGCMId()
-				db.user_ptr = user_ptr
-				db.gcm_id = gcm_id
-				db.put()
+				q = DBProxyUserGCMId.query(DBProxyUserGCMId.user_ptr == user_ptr).fetch()
+				for a in q:
+					if a.gcm_id == gcm_id:
+						seen = 1
+						break
+				if seen == 0:
+					db = DBProxyUserGCMId()
+					db.user_ptr = user_ptr
+					db.gcm_id = gcm_id
+					db.put()
 
 			self.response.set_status(200,"Awesome")
 		else:

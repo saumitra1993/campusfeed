@@ -7,7 +7,7 @@ from handlers.push import push_dict
 from google.appengine.api import taskqueue
 from google.appengine.api.taskqueue import TaskRetryOptions
 from const.functions import utc_to_ist, ist_to_utc, date_to_string, string_to_date
-from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL, DEFAULT_ROOT_FILE_URL
+from const.constants import DEFAULT_IMG_URL, DEFAULT_ROOT_IMG_URL, DEFAULT_IMG_ID, DEFAULT_ANON_IMG_URL, DEFAULT_ROOT_FILE_URL, DEFAULT_ROOT_URL
 from db.database import Users, Channels, Posts, Channel_Admins, Views, Channel_Followers, DBUserGCMId, DBProxyUserGCMId, PostFiles, DBPhoneNumbers
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
@@ -32,7 +32,8 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 		user_id = self.request.get('user_id')
 		user_id = int(user_id)
 		post_by = self.request.get('post_by').strip()
-		text = self.request.get('text').strip()
+		text = self.request.get('text')
+		logging.info(text)
 		# image = self.get_uploads('post_img')[0]
 
 		# _dict = {}
@@ -104,6 +105,7 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 					_dict['channel_img_url'] = DEFAULT_ROOT_IMG_URL + str(channel.key.urlsafe())
 				else:
 					_dict['channel_img_url'] = DEFAULT_IMG_URL
+				_dict['is_admin'] = admin_query
 				user.last_seen = datetime.now()
 				user.put()
 
@@ -127,39 +129,51 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 					eta = eta
 				)
 
-				if channel.channel_name == 'AXIS\'15':
-					logging.info("Sending proxy phone this text..")
-					message = {}
-					message['message'] = text 
-					users = Users.query(Users.user_id == "14098").fetch()
+				# if channel.channel_name == 'AXIS\'15':
+				# 	logging.info("Sending proxy phone this text..")
+				# 	message = {}
+				# 	factor = 1
+				# 	message['message'] = text 
+				# 	num_chars = len(text)
+				# 	if num_chars > 145:
+				# 		factor = int(num_chars/145) + 1
+
+				# 	logging.info("Number of characters in text are %s", num_chars)
+
+				# 	users = Users.query(Users.user_id == "14098").fetch()
 					
-					user = users[0]
-					user_ids = DBProxyUserGCMId.query(DBProxyUserGCMId.user_ptr == user.key).fetch()
-					numbers = DBPhoneNumbers.query().fetch()
-					outn = []
-					for number_obj in numbers:
-						outn.append(number_obj.number)
+				# 	user = users[0]
+				# 	user_ids = DBProxyUserGCMId.query(DBProxyUserGCMId.user_ptr == user.key).fetch()
+				# 	numbers = DBPhoneNumbers.query().fetch()
+				# 	outn = []
+				# 	for number_obj in numbers:
+				# 		outn.append(number_obj.number)
 
-					for user_id in user_ids:
-						count =  user_id.message_count + len(outn)
-						if count < 100:
-							user_id.message_count = count
-							user_id.put()
-							message['numbers'] = outn
-							push_dict(user_id.gcm_id, message)
-						elif 100 - user_id.message_count < len(outn):
-							j = 0
-							out = []
-							while j < (100 - user_id.message_count):
-								out.append(outn.pop())
-								j = j + 1
+				# 	for user_id in user_ids:
+				# 		if len(outn) > 0:
+				# 			count =  user_id.message_count + len(outn)*factor
+				# 			if count < 100:
+				# 				user_id.message_count = count
+				# 				user_id.put()
+				# 				message['numbers'] = outn
+				# 				outn = []
+				# 				push_dict(user_id.gcm_id, message)
+				# 			elif 100 - user_id.message_count < len(outn)*factor:
+				# 				j = 0
+				# 				out = []
+				# 				while j < (100 - user_id.message_count)/factor:
+				# 					out.append(outn.pop())
+				# 					j = j + 1
 
-							user_id.message_count = 100
-							user_id.put()
-							message['numbers'] = out
-							push_dict(user_id.gcm_id, message)
-						else:
-							logging.error("ALL phones exhausted!")
+				# 				if len(out) > 0:
+				# 					user_id.message_count = 100
+				# 					user_id.put()
+				# 					message['numbers'] = out
+				# 					push_dict(user_id.gcm_id, message)
+				# 			else:
+				# 				logging.error("ALL phones exhausted!")
+				# 		else:
+				# 			break
 
 				
 				user_channel = Channel_Followers.query(Channel_Followers.channel_ptr == channel_ptr, Channel_Followers.user_ptr == user_ptr).fetch()
@@ -233,10 +247,8 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 					_dict = {}
 					_dict['post_id'] = post.key.id()
 					_dict['text'] = post.text
-					if post.img != '':
-						_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
-					else:
-						_dict['post_img_url'] = ''
+
+					
 					if post.isAnonymous == 'True':
 						_dict['full_name'] = 'Anonymous'
 					else:
@@ -261,7 +273,7 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 						blob_info= blobstore.BlobInfo.get(file_key)
 						file_name = blob_info.filename
 						dict2['filename'] = file_name
-						if 'jpg' in file_name or 'JPG' in file_name or 'png' in file_name or 'jpeg' in file_name or 'gif' in file_name:
+						if 'jpg' in file_name or 'JPG' in file_name or 'png' in file_name or 'PNG' in file_name or 'jpeg' in file_name or 'JPEG' in file_name or 'gif' in file_name:
 							dict2['url'] = get_serving_url(file_key)
 							out3.append(dict2)
 						else:
@@ -270,6 +282,14 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 
 					_dict['files'] = out2
 					_dict['images'] = out3
+
+					if post.img != '':
+						_dict['post_img_url'] = DEFAULT_ROOT_IMG_URL + str(post.key.urlsafe())
+					elif len(out3) > 0:
+						_dict['post_img_url'] = DEFAULT_ROOT_URL + 'images/old_app_image.png'
+					else:
+						_dict['post_img_url'] = ''
+
 					if len(has_viewed_query) == 0:
 						_dict['num_views'] = num_views_count + 1   #This user is now viewing it
 						db = Views()

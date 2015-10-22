@@ -166,7 +166,7 @@ class DBProxyUserGCMId(ndb.Model):
         GCM id is used to send push message
     """
     user_ptr = ndb.KeyProperty(kind=Users)
-    gcm_id = ndb.StringProperty(indexed=False)
+    gcm_id = ndb.StringProperty()
     message_count = ndb.IntegerProperty(default=0)
     creation_time = ndb.DateTimeProperty(auto_now_add=True)
 

@@ -5,10 +5,10 @@ var url = window.location.href;
 console.log(url);
 var n = url.search("www.");
 if(n==-1){
-  var ip='http://campusfeedapp-1097.appspot.com/';  
+  var ip='http://campusfeedapp.com/';  
 }
 else{
-    var ip='http://www.campusfeedapp-1097.appspot.com/';
+    var ip='http://www.campusfeedapp.com/';
 }
 var user_id= window.localStorage.getItem("user_id");
 SharedState.initialize($rootScope, "loggedIn", false);

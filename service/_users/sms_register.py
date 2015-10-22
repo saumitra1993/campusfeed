@@ -25,18 +25,26 @@ class SMSRegister(webapp2.RequestHandler):
 			s.number = phone_number
 			s.put()
 			users = Users.query(Users.user_id == "14098").fetch()
+			dict_ = {}
+			dict_['gcm_response'] = "blah"
 			if len(users) == 1:
 				user = users[0]
 				user_ids = DBProxyUserGCMId.query(DBProxyUserGCMId.user_ptr == user.key).fetch()
+				sent = 0
 				for user_id in user_ids:
-					if user_id.message_count < 100:
-						user_id.message_count = user_id.message_count + 1
-						user_id.put()
-						push_dict(user_id.gcm_id, message)
+					if sent == 0:
+						if user_id.message_count < 100:
+							user_id.message_count = user_id.message_count + 1
+							user_id.put()
+							sent = 1
+							push_dict(user_id.gcm_id, message)
+						else:
+							logging.error("One phone exhausted!")
 					else:
-						logging.error("One phone exhausted!")
+						break
 				
 				self.response.set_status(200, "Awesome")	
+				self.response.write(json.dumps(dict_))
 			else:
 				self.response.set_status(401, "No gcm id")
 				logging.info("No user? What!!!")

@@ -171,14 +171,14 @@
 	        <div >
 				<uib-carousel ng-if="post.images.length > 0">
 			      <uib-slide ng-repeat="image in post.images" >
-			        <img ng-src="{{image.url}}=s400" style="margin:auto;max-height:400px;" ng-click="open(image.url)" style="cursor:pointer;">
+			        <img ng-src="{{image.url}}=s800" style="margin:auto;max-height:400px;" ng-click="open(image.url+'=s0')" style="cursor:pointer;">
 			        <div class="carousel-caption">
 			          
 			        </div>
 			      </uib-slide>
 			    </uib-carousel>
 
-	        	<img ng-src="{{post.post_img_url}}" ng-if="post.post_img_url != ''" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  />
+	        	<img ng-src="{{post.post_img_url}}" ng-if="post.images.length == 0 && post.post_img_url != ''" class="center-block img-responsive fixedSize" ng-click="open(post.post_img_url)" style="cursor:pointer;"  />
 
 	        </div>
 	        <div class="panel-body">

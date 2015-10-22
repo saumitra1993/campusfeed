@@ -113,7 +113,7 @@
 		<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 		<script>
 			/*var ip = "http://localhost:9080/";*/
-			var ip = "http://campusfeedapp-1097.appspot.com/";
+			var ip = "http://campusfeedapp.com/";
 			window.onload = function() { document.body.className = ''; }
 			window.ontouchmove = function() { return false; }
 			window.onorientationchange = function() { document.body.scrollTop = 0; }
@@ -145,7 +145,6 @@
 				        url: ip+"register",
 				        data: JSON.stringify({"phone_number":phone}),
 				        contentType: "application/json",
-				        dataType: "json",
 				        type: 'POST',
 
 				        success: function(data, textStatus, xhr){
