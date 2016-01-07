@@ -29,11 +29,13 @@ class PostsHandler(BaseHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def post(self,channel_id):
 
 		isAnonymous = self.request.get('isAnonymous').strip() #fetching True/False
-		user_id = self.request.get('user_id')
-		user_id = int(user_id)
+
 		post_by = self.request.get('post_by').strip()
 		text = self.request.get('text')
 		logging.info(text)
+		user_id = self.request.get('user_id')
+		logging.info(user_id);
+		user_id = int(user_id)
 		# image = self.get_uploads('post_img')[0]
 
 		# _dict = {}

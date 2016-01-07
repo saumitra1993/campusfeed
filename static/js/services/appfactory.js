@@ -310,6 +310,7 @@ factory.addPost = function(formData,channel_id,text,post_by,isAnonymous,image){
         url: ip+'uploadendpoint?channel_id='+channel_id,
         dataType:"json",
         success: function(data, textStatus, xhr){
+            console.log(formData);
             $.ajax({
                 url: data.upload_url,
                 data: formData,
@@ -326,14 +327,14 @@ factory.addPost = function(formData,channel_id,text,post_by,isAnonymous,image){
                     defer7.reject(data);
                     
                 },
-                timeout: 25000
+                timeout: 90000
               });
         },
         error: function(data, textStatus, xhr){
             defer7.reject(xhr.status);
             
         },
-        timeout: 15000
+        timeout: 25000
     }); 
  
    return defer7.promise;

@@ -172,3 +172,44 @@ class DBProxyUserGCMId(ndb.Model):
 
 class DBPhoneNumbers(ndb.Model):
 	number = ndb.StringProperty()
+
+class Events(ndb.Model):
+	name = ndb.StringProperty()
+	code = ndb.IntegerProperty()
+	type_of_event = ndb.StringProperty(
+					choices = ['oneshot','tournament'],
+					default = 'tournament')
+	location = ndb.StringProperty()
+	event_time = ndb.DateTimeProperty()                              #only for oneshot events
+	p1 = ndb.IntegerProperty()
+	p2 = ndb.IntegerProperty()
+	p3 = ndb.IntegerProperty()
+	p4 = ndb.IntegerProperty()
+	p5 = ndb.IntegerProperty()
+	p6 = ndb.IntegerProperty()
+	p7 = ndb.IntegerProperty()
+	p8 = ndb.IntegerProperty()
+
+class Departments(ndb.Model):
+	name = ndb.StringProperty()
+	code_name = ndb.StringProperty()
+	points = ndb.IntegerProperty(default=0)
+
+class EventStandings(ndb.Model):
+	event_ptr = ndb.KeyProperty(kind=Events)
+	points = ndb.IntegerProperty(default=0)
+	dept_ptr = ndb.KeyProperty(kind=Departments)
+	created_time = ndb.DateTimeProperty(auto_now_add = True)
+	edited_time = ndb.DateTimeProperty(auto_now = True)
+
+class EventMatches(ndb.Model):
+	event_ptr = ndb.KeyProperty(kind=Events)
+	winner_ptr = ndb.KeyProperty(kind=Departments)
+	dept1_ptr = ndb.KeyProperty(kind=Departments)
+	dept2_ptr = ndb.KeyProperty(kind=Departments)
+	match_time = ndb.DateTimeProperty()
+	match_type = ndb.StringProperty(
+					choices = ['qf','sf','f','po'],     #quarterfinals, semifinals, finals, playoffs
+					default = 'qf')
+
+

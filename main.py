@@ -50,6 +50,8 @@ from service._channels._posts.files import GetFile
 from service._channels._posts.file_upload_endpoint import PostUploadURL
 from service._channels._posts.view_post import PostViewed
 from service._channels._posts.approve_post import OnePost
+from service.ig.updateresult import UpdateResult
+from service.ig.eventtime import EventTime
 
 config = {}
 config['webapp2_extras.sessions'] = {
@@ -123,5 +125,8 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/channels/<:[0-9a-zA-Z]{16}>/deletethread',RemoveThreadHandler),
 	webapp2.Route(r'/channels/search',SearchChannels),
 	webapp2.Route(r'/posts/<:[0-9a-zA-Z]{16}>/views', PostViewed),
+
+	webapp2.Route(r'/updateresult',UpdateResult),
+	webapp2.Route(r'/eventtime', EventTime),
 
 ], config=config, debug=True)

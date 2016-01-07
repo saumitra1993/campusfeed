@@ -73,3 +73,6 @@ class Signup(webapp2.RequestHandler):
 			dict_ = {}
 			dict_['signup_response'] = "blah"
 			self.response.write(json.dumps(dict_))
+
+
+			

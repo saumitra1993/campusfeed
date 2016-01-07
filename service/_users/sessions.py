@@ -74,18 +74,13 @@ class LoginRequired(object):
 					return
 				_user = DBMobileAuth.get_by_id(token)
 				if _user:
-					now = datetime.now()
-					if _user.expiration > now:
-						if (_user.expiration - now).total_seconds() < 3600*24:
-							_user.expiration = now + datetime.timedelta(days=MOBILE_USER_SESSION_DURATION_DAYS)
-							_user.put()
-						obj.session['userid'] = _user.user_id
-						_user.put()
-						r = self.f(obj, *args, **kwargs)
-						return r
-					else:
-						key = _user.key
-						key.delete()
+					
+					
+					obj.session['userid'] = _user.user_id
+				
+					r = self.f(obj, *args, **kwargs)
+					return r
+					
 			else:
 				logging.info("Came here")
 				id1 = int(ar[2])
@@ -116,18 +111,11 @@ class LoginRequired(object):
 					return
 				_user = DBMobileAuth.get_by_id(token)
 				if _user:
-					now = datetime.now()
-					if _user.expiration > now:
-						if (_user.expiration - now).total_seconds() < 3600*24:
-							_user.expiration = now + datetime.timedelta(days=MOBILE_USER_SESSION_DURATION_DAYS)
-							_user.put()
-						obj.session['userid'] = _user.user_id
-						_user.put()
-						r = self.f(obj, *args, **kwargs)
-						return r
-					else:
-						key = _user.key
-						key.delete()
+					
+					obj.session['userid'] = _user.user_id
+					r = self.f(obj, *args, **kwargs)
+					return r
+					
 
 			obj.response.set_status(400)
 			dict_ = {
