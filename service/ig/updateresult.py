@@ -20,8 +20,20 @@ class UpdateResult(webapp2.RequestHandler):
 
 	def post(self):
 			
-			
+		distribution_type = self.request.get('distribution_type')
+		event_code = self.request.get('event_id')
+		winner_id = self.request.get('winner_id')
+		loser_id = self.request.get('loser_id')
+		points = self.request.get('points')
+		message = self.request.get('message')
+		dept_positions = self.request.get('dept_positions')
+		position_points = self.request.get('position_points')
 		
+		result3 = Events.query(Events.code == event_code).fetch()
+		if len(result1) == 1 and len(result2) == 1 and len(result3) == 1:
+			if distribution_type == 'per_match':
+				result1 = Departments.query(Departments.dept1_code == winner_id).fetch()
+				result2 = Departments.query(Departments.dept2_code == loser_id).fetch()
 		self.response.set_status(200,"Awesome")
 		dict_ = {}
 		dict_['status'] = "SUCCESS"

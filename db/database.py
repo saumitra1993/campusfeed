@@ -191,7 +191,6 @@ class Events(ndb.Model):
 	p8 = ndb.IntegerProperty()
 
 class Departments(ndb.Model):
-	name = ndb.StringProperty()
 	code_name = ndb.StringProperty()
 	points = ndb.IntegerProperty(default=0)
 

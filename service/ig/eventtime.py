@@ -24,7 +24,6 @@ class EventTime(webapp2.RequestHandler):
 		match_type = self.request.get('match_type')
 		dept1_code = self.request.get('dept1')
 		dept2_code = self.request.get('dept2')
-
 		result1=Departments.query(Departments.dept1_code==dept1_code).fetch()
 		result2=Departments.query(Departments.dept2_code==dept2_code).fetch()
 		result3=Events.query(Events.code==event_code).fetch()

@@ -15,28 +15,41 @@ class SuperuserFollow(BaseHandler, webapp2.RequestHandler):
 	def get(self):
 
 
-		f = open("points.txt")
+		f = open("static/points.txt")
 		for line in f:
 			lines = line.split('\r')
 			for line in lines:
 				arr = line.split(',')
 				code = int(arr[0])
-				name = arr[1]
-				type_of_event = arr[10]
+				name = arr[1].strip()
+				type_of_event = arr[10].strip()
 				event = Events()
 				event.name = name
 				event.code = code
 				event.type_of_event = type_of_event
-				event.p1 = arr[2]
-				event.p2 = arr[3]
-				event.p3 = arr[4]
-				event.p4 = arr[5]
-				event.p5 = arr[6]
-				event.p6 = arr[7]
-				event.p7 = arr[8]
-				event.p8 = arr[9]
+				event.p1 = int(arr[2])
+				event.p2 = int(arr[3])
+				event.p3 = int(arr[4])
+				event.p4 = int(arr[5])
+				event.p5 = int(arr[6])
+				event.p6 = int(arr[7])
+				event.p7 = int(arr[8])
+				event.p8 = int(arr[9])
 				event.put()
+				
 		f.close()
+
+		depts = ['CSE','MME','CME','MIN','EEE','ECE','ARCHI']
+		i = 0
+		for dept in depts:
+			d = Departments()
+			d.code_name = depts[i]
+			d.put()
+			i = i + 1 
+			
+		self.response.set_status(200,"Awesome")
+		self.response.write("dhg")
+
 		# users = Users.query().fetch()
 		# channel = Channels.get_by_id(5636432282517504)
 		# channels_followers = Channel_Followers.query(Channel_Followers.channel_ptr == channel.key).fetch()
@@ -62,4 +75,4 @@ class SuperuserFollow(BaseHandler, webapp2.RequestHandler):
 		# 		send_email(subject,to,body)
 
 
-		self.response.set_status(200,"Awesome")
+		
