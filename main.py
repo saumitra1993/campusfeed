@@ -8,7 +8,7 @@ from handlers.lock import LockHandler
 from tasks.gcm_push import PushMsg
 
 from service.get_photo import GetPhotu
-from service._users.login import Login
+#from service._users.login import Login
 from service._users.signup import Signup
 from service._users.image_url import ImageUrl
 from service._users.search_users import SearchUsers
@@ -75,7 +75,7 @@ application = webapp2.WSGIApplication([
 	#('/', MyClassName),
 	('/',Home),
 	('/web',WebHome),
-	('/login',Login),
+	#('/login',Login),
 	('/signup',Signup),
 	('/imageurl',ImageUrl),
 	('/register', SMSRegister),

@@ -18,14 +18,16 @@ class EventTime(webapp2.RequestHandler):
 
 	def post(self):
 
-		event_code = self.request.get('event_id')
-		time_string = self.request.get('time')
-		location = self.request.get('location')
-		match_type = self.request.get('match_type')
-		dept1_code = self.request.get('dept1')
-		dept2_code = self.request.get('dept2')
-		result1=Departments.query(Departments.dept1_code==dept1_code).fetch()
-		result2=Departments.query(Departments.dept2_code==dept2_code).fetch()
+		data=json.loads(self.request.body)
+		event_code = int(data.get('event_id'))
+		logging.info(event_code)
+		time_string = data.get('time')
+		location = data.get('location')
+		match_type = data.get('match_type')
+		dept1_code = data.get('dept1')
+		dept2_code = data.get('dept2')
+		result1=Departments.query(Departments.code_name==dept1_code).fetch()
+		result2=Departments.query(Departments.code_name==dept2_code).fetch()
 		result3=Events.query(Events.code==event_code).fetch()
 		if len(result1) == 1 and len(result2) == 1 and len(result3) == 1:
 			dept1_ptr = result1[0].key
