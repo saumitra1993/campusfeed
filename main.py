@@ -32,7 +32,6 @@ from service._channels._posts.approve_post import OnePost
 
 config = {}
 config['webapp2_extras.sessions'] = {
-	'secret_key': 'qwertyuioppoiuytrewqqwertyuiopsdfkjbsdjf',
 	'backends': {'datastore': 'webapp2_extras.appengine.sessions_ndb.DatastoreSessionFactory',
                  'memcache': 'webapp2_extras.appengine.sessions_memcache.MemcacheSessionFactory',
                  'securecookie': 'webapp2_extras.sessions.SecureCookieSessionFactory'}
