@@ -1,0 +1,14 @@
+2018-12-10 23:44:24,015 [main] DEBUG org.jboss.logging - Logging Provider: org.jboss.logging.Slf4jLoggerProvider 
+2018-12-10 23:44:25,516 [main] INFO  campusfeed.env - 
+-=[campusfeed started successfully using the development profile]=- 
+2018-12-10 23:44:25,915 [main] INFO  luminus.http-server - starting HTTP server on port 3000 
+2018-12-10 23:44:26,202 [main] DEBUG io.undertow - starting undertow server io.undertow.Undertow@4116167e 
+2018-12-10 23:44:26,230 [main] INFO  org.xnio - XNIO version 3.3.6.Final 
+2018-12-10 23:44:26,775 [main] DEBUG io.undertow - Configuring listener with protocol HTTP for interface 0.0.0.0 and port 3000 
+2018-12-10 23:44:26,954 [main] INFO  org.projectodd.wunderboss.web.Web - Registered web context / 
+2018-12-10 23:44:26,960 [main] INFO  campusfeed.nrepl - starting nREPL server on port 7000 
+2018-12-10 23:44:27,040 [main] INFO  campusfeed.core - #'campusfeed.config/env started 
+2018-12-10 23:44:27,040 [main] INFO  campusfeed.core - #'campusfeed.handler/init-app started 
+2018-12-10 23:44:27,041 [main] INFO  campusfeed.core - #'campusfeed.handler/app started 
+2018-12-10 23:44:27,041 [main] INFO  campusfeed.core - #'campusfeed.core/http-server started 
+2018-12-10 23:44:27,041 [main] INFO  campusfeed.core - #'campusfeed.core/repl-server started 
