@@ -2,6 +2,7 @@
   (:require [campusfeed.middleware :as middleware]
             [campusfeed.layout :refer [error-page]]
             [campusfeed.routes.home :refer [home-routes]]
+            [campusfeed.app :as capp]
             [compojure.core :refer [routes wrap-routes]]
             [ring.util.http-response :as response]
             [compojure.route :as route]
@@ -16,6 +17,8 @@
   :start
   (middleware/wrap-base
     (routes
+      (-> capp/api-routes
+        (wrap-routes middleware/wrap-formats))
       (-> #'home-routes
           (wrap-routes middleware/wrap-csrf)
           (wrap-routes middleware/wrap-formats))
@@ -23,4 +26,3 @@
         (:body
           (error-page {:status 404
                        :title "page not found"}))))))
-
