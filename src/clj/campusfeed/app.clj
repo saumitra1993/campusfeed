@@ -13,4 +13,9 @@
   (context "/api" []
     (GET "/hello/:name" [name] (ok {:message (api/greet name)}))
     (GET "/get-user-details" [userid] (get-user-details userid))
+    (GET "/get-posts-by-channel" [channel-id] (get-posts-by-channel channel-id))
+    (GET "/posts/:post-id" [post-id] (get-post post-id))
+    (GET "/get-channel-admins" [channel-id] (get-channel-admins channel-id))
+    (GET "/channel/:channel-id" [channel-id] (get-channel channel-id))
+    (GET "/get-channels-for-admin" [admin-id] (get-channels-for-admin admin-id))
   ))
