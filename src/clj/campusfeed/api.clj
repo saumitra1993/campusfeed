@@ -7,7 +7,7 @@
 
   (defn get-user-details
     "For getting user details" [userid]
-    ;;we have to insert code for the user details later
+    ;;we have to insert code for the user details later .
     )
 
   (defn get-posts-by-channel
